@@ -49,24 +49,6 @@
 
         <!-- apk laucher -->
         <activity
-            android:name="org.bbs.apklauncher.ApkLuncherActivity"
-            android:label="AkpLauncher" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name="org.bbs.apklauncher.BackUpActivity"
-            android:label="AppBackup" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name="org.bbs.apklauncher.StubActivity"
             android:label="StubActivity" >
             <intent-filter>

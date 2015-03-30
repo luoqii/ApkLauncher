@@ -109,7 +109,7 @@ ContextWrapper
 			theme = super.getTheme();
 		}
 		
-		Log.d(TAG, "getTheme(). theme: " + theme);
+//		Log.d(TAG, "getTheme(). theme: " + theme);
 		return theme;
 		
 	}
@@ -139,7 +139,7 @@ ContextWrapper
 			res = mResource;
 		}
 		
-		Log.d(TAG, "getResources(). res: " + res);
+//		Log.d(TAG, "getResources(). res: " + res);
 		return res;
 	}
 	
