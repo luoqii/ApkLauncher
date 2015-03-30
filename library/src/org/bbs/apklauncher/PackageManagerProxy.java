@@ -13,6 +13,7 @@ import android.content.pm.FeatureInfo;
 import android.content.pm.InstrumentationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageInstaller;
+import android.content.pm.PackageItemInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PermissionGroupInfo;
 import android.content.pm.PermissionInfo;
@@ -34,6 +35,11 @@ public class PackageManagerProxy extends PackageManager {
 	public PackageManagerProxy(PackageManager policy) {
 		mProxy = policy;
 	}
+	
+	// @hide
+    public Drawable loadItemIcon(PackageItemInfo itemInfo, ApplicationInfo appInfo){
+    	return ReflectUtil.loadItemIcon(mProxy, itemInfo, appInfo);
+    }
 
 	@Override
 	public PackageInfo getPackageInfo(String packageName, int flags)

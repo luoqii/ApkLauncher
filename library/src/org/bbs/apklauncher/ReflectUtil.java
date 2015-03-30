@@ -13,9 +13,13 @@ import android.app.Service;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageItemInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.Resources.Theme;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v4.app.FragmentActivity;
@@ -933,5 +937,16 @@ public class ReflectUtil {
 				
 				return -1;
 			}
+		}
+
+		public static Drawable loadItemIcon(PackageManager object,
+				PackageItemInfo itemInfo, ApplicationInfo appInfo) {
+			try {
+				Method m = object.getClass().getDeclaredMethod("loadItemIcon", new Class[]{PackageItemInfo.class, ApplicationInfo.class});
+				return (Drawable) m.invoke(object, new Object[]{itemInfo, appInfo});
+			} catch (NoSuchMethodException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				e.printStackTrace();
+			}
+			return null;
 		}
 	}
