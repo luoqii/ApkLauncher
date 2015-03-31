@@ -30,7 +30,7 @@ import android.widget.Toast;
  * This demonstrates the use of action bar tabs and how they interact
  * with other action bar features.
  */
-public class FragmentTabs extends Activity {
+public class FragmentTabs extends org.bbs.apklauncher.api.Base_Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,19 +42,19 @@ public class FragmentTabs extends Activity {
         bar.addTab(bar.newTab()
                 .setText("Simple")
                 .setTabListener(new TabListener<FragmentStack.CountingFragment>(
-                        this, "simple", FragmentStack.CountingFragment.class)));
+                        this.getHostActivity(), "simple", FragmentStack.CountingFragment.class)));
         bar.addTab(bar.newTab()
                 .setText("Contacts")
                 .setTabListener(new TabListener<LoaderCursor.CursorLoaderListFragment>(
-                        this, "contacts", LoaderCursor.CursorLoaderListFragment.class)));
+                        this.getHostActivity(), "contacts", LoaderCursor.CursorLoaderListFragment.class)));
         bar.addTab(bar.newTab()
                 .setText("Apps")
                 .setTabListener(new TabListener<LoaderCustom.AppListFragment>(
-                        this, "apps", LoaderCustom.AppListFragment.class)));
+                        this.getHostActivity(), "apps", LoaderCustom.AppListFragment.class)));
         bar.addTab(bar.newTab()
                 .setText("Throttle")
                 .setTabListener(new TabListener<LoaderThrottle.ThrottledLoaderListFragment>(
-                        this, "throttle", LoaderThrottle.ThrottledLoaderListFragment.class)));
+                        this.getHostActivity(), "throttle", LoaderThrottle.ThrottledLoaderListFragment.class)));
 
         if (savedInstanceState != null) {
             bar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));

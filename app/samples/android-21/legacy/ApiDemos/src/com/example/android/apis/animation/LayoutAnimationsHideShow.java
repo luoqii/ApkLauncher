@@ -40,7 +40,7 @@ import android.widget.Button;
  * This application demonstrates how to use LayoutTransition to automate transition animations
  * as items are hidden or shown in a container.
  */
-public class LayoutAnimationsHideShow extends Activity {
+public class LayoutAnimationsHideShow extends org.bbs.apklauncher.api.Base_Activity {
 
     private int numButtons = 1;
     ViewGroup container = null;

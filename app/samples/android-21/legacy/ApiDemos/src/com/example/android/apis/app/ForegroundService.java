@@ -198,7 +198,7 @@ public class ForegroundService extends Service {
      * <p>Note that this is implemented as an inner class only keep the sample
      * all together; typically this code would appear in some separate class.
      */
-    public static class Controller extends Activity {
+    public static class Controller extends org.bbs.apklauncher.api.Base_Activity {
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);

@@ -21,7 +21,7 @@ import com.example.android.apis.R;
 import android.app.Activity;
 import android.os.Bundle;
 
-public class ResourcesWidthAndHeight extends Activity {
+public class ResourcesWidthAndHeight extends org.bbs.apklauncher.api.Base_Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -28,7 +28,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.AdapterView.OnItemSelectedListener;
 
-public class ScreenOrientation extends Activity {
+public class ScreenOrientation extends org.bbs.apklauncher.api.Base_Activity {
     Spinner mOrientation;
 
     // Orientation spinner choices

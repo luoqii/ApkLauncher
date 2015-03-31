@@ -48,7 +48,7 @@ import com.example.android.apis.R;
  * This activity demonstrates how to use system UI flags to implement
  * a content browser style of UI (such as a book reader).
  */
-public class ContentBrowserActivity extends Activity
+public class ContentBrowserActivity extends org.bbs.apklauncher.api.Base_Activity
         implements OnQueryTextListener, ActionBar.TabListener {
 
     /**

@@ -34,7 +34,7 @@ import android.widget.FilterQueryProvider;
 import android.widget.Filterable;
 import android.widget.TextView;
 
-public class AutoComplete4 extends Activity {
+public class AutoComplete4 extends org.bbs.apklauncher.api.Base_Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

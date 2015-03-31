@@ -28,7 +28,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 
-public class TableLayout7 extends Activity {
+public class TableLayout7 extends org.bbs.apklauncher.api.Base_Activity {
     private boolean mShortcutsCollapsed;
     private boolean mCheckmarksCollapsed;
 

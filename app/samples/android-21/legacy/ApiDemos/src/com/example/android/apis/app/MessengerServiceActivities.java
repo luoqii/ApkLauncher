@@ -29,7 +29,7 @@ public class MessengerServiceActivities {
      * <p>Note that this is implemented as an inner class only keep the sample
      * all together; typically this code would appear in some separate class.
      */
-    public static class Binding extends Activity {
+    public static class Binding extends org.bbs.apklauncher.api.Base_Activity {
 
         /** Messenger for communicating with service. */
         Messenger mService = null;

@@ -24,7 +24,7 @@ import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.widget.TextView;
 
-public class TechFilter extends Activity {
+public class TechFilter extends org.bbs.apklauncher.api.Base_Activity {
     private TextView mText;
     private int mCount = 0;
 

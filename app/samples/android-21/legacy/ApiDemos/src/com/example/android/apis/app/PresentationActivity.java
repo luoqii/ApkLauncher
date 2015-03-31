@@ -73,7 +73,7 @@ import android.widget.TextView;
  * on which to show content based on the currently selected route.
  * </p>
  */
-public class PresentationActivity extends Activity
+public class PresentationActivity extends org.bbs.apklauncher.api.Base_Activity
         implements OnCheckedChangeListener, OnClickListener {
     private final String TAG = "PresentationActivity";
 

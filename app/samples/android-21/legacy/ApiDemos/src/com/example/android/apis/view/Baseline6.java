@@ -25,7 +25,7 @@ import android.os.Bundle;
 /**
  * Baseline alignment in RelativeLayout.
  */
-public class Baseline6 extends Activity {
+public class Baseline6 extends org.bbs.apklauncher.api.Base_Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

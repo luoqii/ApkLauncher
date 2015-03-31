@@ -41,7 +41,7 @@ import com.example.android.apis.R;
 
 import java.util.ArrayList;
 
-public class ShadowCardDrag extends Activity {
+public class ShadowCardDrag extends org.bbs.apklauncher.api.Base_Activity {
     private static final float MAX_Z_DP = 10;
     private static final float MOMENTUM_SCALE = 10;
     private static final int MAX_ANGLE = 10;

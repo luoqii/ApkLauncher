@@ -28,7 +28,7 @@ import android.widget.Button;
 /**
  * Demonstrates how to use an indeterminate progress indicator in the window's title bar.
  */
-public class ProgressBar4 extends Activity {
+public class ProgressBar4 extends org.bbs.apklauncher.api.Base_Activity {
     private boolean mToggleIndeterminate = false;
 
     @Override

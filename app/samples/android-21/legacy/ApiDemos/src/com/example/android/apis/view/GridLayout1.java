@@ -24,7 +24,7 @@ import com.example.android.apis.R;
  * Demonstrates using GridLayout to build the same "Simple Form" as in the
  * LinearLayout and RelativeLayout demos.
  */
-public class GridLayout1 extends Activity {
+public class GridLayout1 extends org.bbs.apklauncher.api.Base_Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.grid_layout_1);

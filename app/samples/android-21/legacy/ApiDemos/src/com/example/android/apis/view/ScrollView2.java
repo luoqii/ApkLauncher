@@ -28,7 +28,7 @@ import android.widget.Button;
  * Demonstrates wrapping a layout in a ScrollView.
  *
  */
-public class ScrollView2 extends Activity {
+public class ScrollView2 extends org.bbs.apklauncher.api.Base_Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

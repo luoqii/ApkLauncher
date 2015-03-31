@@ -30,7 +30,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class FragmentDialogOrActivity extends Activity {
+public class FragmentDialogOrActivity extends org.bbs.apklauncher.api.Base_Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -30,7 +30,7 @@ import android.widget.TextView;
  * SimpleCursorListAdapter is used to map each item to a two-line
  * display.
  */
-public class List3 extends ListActivity {
+public class List3 extends org.bbs.apklauncher.api.Base_ListActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

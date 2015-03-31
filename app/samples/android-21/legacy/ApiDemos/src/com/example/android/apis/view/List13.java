@@ -38,7 +38,7 @@ import com.example.android.apis.R;
  * has finished, the temporary data is replace with the actual data.
  *
  */
-public class List13 extends ListActivity implements ListView.OnScrollListener {
+public class List13 extends org.bbs.apklauncher.api.Base_ListActivity implements ListView.OnScrollListener {
 
     private TextView mStatus;
     

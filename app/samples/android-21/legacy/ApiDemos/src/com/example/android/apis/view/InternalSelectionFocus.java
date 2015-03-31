@@ -37,7 +37,7 @@ import android.widget.LinearLayout;
  * {@link android.view.View#onFocusChanged(boolean, int, android.graphics.Rect)}, the focus would
  * jump to some default internal selection (the top) and not allow for the smooth handoff.
  */
-public class InternalSelectionFocus extends Activity {
+public class InternalSelectionFocus extends org.bbs.apklauncher.api.Base_Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

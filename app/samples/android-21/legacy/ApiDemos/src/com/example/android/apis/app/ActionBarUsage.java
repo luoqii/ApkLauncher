@@ -34,7 +34,7 @@ import com.example.android.apis.R;
  * menu data itself. If you'd like to see how these things work under the hood, see
  * ActionBarMechanics.
  */
-public class ActionBarUsage extends Activity implements OnQueryTextListener {
+public class ActionBarUsage extends org.bbs.apklauncher.api.Base_Activity implements OnQueryTextListener {
     TextView mSearchText;
     int mSortMode = -1;
 

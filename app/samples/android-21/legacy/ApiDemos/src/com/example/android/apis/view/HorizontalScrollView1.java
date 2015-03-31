@@ -23,7 +23,7 @@ import android.view.View;
 import com.example.android.apis.R;
 
 
-public class HorizontalScrollView1 extends Activity {
+public class HorizontalScrollView1 extends org.bbs.apklauncher.api.Base_Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

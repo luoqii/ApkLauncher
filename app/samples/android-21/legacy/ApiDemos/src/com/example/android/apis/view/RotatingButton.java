@@ -30,7 +30,7 @@ import android.widget.SeekBar;
  * translating them, and rotating them (in 2D and 3D). Use the seek bars to set the various
  * transform properties of the button.
  */
-public class RotatingButton extends Activity {
+public class RotatingButton extends org.bbs.apklauncher.api.Base_Activity {
 
     /** Called when the activity is first created. */
     @Override

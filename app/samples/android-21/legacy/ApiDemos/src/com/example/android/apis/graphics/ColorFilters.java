@@ -30,7 +30,7 @@ public class ColorFilters extends GraphicsActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(new SampleView(this));
+        setContentView(new SampleView(this.getHostActivity()));
 
     }
 

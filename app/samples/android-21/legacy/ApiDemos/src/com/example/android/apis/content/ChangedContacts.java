@@ -41,7 +41,7 @@ import android.widget.Toast;
 /**
  * Demonstrates selecting contacts that have changed since a certain time.
  */
-public class ChangedContacts extends Activity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class ChangedContacts extends org.bbs.apklauncher.api.Base_Activity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String CLASS = ChangedContacts.class.getSimpleName();
 

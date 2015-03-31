@@ -35,7 +35,7 @@ import android.widget.ProgressBar;
  * restarted due to, for example, a configuration change.  This is a lot
  * easier than using the raw Activity.onRetainNonConfiguratinInstance() API.
  */
-public class FragmentRetainInstance extends Activity {
+public class FragmentRetainInstance extends org.bbs.apklauncher.api.Base_Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

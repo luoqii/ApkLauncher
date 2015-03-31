@@ -50,7 +50,7 @@ import android.view.WindowManager;
  * </ul>
  * </p>
  */
-public class SecureSurfaceViewActivity extends Activity {
+public class SecureSurfaceViewActivity extends org.bbs.apklauncher.api.Base_Activity {
     private GLSurfaceView mSurfaceView;
 
     /**

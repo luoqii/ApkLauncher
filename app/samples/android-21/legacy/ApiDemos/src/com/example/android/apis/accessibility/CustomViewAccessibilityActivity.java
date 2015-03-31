@@ -48,7 +48,7 @@ import com.example.android.apis.R;
  * disabled users can leverage it.
  * </p>
  */
-public class CustomViewAccessibilityActivity extends Activity {
+public class CustomViewAccessibilityActivity extends org.bbs.apklauncher.api.Base_Activity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

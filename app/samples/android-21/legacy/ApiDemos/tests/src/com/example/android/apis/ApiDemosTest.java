@@ -22,7 +22,7 @@ import android.test.ActivityInstrumentationTestCase2;
  * Make sure that the main launcher activity opens up properly, which will be
  * verified by {@link #testActivityTestCaseSetUpProperly}.
  */
-public class ApiDemosTest extends ActivityInstrumentationTestCase2<ApiDemos> {
+public class ApiDemosTest extends org.bbs.apklauncher.api.Base_ActivityInstrumentationTestCase2<ApiDemos> {
 
     /**
      * Create an {@link ActivityInstrumentationTestCase2} that tests the {@link ApiDemos} activity.

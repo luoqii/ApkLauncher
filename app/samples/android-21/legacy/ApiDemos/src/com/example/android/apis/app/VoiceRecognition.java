@@ -44,7 +44,7 @@ import java.util.List;
 /**
  * Sample code that invokes the speech recognition intent API.
  */
-public class VoiceRecognition extends Activity implements OnClickListener {
+public class VoiceRecognition extends org.bbs.apklauncher.api.Base_Activity implements OnClickListener {
 
     private static final String TAG = "VoiceRecognition";
 

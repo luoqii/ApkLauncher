@@ -24,7 +24,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-public class MediaPlayerDemo extends Activity {
+public class MediaPlayerDemo extends org.bbs.apklauncher.api.Base_Activity {
     private Button mlocalvideo;
     private Button mresourcesvideo;
     private Button mstreamvideo;

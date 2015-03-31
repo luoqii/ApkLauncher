@@ -33,7 +33,7 @@ import android.widget.TextView;
  * An example of how to use the NFC foreground dispatch APIs. This will intercept any MIME data
  * based NDEF dispatch as well as all dispatched for NfcF tags.
  */
-public class ForegroundDispatch extends Activity {
+public class ForegroundDispatch extends org.bbs.apklauncher.api.Base_Activity {
     private NfcAdapter mAdapter;
     private PendingIntent mPendingIntent;
     private IntentFilter[] mFilters;
@@ -75,7 +75,7 @@ public class ForegroundDispatch extends Activity {
     @Override
     public void onResume() {
         super.onResume();
-        if (mAdapter != null) mAdapter.enableForegroundDispatch(this, mPendingIntent, mFilters,
+        if (mAdapter != null) mAdapter.enableForegroundDispatch(this.getHostActivity(), mPendingIntent, mFilters,
                 mTechLists);
     }
 
@@ -88,6 +88,6 @@ public class ForegroundDispatch extends Activity {
     @Override
     public void onPause() {
         super.onPause();
-        if (mAdapter != null) mAdapter.disableForegroundDispatch(this);
+        if (mAdapter != null) mAdapter.disableForegroundDispatch(this.getHostActivity());
     }
 }

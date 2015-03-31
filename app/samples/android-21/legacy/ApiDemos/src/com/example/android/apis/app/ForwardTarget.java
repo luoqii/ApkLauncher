@@ -28,7 +28,7 @@ import android.os.Bundle;
  * Example of removing yourself from the history stack after forwarding to
  * another activity.
  */
-public class ForwardTarget extends Activity
+public class ForwardTarget extends org.bbs.apklauncher.api.Base_Activity
 {
     @Override
 	protected void onCreate(Bundle savedInstanceState)

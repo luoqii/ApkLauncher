@@ -34,7 +34,7 @@ import android.widget.Button;
 /**
  * UI for posting an example notification.
  */
-public class IncomingMessage extends Activity {
+public class IncomingMessage extends org.bbs.apklauncher.api.Base_Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

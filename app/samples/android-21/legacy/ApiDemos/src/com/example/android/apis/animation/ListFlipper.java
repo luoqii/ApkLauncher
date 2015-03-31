@@ -39,7 +39,7 @@ import android.widget.SeekBar;
  * UI allows you to set the position of the animation. Pressing the Run button will play from
  * the current position of the animation.
  */
-public class ListFlipper extends Activity {
+public class ListFlipper extends org.bbs.apklauncher.api.Base_Activity {
 
     private static final int DURATION = 1500;
     private SeekBar mSeekBar;

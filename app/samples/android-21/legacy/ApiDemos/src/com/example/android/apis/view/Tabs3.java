@@ -24,7 +24,7 @@ import android.content.Intent;
 /**
  * An example of tab content that launches an activity via {@link android.widget.TabHost.TabSpec#setContent(android.content.Intent)}
  */
-public class Tabs3 extends TabActivity {
+public class Tabs3 extends org.bbs.apklauncher.api.Base_TabActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

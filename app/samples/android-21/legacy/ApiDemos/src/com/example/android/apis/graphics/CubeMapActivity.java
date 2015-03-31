@@ -45,7 +45,7 @@ import com.example.android.apis.R;
  * Demonstrate how to use the OES_texture_cube_map extension, available on some
  * high-end OpenGL ES 1.x GPUs.
  */
-public class CubeMapActivity extends Activity {
+public class CubeMapActivity extends org.bbs.apklauncher.api.Base_Activity {
     private GLSurfaceView mGLSurfaceView;
     private class Renderer implements GLSurfaceView.Renderer {
         private boolean mContextSupportsCubeMap;

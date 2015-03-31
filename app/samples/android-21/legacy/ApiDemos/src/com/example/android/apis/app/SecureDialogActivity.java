@@ -50,7 +50,7 @@ import android.widget.Button;
  * </ul>
  * </p>
  */
-public class SecureDialogActivity extends Activity
+public class SecureDialogActivity extends org.bbs.apklauncher.api.Base_Activity
         implements View.OnClickListener {
     /**
      * Initialization of the Activity after it is first created.  Must at least

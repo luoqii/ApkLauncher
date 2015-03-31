@@ -54,7 +54,7 @@ App/Activity/Receive Result
         </tr>
 </table>
  */
-public class Forwarding extends Activity
+public class Forwarding extends org.bbs.apklauncher.api.Base_Activity
 {
     @Override
 	protected void onCreate(Bundle savedInstanceState)

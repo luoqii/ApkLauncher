@@ -31,7 +31,7 @@ import android.widget.GridLayout;
  * This application demonstrates how to use the animateLayoutChanges tag in XML to automate
  * transition animations as items are removed from or added to a container.
  */
-public class LayoutAnimationsByDefault extends Activity {
+public class LayoutAnimationsByDefault extends org.bbs.apklauncher.api.Base_Activity {
 
     private int numButtons = 1;
 

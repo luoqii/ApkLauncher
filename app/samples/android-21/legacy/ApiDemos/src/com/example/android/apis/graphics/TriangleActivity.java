@@ -20,7 +20,7 @@ import android.app.Activity;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 
-public class TriangleActivity extends Activity {
+public class TriangleActivity extends org.bbs.apklauncher.api.Base_Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

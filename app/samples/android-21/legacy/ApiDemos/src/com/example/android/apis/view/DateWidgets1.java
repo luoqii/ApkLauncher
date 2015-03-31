@@ -39,7 +39,7 @@ import java.util.Calendar;
  * {@link Activity#onPrepareDialog} and {@link Activity#showDialog} to have the
  * activity automatically save and restore the state of the dialogs.
  */
-public class DateWidgets1 extends Activity {
+public class DateWidgets1 extends org.bbs.apklauncher.api.Base_Activity {
 
     // where we display the selected date and time
     private TextView mDateDisplay;

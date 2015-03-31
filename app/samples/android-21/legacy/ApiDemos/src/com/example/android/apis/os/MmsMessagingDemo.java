@@ -18,7 +18,7 @@ package com.example.android.apis.os;
 
 import android.app.Activity;
 
-public class MmsMessagingDemo extends Activity {
+public class MmsMessagingDemo extends org.bbs.apklauncher.api.Base_Activity {
    /* private static final String TAG = "MmsMessagingDemo";
 
     public static final String EXTRA_NOTIFICATION_URL = "notification_url";

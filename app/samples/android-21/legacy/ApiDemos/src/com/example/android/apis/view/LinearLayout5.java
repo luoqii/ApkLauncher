@@ -28,7 +28,7 @@ import android.os.Bundle;
  * Demonstrates building a simple form with nested LinearLayouts.
  *
  */
-public class LinearLayout5 extends Activity {
+public class LinearLayout5 extends org.bbs.apklauncher.api.Base_Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

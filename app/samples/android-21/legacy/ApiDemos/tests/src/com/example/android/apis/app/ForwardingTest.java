@@ -45,7 +45,7 @@ import android.widget.Button;
  * <p>See {@link com.example.android.apis.AllTests} for documentation on running
  * all tests and individual tests in this application.
  */
-public class ForwardingTest extends ActivityUnitTestCase<Forwarding> {
+public class ForwardingTest extends org.bbs.apklauncher.api.Base_ActivityUnitTestCase<Forwarding> {
 
     private Intent mStartIntent;
     private Button mButton;

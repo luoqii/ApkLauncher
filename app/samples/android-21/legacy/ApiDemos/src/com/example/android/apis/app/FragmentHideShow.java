@@ -33,7 +33,7 @@ import android.widget.TextView;
 /**
  * Demonstration of hiding and showing fragments.
  */
-public class FragmentHideShow extends Activity {
+public class FragmentHideShow extends org.bbs.apklauncher.api.Base_Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

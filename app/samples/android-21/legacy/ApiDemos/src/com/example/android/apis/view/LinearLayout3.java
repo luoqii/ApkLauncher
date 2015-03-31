@@ -27,7 +27,7 @@ import android.os.Bundle;
 /**
  * A simple linear layout that fills the screen vertically, and the middle child is padded with extra space.
  */
-public class LinearLayout3 extends Activity {
+public class LinearLayout3 extends org.bbs.apklauncher.api.Base_Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

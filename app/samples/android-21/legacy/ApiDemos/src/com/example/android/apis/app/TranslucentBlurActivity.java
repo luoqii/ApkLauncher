@@ -32,7 +32,7 @@ import android.view.WindowManager;
  * allowing windows underneath to show through, with a fancy blur
  * compositing effect.</p>
  */
-public class TranslucentBlurActivity extends Activity {
+public class TranslucentBlurActivity extends org.bbs.apklauncher.api.Base_Activity {
     /**
      * Initialization of the Activity after it is first created.  Must at least
      * call {@link android.app.Activity#setContentView setContentView()} to

@@ -48,7 +48,7 @@ import java.io.InputStream;
 /**
  * Demonstration of styled text resources.
  */
-public class InstallApk extends Activity {
+public class InstallApk extends org.bbs.apklauncher.api.Base_Activity {
     static final int REQUEST_INSTALL = 1;
     static final int REQUEST_UNINSTALL = 2;
 

@@ -63,7 +63,7 @@ import android.widget.TextView;
  * </table>
  *
  */
-public class PersistentState extends Activity
+public class PersistentState extends org.bbs.apklauncher.api.Base_Activity
 {
     /**
      * Initialization of the Activity after it is first created.  Here we use

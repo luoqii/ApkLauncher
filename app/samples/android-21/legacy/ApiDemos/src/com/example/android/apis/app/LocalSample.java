@@ -31,7 +31,7 @@ import com.example.android.apis.R;
  * Front-end for launching {@link LocalSampleInstrumentation} example
  * instrumentation class.
  */
-public class LocalSample extends Activity {
+public class LocalSample extends org.bbs.apklauncher.api.Base_Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

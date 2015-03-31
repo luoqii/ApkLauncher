@@ -22,7 +22,7 @@ import android.app.Activity;
 import android.os.Bundle;
 
 
-public class ScrollBar2 extends Activity {
+public class ScrollBar2 extends org.bbs.apklauncher.api.Base_Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

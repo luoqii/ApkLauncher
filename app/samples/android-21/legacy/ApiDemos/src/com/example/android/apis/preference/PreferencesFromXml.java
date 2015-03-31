@@ -21,7 +21,7 @@ import com.example.android.apis.R;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 
-public class PreferencesFromXml extends PreferenceActivity {
+public class PreferencesFromXml extends org.bbs.apklauncher.api.Base_PreferenceActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

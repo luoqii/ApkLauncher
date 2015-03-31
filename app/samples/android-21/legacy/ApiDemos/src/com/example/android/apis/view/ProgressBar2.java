@@ -28,7 +28,7 @@ import android.view.Window;
  * window's title bar. The widgets show the 3 different sizes of circular
  * progress bars that can be used.
  */
-public class ProgressBar2 extends Activity {
+public class ProgressBar2 extends org.bbs.apklauncher.api.Base_Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

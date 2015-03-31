@@ -28,7 +28,7 @@ import android.os.Bundle;
  * Demonstrates using the uniformSize attribute
  *
  */
-public class LinearLayout6 extends Activity {
+public class LinearLayout6 extends org.bbs.apklauncher.api.Base_Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

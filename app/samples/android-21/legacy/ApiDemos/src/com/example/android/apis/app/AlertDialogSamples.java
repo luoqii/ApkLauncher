@@ -55,7 +55,7 @@ App/Dialog/Alert Dialog
  *         </tr>
  * </table> 
  */
-public class AlertDialogSamples extends Activity {
+public class AlertDialogSamples extends org.bbs.apklauncher.api.Base_Activity {
     private static final int DIALOG_YES_NO_MESSAGE = 1;
     private static final int DIALOG_YES_NO_LONG_MESSAGE = 2;
     private static final int DIALOG_LIST = 3;

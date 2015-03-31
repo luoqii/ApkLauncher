@@ -31,7 +31,7 @@ import android.widget.Button;
  * Demonstrates making a view VISIBLE, INVISIBLE and GONE
  *
  */
-public class Visibility1 extends Activity {
+public class Visibility1 extends org.bbs.apklauncher.api.Base_Activity {
 
     private View mVictim;
 

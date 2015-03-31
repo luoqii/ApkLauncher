@@ -32,7 +32,7 @@ import android.widget.TextView;
  * data comes from a custom
  * ListAdapter
  */
-public class List6 extends ListActivity 
+public class List6 extends org.bbs.apklauncher.api.Base_ListActivity 
 {
     
     @Override

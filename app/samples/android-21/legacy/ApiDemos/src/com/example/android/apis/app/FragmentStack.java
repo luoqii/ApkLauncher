@@ -29,7 +29,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class FragmentStack extends Activity {
+public class FragmentStack extends org.bbs.apklauncher.api.Base_Activity {
     int mStackLevel = 1;
 
     @Override

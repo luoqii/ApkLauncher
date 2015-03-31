@@ -39,7 +39,7 @@ import android.widget.TextView;
  * AbsListView#setOnItemScrollListener(AbsListView.OnItemScrollListener)} to display the
  * first letter of the visible range of cheeses.
  */
-public class List9 extends ListActivity implements ListView.OnScrollListener {
+public class List9 extends org.bbs.apklauncher.api.Base_ListActivity implements ListView.OnScrollListener {
 
     private final class RemoveWindow implements Runnable {
         public void run() {

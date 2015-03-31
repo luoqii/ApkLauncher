@@ -30,7 +30,7 @@ import android.widget.SearchView;
 /**
  * Shows a list that can be filtered in-place with a SearchView in non-iconified mode.
  */
-public class SearchViewFilterMode extends Activity implements SearchView.OnQueryTextListener {
+public class SearchViewFilterMode extends org.bbs.apklauncher.api.Base_Activity implements SearchView.OnQueryTextListener {
 
     private static final String TAG = "SearchViewFilterMode";
 

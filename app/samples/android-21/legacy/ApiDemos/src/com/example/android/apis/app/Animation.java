@@ -34,7 +34,7 @@ import android.widget.Button;
 /**
  * <p>Example of using a custom animation when transitioning between activities.</p>
  */
-public class Animation extends Activity {
+public class Animation extends org.bbs.apklauncher.api.Base_Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

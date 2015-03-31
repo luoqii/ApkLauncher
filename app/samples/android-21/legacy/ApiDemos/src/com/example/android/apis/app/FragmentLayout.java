@@ -40,7 +40,7 @@ import android.widget.TextView;
  * This sample provides a different layout (and activity flow) when run in
  * landscape.
  */
-public class FragmentLayout extends Activity {
+public class FragmentLayout extends org.bbs.apklauncher.api.Base_Activity {
 
 
     @Override
@@ -56,7 +56,7 @@ public class FragmentLayout extends Activity {
      * when the screen is not large enough to show it all in one activity.
      */
 
-    public static class DetailsActivity extends Activity {
+    public static class DetailsActivity extends org.bbs.apklauncher.api.Base_Activity {
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {

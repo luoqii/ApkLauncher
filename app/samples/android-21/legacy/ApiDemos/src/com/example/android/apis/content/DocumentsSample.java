@@ -42,7 +42,7 @@ import java.io.OutputStream;
 /**
  * Example that exercises client side of {@link DocumentsContract}.
  */
-public class DocumentsSample extends Activity {
+public class DocumentsSample extends org.bbs.apklauncher.api.Base_Activity {
     private static final String TAG = "DocumentsSample";
 
     private static final int CODE_READ = 42;

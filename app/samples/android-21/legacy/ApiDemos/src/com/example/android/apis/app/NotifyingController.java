@@ -31,7 +31,7 @@ import android.widget.Button;
  * Controller to start and stop a service. The serivce will update a status bar
  * notification every 5 seconds for a minute.
  */
-public class NotifyingController extends Activity {
+public class NotifyingController extends org.bbs.apklauncher.api.Base_Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

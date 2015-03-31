@@ -25,7 +25,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-public class ReorderFour extends Activity {
+public class ReorderFour extends org.bbs.apklauncher.api.Base_Activity {
     @Override
     protected void onCreate(Bundle savedState) {
         super.onCreate(savedState);

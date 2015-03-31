@@ -27,7 +27,7 @@ import android.os.Bundle;
 /**
  * A simple layout which demonstrates stretching a view to fill the space between two other views.
  */
-public class RelativeLayout1 extends Activity {
+public class RelativeLayout1 extends org.bbs.apklauncher.api.Base_Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

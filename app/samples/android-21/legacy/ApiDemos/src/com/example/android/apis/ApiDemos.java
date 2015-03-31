@@ -33,7 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ApiDemos extends ListActivity {
+public class ApiDemos extends org.bbs.apklauncher.api.Base_ListActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

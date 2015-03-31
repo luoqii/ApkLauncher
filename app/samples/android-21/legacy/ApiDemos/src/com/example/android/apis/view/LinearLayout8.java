@@ -31,7 +31,7 @@ import android.widget.LinearLayout;
 /**
  * Demonstrates horizontal and vertical gravity
  */
-public class LinearLayout8 extends Activity {
+public class LinearLayout8 extends org.bbs.apklauncher.api.Base_Activity {
 
     private LinearLayout mLinearLayout;
 

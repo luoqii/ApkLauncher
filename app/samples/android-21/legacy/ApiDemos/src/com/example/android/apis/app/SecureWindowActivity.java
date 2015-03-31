@@ -47,7 +47,7 @@ import android.view.WindowManager;
  * </ul>
  * </p>
  */
-public class SecureWindowActivity extends Activity {
+public class SecureWindowActivity extends org.bbs.apklauncher.api.Base_Activity {
     /**
      * Initialization of the Activity after it is first created.  Must at least
      * call {@link android.app.Activity#setContentView setContentView()} to

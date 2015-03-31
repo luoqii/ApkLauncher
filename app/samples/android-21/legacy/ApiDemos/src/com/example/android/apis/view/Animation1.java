@@ -26,7 +26,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
-public class Animation1 extends Activity implements View.OnClickListener {
+public class Animation1 extends org.bbs.apklauncher.api.Base_Activity implements View.OnClickListener {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -32,7 +32,7 @@ import android.widget.AdapterView.OnItemClickListener;
 /**
  * Demonstrates splitting touch events across multiple views within a view group.
  */
-public class SplitTouchView extends Activity {
+public class SplitTouchView extends org.bbs.apklauncher.api.Base_Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

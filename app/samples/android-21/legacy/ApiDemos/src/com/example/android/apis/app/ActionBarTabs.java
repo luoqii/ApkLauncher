@@ -33,7 +33,7 @@ import android.widget.Toast;
  * This demonstrates the use of action bar tabs and how they interact
  * with other action bar features.
  */
-public class ActionBarTabs extends Activity {
+public class ActionBarTabs extends org.bbs.apklauncher.api.Base_Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

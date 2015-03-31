@@ -102,7 +102,7 @@ public class IsolatedService extends Service {
     
     // ----------------------------------------------------------------------
     
-    public static class Controller extends Activity {
+    public static class Controller extends org.bbs.apklauncher.api.Base_Activity {
         static class ServiceInfo {
             final Activity mActivity;
             final Class<?> mClz;
@@ -190,9 +190,9 @@ public class IsolatedService extends Service {
 
             setContentView(R.layout.isolated_service_controller);
 
-            mService1 = new ServiceInfo(this, IsolatedService.class, R.id.start1, R.id.stop1,
+            mService1 = new ServiceInfo(this.getHostActivity(), IsolatedService.class, R.id.start1, R.id.stop1,
                     R.id.bind1, R.id.status1);
-            mService2 = new ServiceInfo(this, IsolatedService2.class, R.id.start2, R.id.stop2,
+            mService2 = new ServiceInfo(this.getHostActivity(), IsolatedService2.class, R.id.start2, R.id.stop2,
                     R.id.bind2, R.id.status2);
         }
 

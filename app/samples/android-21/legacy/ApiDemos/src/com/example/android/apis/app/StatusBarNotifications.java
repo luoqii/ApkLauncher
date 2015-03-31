@@ -32,7 +32,7 @@ import android.widget.RemoteViews;
 /**
  * Demonstrates adding notifications to the status bar
  */
-public class StatusBarNotifications extends Activity {
+public class StatusBarNotifications extends org.bbs.apklauncher.api.Base_Activity {
 
     private NotificationManager mNotificationManager;
 

@@ -46,7 +46,7 @@ import java.io.OutputStream;
 /**
 * Demonstration of styled text resources.
 */
-public class ExternalStorage extends Activity {
+public class ExternalStorage extends org.bbs.apklauncher.api.Base_Activity {
     ViewGroup mLayout;
 
     static class Item {

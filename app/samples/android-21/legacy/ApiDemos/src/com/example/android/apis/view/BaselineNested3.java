@@ -25,7 +25,7 @@ import android.os.Bundle;
  * Baseline alignment includes a {@link android.widget.LinearLayout}
  * within another {@link android.widget.LinearLayout}.
  */
-public class BaselineNested3 extends Activity {
+public class BaselineNested3 extends org.bbs.apklauncher.api.Base_Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -40,7 +40,7 @@ public class LocalServiceActivities {
      * <p>Note that this is implemented as an inner class only keep the sample
      * all together; typically this code would appear in some separate class.
      */
-    public static class Controller extends Activity {
+    public static class Controller extends org.bbs.apklauncher.api.Base_Activity {
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -87,7 +87,7 @@ public class LocalServiceActivities {
      * <p>Note that this is implemented as an inner class only keep the sample
      * all together; typically this code would appear in some separate class.
      */
-    public static class Binding extends Activity {
+    public static class Binding extends org.bbs.apklauncher.api.Base_Activity {
         private boolean mIsBound;
 
 

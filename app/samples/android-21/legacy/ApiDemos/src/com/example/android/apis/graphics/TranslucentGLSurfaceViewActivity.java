@@ -26,7 +26,7 @@ import android.os.Bundle;
  * Wrapper activity demonstrating the use of {@link GLSurfaceView} to
  * display translucent 3D graphics.
  */
-public class TranslucentGLSurfaceViewActivity extends Activity {
+public class TranslucentGLSurfaceViewActivity extends org.bbs.apklauncher.api.Base_Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -42,7 +42,7 @@ import java.util.Calendar;
  * require permission to read contacts, as that permission will be granted
  * when the selected contact is returned.
  */
-public class PickContact extends Activity {
+public class PickContact extends org.bbs.apklauncher.api.Base_Activity {
     Toast mToast;
     ResultDisplayer mPendingResult;
 

@@ -32,7 +32,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-public class FragmentReceiveResult extends Activity {
+public class FragmentReceiveResult extends org.bbs.apklauncher.api.Base_Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

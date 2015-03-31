@@ -36,7 +36,7 @@ import android.widget.ScrollView;
  * within either {@link android.widget.ScrollView}s or {@link android.widget.ListView}s can
  * expect to keep their internal interesting rectangle visible.
  */
-public class InternalSelectionScroll extends Activity {
+public class InternalSelectionScroll extends org.bbs.apklauncher.api.Base_Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

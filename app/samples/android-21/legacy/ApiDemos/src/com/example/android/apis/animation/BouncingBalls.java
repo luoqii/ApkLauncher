@@ -40,7 +40,7 @@ import android.widget.LinearLayout;
 import java.util.ArrayList;
 
 
-public class BouncingBalls extends Activity {
+public class BouncingBalls extends org.bbs.apklauncher.api.Base_Activity {
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {

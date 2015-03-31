@@ -39,7 +39,7 @@ import com.example.android.apis.R;
  * @see PrintManager
  * @see WebView
  */
-public class PrintBitmap extends Activity {
+public class PrintBitmap extends org.bbs.apklauncher.api.Base_Activity {
 
     private ImageView mImageView;
 

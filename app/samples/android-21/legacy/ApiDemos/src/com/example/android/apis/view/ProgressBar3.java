@@ -30,7 +30,7 @@ import android.widget.Button;
  * and {@link Activity#showDialog} to ensure the dialogs will be properly saved
  * and restored.
  */
-public class ProgressBar3 extends Activity {
+public class ProgressBar3 extends org.bbs.apklauncher.api.Base_Activity {
 
     ProgressDialog mDialog1;
     ProgressDialog mDialog2;

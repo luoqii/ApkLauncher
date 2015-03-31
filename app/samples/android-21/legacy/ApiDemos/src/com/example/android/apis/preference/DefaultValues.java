@@ -37,7 +37,7 @@ import android.preference.PreferenceManager;
  * An easy way to do this is to have a common function for retrieving the
  * SharedPreferences that takes care of calling it.
  */
-public class DefaultValues extends PreferenceActivity {
+public class DefaultValues extends org.bbs.apklauncher.api.Base_PreferenceActivity {
     // This is the global (to the .apk) name under which we store these
     // preferences.  We want this to be unique from other preferences so that
     // we do not have unexpected name conflicts, and the framework can correctly

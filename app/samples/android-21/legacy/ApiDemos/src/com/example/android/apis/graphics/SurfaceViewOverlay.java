@@ -30,7 +30,7 @@ import com.example.android.apis.R;
 /**
  * Demonstration of overlays placed on top of a SurfaceView.
  */
-public class SurfaceViewOverlay extends Activity {
+public class SurfaceViewOverlay extends org.bbs.apklauncher.api.Base_Activity {
     View mVictimContainer;
     View mVictim1;
     View mVictim2;

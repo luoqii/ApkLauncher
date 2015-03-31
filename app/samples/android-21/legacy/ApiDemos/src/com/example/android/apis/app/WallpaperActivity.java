@@ -29,7 +29,7 @@ import android.os.Bundle;
  * <p>This demonstrates the how to write an activity that has the system
  * wallpaper behind it.</p>
  */
-public class WallpaperActivity extends Activity {
+public class WallpaperActivity extends org.bbs.apklauncher.api.Base_Activity {
     /**
      * Initialization of the Activity after it is first created.  Must at least
      * call {@link android.app.Activity#setContentView setContentView()} to

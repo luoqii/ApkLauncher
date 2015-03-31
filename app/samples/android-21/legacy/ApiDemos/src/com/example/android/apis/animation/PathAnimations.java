@@ -41,7 +41,7 @@ import android.widget.RadioGroup;
 import com.example.android.apis.R;
 
 /** This application demonstrates the use of Path animation. */
-public class PathAnimations extends Activity implements
+public class PathAnimations extends org.bbs.apklauncher.api.Base_Activity implements
         RadioGroup.OnCheckedChangeListener, View.OnLayoutChangeListener {
 
     final static Path sTraversalPath = new Path();

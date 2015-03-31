@@ -20,6 +20,7 @@ import com.example.android.apis.R;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceActivity.Header;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -32,7 +33,7 @@ import java.util.List;
  * panel with headers.
  */
 
-public class PreferenceWithHeaders extends PreferenceActivity {
+public class PreferenceWithHeaders extends org.bbs.apklauncher.api.Base_PreferenceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

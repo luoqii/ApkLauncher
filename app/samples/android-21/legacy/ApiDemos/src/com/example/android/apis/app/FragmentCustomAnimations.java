@@ -33,7 +33,7 @@ import android.widget.TextView;
  * Demonstrates the use of custom animations in a FragmentTransaction when
  * pushing and popping a stack.
  */
-public class FragmentCustomAnimations extends Activity {
+public class FragmentCustomAnimations extends org.bbs.apklauncher.api.Base_Activity {
     int mStackLevel = 1;
 
     @Override

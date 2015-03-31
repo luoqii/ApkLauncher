@@ -28,7 +28,7 @@ import android.widget.RadioButton;
 import android.widget.LinearLayout;
 
 
-public class RadioGroup1 extends Activity implements RadioGroup.OnCheckedChangeListener,
+public class RadioGroup1 extends org.bbs.apklauncher.api.Base_Activity implements RadioGroup.OnCheckedChangeListener,
         View.OnClickListener {
 
     private TextView mChoice;

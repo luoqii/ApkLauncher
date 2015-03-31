@@ -28,7 +28,7 @@ import android.widget.TextView;
 /**
  * An example of how to use the NFC foreground NDEF push APIs.
  */
-public class ForegroundNdefPush extends Activity {
+public class ForegroundNdefPush extends org.bbs.apklauncher.api.Base_Activity {
     private NfcAdapter mAdapter;
     private TextView mText;
     private NdefMessage mMessage;
@@ -46,7 +46,7 @@ public class ForegroundNdefPush extends Activity {
         mText = (TextView) findViewById(R.id.text);
 
         if (mAdapter != null) {
-            mAdapter.setNdefPushMessage(mMessage, this);
+            mAdapter.setNdefPushMessage(mMessage, this.getHostActivity());
             mText.setText("Tap another Android phone with NFC to push a URL");
         } else {
             mText.setText("This phone is not NFC enabled.");

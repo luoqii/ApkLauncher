@@ -26,7 +26,7 @@ import android.os.Bundle;
  * Baseline alignement in LinearLayout with a center_vertical gravity. This sample shows that
  * using a center_vertical gravity disables baseline alignment.
  */
-public class Baseline3 extends Activity {
+public class Baseline3 extends org.bbs.apklauncher.api.Base_Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

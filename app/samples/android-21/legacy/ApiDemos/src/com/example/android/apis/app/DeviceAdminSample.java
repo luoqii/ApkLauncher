@@ -16,7 +16,9 @@
 
 package com.example.android.apis.app;
 
-import com.example.android.apis.R;
+import java.util.List;
+
+import org.bbs.apklauncher.api.Util;
 
 import android.app.ActivityManager;
 import android.app.AlertDialog;
@@ -33,7 +35,7 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
-import android.preference.PreferenceActivity;
+import android.preference.PreferenceActivity.Header;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
@@ -41,7 +43,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
-import java.util.List;
+import com.example.android.apis.R;
 
 /**
  * This activity provides a comprehensive UI for exploring and operating the DevicePolicyManager
@@ -53,7 +55,7 @@ import java.util.List;
  * 2:  A DeviceAdminReceiver, to receive updates from the DevicePolicyManager when certain aspects
  *     of the device security status have changed.
  */
-public class DeviceAdminSample extends PreferenceActivity {
+public class DeviceAdminSample extends org.bbs.apklauncher.api.Base_PreferenceActivity {
 
     // Miscellaneous utilities and definitions
     private static final String TAG = "DeviceAdminSample";
@@ -164,7 +166,8 @@ public class DeviceAdminSample extends PreferenceActivity {
             super.onActivityCreated(savedInstanceState);
 
             // Retrieve the useful instance variables
-            mActivity = (DeviceAdminSample) getActivity();
+//            mActivity = (DeviceAdminSample) getActivity();
+            mActivity = (DeviceAdminSample) Util.getTargetActivityFormFrag(this);
             mDPM = mActivity.mDPM;
             mDeviceAdminSample = mActivity.mDeviceAdminSample;
             mAdminActive = mActivity.isActiveAdmin();

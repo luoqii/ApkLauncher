@@ -33,7 +33,7 @@ import android.widget.LinearLayout.LayoutParams;
 /**
  * Demonstrates launching a PreferenceActivity and grabbing a value it saved.
  */
-public class LaunchingPreferences extends Activity implements OnClickListener {
+public class LaunchingPreferences extends org.bbs.apklauncher.api.Base_Activity implements OnClickListener {
 
     private static final int REQUEST_CODE_PREFERENCES = 1;
 

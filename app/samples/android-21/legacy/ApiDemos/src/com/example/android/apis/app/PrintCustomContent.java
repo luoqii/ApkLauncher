@@ -76,7 +76,7 @@ import java.util.List;
  * @see PrintManager
  * @see PrintDocumentAdapter
  */
-public class PrintCustomContent extends ListActivity {
+public class PrintCustomContent extends org.bbs.apklauncher.api.Base_ListActivity {
 
     private static final int MILS_IN_INCH = 1000;
 

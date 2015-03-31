@@ -49,7 +49,7 @@ App/Title/Custom Title
  *         </tr>
  * </table> 
  */
-public class CustomTitle extends Activity {
+public class CustomTitle extends org.bbs.apklauncher.api.Base_Activity {
     
     /**
      * Initialization of the Activity after it is first created.  Must at least

@@ -29,7 +29,7 @@ import com.example.android.apis.R;
  * This is the entry activity for a sample that demonstrates how to implement an
  * {@link android.accessibilityservice.AccessibilityService}.
  */
-public class ClockBackActivity extends Activity {
+public class ClockBackActivity extends org.bbs.apklauncher.api.Base_Activity {
 
     /** An intent for launching the system settings. */
     private static final Intent sSettingsIntent =

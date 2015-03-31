@@ -33,7 +33,7 @@ import java.util.ArrayList;
  * Demonstrates the using a list view in transcript mode
  *
  */
-public class List12 extends ListActivity implements OnClickListener, OnKeyListener {
+public class List12 extends org.bbs.apklauncher.api.Base_ListActivity implements OnClickListener, OnKeyListener {
 
     private EditText mUserText;
     

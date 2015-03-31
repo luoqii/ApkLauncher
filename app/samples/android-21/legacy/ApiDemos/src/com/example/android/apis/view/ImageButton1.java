@@ -23,7 +23,7 @@ import android.os.Bundle;
 import com.example.android.apis.R;
 
 
-public class ImageButton1 extends Activity {
+public class ImageButton1 extends org.bbs.apklauncher.api.Base_Activity {
     
     @Override
     public void onCreate(Bundle savedInstanceState) {

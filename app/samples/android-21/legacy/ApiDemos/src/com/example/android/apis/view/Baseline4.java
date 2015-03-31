@@ -25,7 +25,7 @@ import android.os.Bundle;
 /**
  * Baseline alignment in LinearLayout with mixed gravities.
  */
-public class Baseline4 extends Activity {
+public class Baseline4 extends org.bbs.apklauncher.api.Base_Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

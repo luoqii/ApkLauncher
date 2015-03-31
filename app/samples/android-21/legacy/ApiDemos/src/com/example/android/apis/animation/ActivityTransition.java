@@ -32,7 +32,7 @@ import java.util.Map;
 /**
  *
  */
-public class ActivityTransition extends Activity {
+public class ActivityTransition extends org.bbs.apklauncher.api.Base_Activity {
 
     private static final String TAG = "ActivityTransition";
 
@@ -119,7 +119,7 @@ public class ActivityTransition extends Activity {
         Intent intent = new Intent(this, ActivityTransitionDetails.class);
         intent.putExtra(KEY_ID, v.getTransitionName());
         ActivityOptions activityOptions
-                = ActivityOptions.makeSceneTransitionAnimation(this, mHero, "hero");
+                = ActivityOptions.makeSceneTransitionAnimation(this.getHostActivity(), mHero, "hero");
         startActivity(intent, activityOptions.toBundle());
     }
 

@@ -44,7 +44,7 @@ import java.util.Random;
  * </p>
  * <ul>
  */
-public class TextToSpeechActivity extends Activity implements TextToSpeech.OnInitListener {
+public class TextToSpeechActivity extends org.bbs.apklauncher.api.Base_Activity implements TextToSpeech.OnInitListener {
 
     private static final String TAG = "TextToSpeechDemo";
 

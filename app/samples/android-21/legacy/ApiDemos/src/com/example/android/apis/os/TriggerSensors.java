@@ -65,7 +65,7 @@ class TriggerListener extends TriggerEventListener {
     }
 }
 
-public class TriggerSensors extends Activity {
+public class TriggerSensors extends org.bbs.apklauncher.api.Base_Activity {
     private SensorManager mSensorManager;
     private Sensor mSigMotion;
     private TriggerListener mListener;

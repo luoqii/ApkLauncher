@@ -32,7 +32,7 @@ import android.widget.ViewSwitcher;
 /**
  * Uses a TextSwitcher.
  */
-public class TextSwitcher1 extends Activity implements ViewSwitcher.ViewFactory,
+public class TextSwitcher1 extends org.bbs.apklauncher.api.Base_Activity implements ViewSwitcher.ViewFactory,
         View.OnClickListener {
 
     private TextSwitcher mSwitcher;

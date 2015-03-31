@@ -31,7 +31,7 @@ import com.example.android.apis.R;
  * Front-end for launching {@link ContactsFilterInstrumentation} example
  * instrumentation class.
  */
-public class ContactsFilter extends Activity {
+public class ContactsFilter extends org.bbs.apklauncher.api.Base_Activity {
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

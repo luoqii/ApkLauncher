@@ -31,7 +31,7 @@ import android.widget.TextView;
 /**
  * A list view example where the data comes from a custom ListAdapter
  */
-public class List4 extends ListActivity {
+public class List4 extends org.bbs.apklauncher.api.Base_ListActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -34,7 +34,7 @@ import android.widget.Toast;
 /**
  * Demonstration of displaying a context menu from a fragment.
  */
-public class FragmentContextMenu extends Activity {
+public class FragmentContextMenu extends org.bbs.apklauncher.api.Base_Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

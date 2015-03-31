@@ -26,7 +26,7 @@ import com.example.android.apis.R;
 /**
  * Sample creating 1 webviews.
  */
-public class WebView1 extends Activity {
+public class WebView1 extends org.bbs.apklauncher.api.Base_Activity {
     
     @Override
     public void onCreate(Bundle icicle) {

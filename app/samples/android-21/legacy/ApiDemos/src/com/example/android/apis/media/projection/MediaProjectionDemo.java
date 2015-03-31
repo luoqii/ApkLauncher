@@ -43,7 +43,7 @@ import android.widget.ToggleButton;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MediaProjectionDemo extends Activity {
+public class MediaProjectionDemo extends org.bbs.apklauncher.api.Base_Activity {
     private static final String TAG = "MediaProjectionDemo";
     private static final int PERMISSION_CODE = 1;
     private static final List<Resolution> RESOLUTIONS = new ArrayList<Resolution>() {{

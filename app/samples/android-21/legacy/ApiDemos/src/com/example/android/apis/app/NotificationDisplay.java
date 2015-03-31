@@ -32,7 +32,7 @@ import android.widget.RelativeLayout;
 /**
  * Activity used by StatusBarNotification to show the notification to the user.
  */
-public class NotificationDisplay extends Activity implements View.OnClickListener {
+public class NotificationDisplay extends org.bbs.apklauncher.api.Base_Activity implements View.OnClickListener {
     /**
      * Initialization of the Activity after it is first created.  Must at least
      * call {@link android.app.Activity#setContentView setContentView()} to

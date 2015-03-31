@@ -26,7 +26,7 @@ import android.view.View;
 import android.widget.ImageButton;
 
 /** Starts up the task list that will interact with the AccessibilityService sample. */
-public class TaskListActivity extends ListActivity {
+public class TaskListActivity extends org.bbs.apklauncher.api.Base_ListActivity {
 
     /** An intent for launching the system settings. */
     private static final Intent sSettingsIntent =

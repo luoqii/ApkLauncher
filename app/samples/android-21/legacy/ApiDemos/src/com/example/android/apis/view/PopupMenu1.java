@@ -29,7 +29,7 @@ import com.example.android.apis.R;
  * This demonstrates the use of the PopupMenu class. Clicking the button will inflate and
  * show a popup menu from an XML resource.
  */
-public class PopupMenu1 extends Activity {
+public class PopupMenu1 extends org.bbs.apklauncher.api.Base_Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

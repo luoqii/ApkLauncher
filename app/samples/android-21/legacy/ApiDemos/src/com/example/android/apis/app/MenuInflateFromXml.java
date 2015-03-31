@@ -37,7 +37,7 @@ import android.widget.Toast;
  * the spinner, and then hit the menu button. To choose another, back out of the
  * activity and start over.
  */
-public class MenuInflateFromXml extends Activity {
+public class MenuInflateFromXml extends org.bbs.apklauncher.api.Base_Activity {
     /**
      * Different example menu resources.
      */

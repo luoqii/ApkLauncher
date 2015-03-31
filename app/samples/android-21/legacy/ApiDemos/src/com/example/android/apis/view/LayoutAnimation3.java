@@ -22,7 +22,7 @@ import android.app.ListActivity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 
-public class LayoutAnimation3 extends ListActivity {
+public class LayoutAnimation3 extends org.bbs.apklauncher.api.Base_ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

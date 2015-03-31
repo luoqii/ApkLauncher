@@ -49,7 +49,7 @@ import com.example.android.apis.R;
  *         </tr>
  * </table>
  */
-public class ConsumerIr extends Activity {
+public class ConsumerIr extends org.bbs.apklauncher.api.Base_Activity {
     private static final String TAG = "ConsumerIrTest";
     TextView mFreqsText;
     ConsumerIrManager mCIR;

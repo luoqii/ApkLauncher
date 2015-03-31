@@ -25,7 +25,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-public class Intents extends Activity {
+public class Intents extends org.bbs.apklauncher.api.Base_Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

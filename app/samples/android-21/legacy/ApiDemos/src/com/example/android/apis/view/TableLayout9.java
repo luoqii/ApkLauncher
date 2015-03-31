@@ -25,7 +25,7 @@ import android.os.Bundle;
 import android.view.View;
 
 
-public class TableLayout9 extends Activity {
+public class TableLayout9 extends org.bbs.apklauncher.api.Base_Activity {
     private boolean mShrink;
 
     @Override

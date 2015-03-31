@@ -28,7 +28,7 @@ import android.os.Bundle;
  * Builds building a simple form using a RelativeLayout
  * 
  */
-public class RelativeLayout2 extends Activity {
+public class RelativeLayout2 extends org.bbs.apklauncher.api.Base_Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

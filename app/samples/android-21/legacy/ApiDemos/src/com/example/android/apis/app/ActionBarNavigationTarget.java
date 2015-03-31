@@ -27,7 +27,7 @@ import com.example.android.apis.R;
 /**
  * Target launch activity for demonstrations from {@link ActionBarNavigation}.
  */
-public class ActionBarNavigationTarget extends Activity {
+public class ActionBarNavigationTarget extends org.bbs.apklauncher.api.Base_Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

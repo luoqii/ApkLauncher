@@ -25,7 +25,7 @@ import android.os.Bundle;
 /**
  * Baseline alignment in RelativeLayout with various font weights.
  */
-public class Baseline7 extends Activity {
+public class Baseline7 extends org.bbs.apklauncher.api.Base_Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -34,7 +34,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.AdapterView.OnItemSelectedListener;
 
-public class SearchInvoke extends Activity
+public class SearchInvoke extends org.bbs.apklauncher.api.Base_Activity
 {  
         // UI elements
     Button mStartSearch;

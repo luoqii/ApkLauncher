@@ -21,7 +21,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import com.example.android.apis.R;
 
-public class Focus3 extends Activity {
+public class Focus3 extends org.bbs.apklauncher.api.Base_Activity {
     private Button mTopButton;
     private Button mBottomButton;
 

@@ -63,7 +63,7 @@ App/Service/Alarm Controller
 </table>
 
  */
-public class AlarmController extends Activity {
+public class AlarmController extends org.bbs.apklauncher.api.Base_Activity {
     Toast mToast;
 
     @Override

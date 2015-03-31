@@ -21,7 +21,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import com.example.android.apis.R;
 
-public class Focus5 extends Activity {
+public class Focus5 extends org.bbs.apklauncher.api.Base_Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

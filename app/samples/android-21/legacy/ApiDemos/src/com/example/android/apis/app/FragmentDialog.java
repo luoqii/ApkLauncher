@@ -16,7 +16,10 @@
 
 package com.example.android.apis.app;
 
+import org.bbs.apklauncher.api.Util;
+
 import com.example.android.apis.R;
+import com.example.android.apis.app.FragmentAlertDialog.MyAlertDialogFragment;
 
 import android.app.Activity;
 import android.app.DialogFragment;
@@ -30,7 +33,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class FragmentDialog extends Activity {
+public class FragmentDialog extends org.bbs.apklauncher.api.Base_Activity {
     int mStackLevel = 0;
 
     @Override
@@ -157,7 +160,7 @@ public class FragmentDialog extends Activity {
             button.setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {
                     // When button is clicked, call up to owning activity.
-                    ((FragmentDialog)getActivity()).showDialog();
+                    ((FragmentDialog)Util.getTargetActivityFormFrag(MyDialogFragment.this)).showDialog();
                 }
             });
 

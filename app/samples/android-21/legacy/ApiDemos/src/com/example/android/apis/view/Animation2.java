@@ -30,7 +30,7 @@ import android.widget.Spinner;
 import android.widget.ViewFlipper;
 
 
-public class Animation2 extends Activity implements
+public class Animation2 extends org.bbs.apklauncher.api.Base_Activity implements
         AdapterView.OnItemSelectedListener {
 
     @Override

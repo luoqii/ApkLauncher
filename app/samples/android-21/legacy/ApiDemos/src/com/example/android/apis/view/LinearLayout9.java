@@ -27,7 +27,7 @@ import android.widget.ArrayAdapter;
  * Demonstrates how the layout_weight attribute can shrink an element too big
  * to fit on screen.
  */
-public class LinearLayout9 extends Activity {
+public class LinearLayout9 extends org.bbs.apklauncher.api.Base_Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

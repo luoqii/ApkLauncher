@@ -30,7 +30,7 @@ import android.widget.TextView;
 /**
  * Entry into our redirection example, describing what will happen.
  */
-public class RedirectMain extends Activity {
+public class RedirectMain extends org.bbs.apklauncher.api.Base_Activity {
     static final int INIT_TEXT_REQUEST = 0;
     static final int NEW_TEXT_REQUEST = 1;
 

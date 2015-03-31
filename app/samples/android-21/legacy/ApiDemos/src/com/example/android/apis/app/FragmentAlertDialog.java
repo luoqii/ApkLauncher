@@ -16,6 +16,8 @@
 
 package com.example.android.apis.app;
 
+import org.bbs.apklauncher.api.Util;
+
 import com.example.android.apis.R;
 
 import android.app.Activity;
@@ -33,7 +35,7 @@ import android.widget.TextView;
 /**
  * Demonstrates how to show an AlertDialog that is managed by a Fragment.
  */
-public class FragmentAlertDialog extends Activity {
+public class FragmentAlertDialog extends org.bbs.apklauncher.api.Base_Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,14 +93,15 @@ public class FragmentAlertDialog extends Activity {
                     .setPositiveButton(R.string.alert_dialog_ok,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                ((FragmentAlertDialog)getActivity()).doPositiveClick();
+//                                ((FragmentAlertDialog)getActivity()).doPositiveClick();
+                                ((FragmentAlertDialog)Util.getTargetActivityFormFrag(MyAlertDialogFragment.this)).doPositiveClick();
                             }
                         }
                     )
                     .setNegativeButton(R.string.alert_dialog_cancel,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                ((FragmentAlertDialog)getActivity()).doNegativeClick();
+                                ((FragmentAlertDialog)Util.getTargetActivityFormFrag(MyAlertDialogFragment.this)).doNegativeClick();
                             }
                         }
                     )

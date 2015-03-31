@@ -42,7 +42,7 @@ import android.widget.Button;
  * See {@link com.example.android.apis.AllTests} for documentation on running
  * all tests and individual tests in this application.
  */
-public class Focus2ActivityTest extends ActivityInstrumentationTestCase2<Focus2> {
+public class Focus2ActivityTest extends org.bbs.apklauncher.api.Base_ActivityInstrumentationTestCase2<Focus2> {
 
     private Button mLeftButton;
     private Button mCenterButton;

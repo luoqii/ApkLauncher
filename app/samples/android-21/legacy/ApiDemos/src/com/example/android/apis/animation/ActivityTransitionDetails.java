@@ -29,7 +29,7 @@ import android.widget.ImageView;
 /**
  *
  */
-public class ActivityTransitionDetails extends Activity {
+public class ActivityTransitionDetails extends org.bbs.apklauncher.api.Base_Activity {
 
     private static final String TAG = "ActivityTransitionDetails";
 
@@ -61,7 +61,7 @@ public class ActivityTransitionDetails extends Activity {
     public void clicked(View v) {
         Intent intent = new Intent(this, ActivityTransition.class);
         intent.putExtra(KEY_ID, mName);
-        ActivityOptions activityOptions = ActivityOptions.makeSceneTransitionAnimation(this,
+        ActivityOptions activityOptions = ActivityOptions.makeSceneTransitionAnimation(this.getHostActivity(),
                 v, "hero");
         startActivity(intent, activityOptions.toBundle());
     }

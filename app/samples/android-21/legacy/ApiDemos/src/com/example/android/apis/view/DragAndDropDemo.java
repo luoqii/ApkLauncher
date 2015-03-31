@@ -24,7 +24,7 @@ import android.view.DragEvent;
 import android.view.View;
 import android.widget.TextView;
 
-public class DragAndDropDemo extends Activity {
+public class DragAndDropDemo extends org.bbs.apklauncher.api.Base_Activity {
     TextView mResultText;
     DraggableDot mHiddenDot;
 

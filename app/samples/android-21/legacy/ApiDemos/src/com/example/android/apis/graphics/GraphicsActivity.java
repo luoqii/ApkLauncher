@@ -21,7 +21,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 
-class GraphicsActivity extends Activity {
+class GraphicsActivity extends org.bbs.apklauncher.api.Base_Activity {
     // set to true to test Picture
     private static final boolean TEST_PICTURE = false;
 

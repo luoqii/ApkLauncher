@@ -8,13 +8,13 @@
 #Robot_R="\/\*Robot\*\/"
 Robot_R=""
 
-export PREFIX=com.example.android.apis.stub.Base_
+export PREFIX=org.bbs.apklauncher.api.Base_
 for file in `find . -name "*.java"`; do
 
 echo "file: $file"
 
 # Activity
-for a in Activity TabActivity PreferenceActivity	
+for a in Activity TabActivity PreferenceActivity ListActivity	
 do
 #ExpandableListActivity
 #TabActivity

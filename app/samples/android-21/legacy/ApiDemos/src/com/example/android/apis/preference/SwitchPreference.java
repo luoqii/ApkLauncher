@@ -22,7 +22,7 @@ import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 
-public class SwitchPreference extends PreferenceActivity {
+public class SwitchPreference extends org.bbs.apklauncher.api.Base_PreferenceActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

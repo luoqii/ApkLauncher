@@ -29,7 +29,7 @@ import android.os.Bundle;
  * <p>This demonstrates the how to write an activity that looks like 
  * a pop-up dialog with a custom theme using a different text color.</p>
  */
-public class CustomDialogActivity extends Activity {
+public class CustomDialogActivity extends org.bbs.apklauncher.api.Base_Activity {
     /**
      * Initialization of the Activity after it is first created.  Must at least
      * call {@link android.app.Activity#setContentView setContentView()} to

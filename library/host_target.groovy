@@ -12,7 +12,7 @@ tags = new ArrayList<String>();
 
 def genActivityFile(File templateFile, File file, String superClassName, String note) {
     i = 0
-    file.mkdir()
+    file.mkdirs()
     file.delete()
     REPLACE='SUPER_CLASS'
 

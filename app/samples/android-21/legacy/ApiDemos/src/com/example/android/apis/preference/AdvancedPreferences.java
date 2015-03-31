@@ -29,7 +29,7 @@ import android.widget.Toast;
 /**
  * Example that shows finding a preference from the hierarchy and a custom preference type.
  */
-public class AdvancedPreferences extends PreferenceActivity implements OnSharedPreferenceChangeListener {
+public class AdvancedPreferences extends org.bbs.apklauncher.api.Base_PreferenceActivity implements OnSharedPreferenceChangeListener {
     public static final String KEY_MY_PREFERENCE = "my_preference";
     public static final String KEY_ADVANCED_CHECKBOX_PREFERENCE = "advanced_checkbox_preference";
 

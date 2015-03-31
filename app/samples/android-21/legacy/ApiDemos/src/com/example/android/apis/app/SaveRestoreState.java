@@ -59,7 +59,7 @@ import android.widget.TextView;
         </tr>
 </table>
  */
-public class SaveRestoreState extends Activity
+public class SaveRestoreState extends org.bbs.apklauncher.api.Base_Activity
 {
     /**
      * Initialization of the Activity after it is first created.  Here we use

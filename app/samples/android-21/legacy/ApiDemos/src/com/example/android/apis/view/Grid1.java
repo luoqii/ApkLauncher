@@ -33,7 +33,7 @@ import java.util.List;
 import com.example.android.apis.R;
 
 
-public class Grid1 extends Activity {
+public class Grid1 extends org.bbs.apklauncher.api.Base_Activity {
 
     GridView mGrid;
 

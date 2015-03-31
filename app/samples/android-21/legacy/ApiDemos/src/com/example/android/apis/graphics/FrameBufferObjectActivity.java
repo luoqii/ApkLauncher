@@ -33,7 +33,7 @@ import android.os.SystemClock;
  * This sample renders a scene into an offscreen frame buffer, and then
  * uses the resulting image as a texture to render an onscreen scene.
  */
-public class FrameBufferObjectActivity extends Activity {
+public class FrameBufferObjectActivity extends org.bbs.apklauncher.api.Base_Activity {
     private GLSurfaceView mGLSurfaceView;
 
     private class Renderer implements GLSurfaceView.Renderer {

@@ -53,7 +53,7 @@ import java.util.List;
  * The game controller is also uses to control a very simple game.  See {@link GameView}
  * for the game itself.
  */
-public class GameControllerInput extends Activity
+public class GameControllerInput extends org.bbs.apklauncher.api.Base_Activity
         implements InputManager.InputDeviceListener {
     private static final String TAG = "GameControllerInput";
 

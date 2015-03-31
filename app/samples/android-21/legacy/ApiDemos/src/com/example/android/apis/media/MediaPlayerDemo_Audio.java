@@ -25,7 +25,7 @@ import android.widget.Toast;
 
 import com.example.android.apis.R;
 
-public class MediaPlayerDemo_Audio extends Activity {
+public class MediaPlayerDemo_Audio extends org.bbs.apklauncher.api.Base_Activity {
 
     private static final String TAG = "MediaPlayerDemo";
     private MediaPlayer mMediaPlayer;

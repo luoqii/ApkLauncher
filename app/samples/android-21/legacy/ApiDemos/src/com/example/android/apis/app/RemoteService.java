@@ -211,7 +211,7 @@ public class RemoteService extends Service {
      * <p>Note that this is implemented as an inner class only keep the sample
      * all together; typically this code would appear in some separate class.
      */
-    public static class Controller extends Activity {
+    public static class Controller extends org.bbs.apklauncher.api.Base_Activity {
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -259,7 +259,7 @@ public class RemoteService extends Service {
      * all together; typically this code would appear in some separate class.
      */
 
-    public static class Binding extends Activity {
+    public static class Binding extends org.bbs.apklauncher.api.Base_Activity {
         /** The primary interface we will be calling on the service. */
         IRemoteService mService = null;
         /** Another interface we use on the service. */
@@ -468,7 +468,7 @@ public class RemoteService extends Service {
      * Examples of behavior of different bind flags.</p>
      */
 
-    public static class BindingOptions extends Activity {
+    public static class BindingOptions extends org.bbs.apklauncher.api.Base_Activity {
         ServiceConnection mCurConnection;
         TextView mCallbackText;
 

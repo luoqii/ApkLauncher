@@ -38,7 +38,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-public class ReversingAnimation extends Activity {
+public class ReversingAnimation extends org.bbs.apklauncher.api.Base_Activity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -49,7 +49,7 @@ import com.example.android.apis.R;
  * the system decor, in order to better focus the user's attention or use available screen real
  * estate on the task at hand.
  */
-public class SystemUIModes extends Activity
+public class SystemUIModes extends org.bbs.apklauncher.api.Base_Activity
         implements OnQueryTextListener, ActionBar.TabListener {
     public static class IV extends ImageView implements View.OnSystemUiVisibilityChangeListener {
         private SystemUIModes mActivity;

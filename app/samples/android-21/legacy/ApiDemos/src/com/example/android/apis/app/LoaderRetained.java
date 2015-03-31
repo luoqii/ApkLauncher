@@ -45,7 +45,7 @@ import android.widget.SearchView.OnQueryTextListener;
  * Demonstration of the use of a CursorLoader to load and display contacts
  * data in a fragment.
  */
-public class LoaderRetained extends Activity {
+public class LoaderRetained extends org.bbs.apklauncher.api.Base_Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

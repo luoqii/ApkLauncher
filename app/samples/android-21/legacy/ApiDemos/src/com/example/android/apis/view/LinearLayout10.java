@@ -28,7 +28,7 @@ import android.os.Bundle;
  * Demonstrates the use of LinearLayout backgrounds to group labels,
  * EditTexts, and buttons,
  */
-public class LinearLayout10 extends Activity {
+public class LinearLayout10 extends org.bbs.apklauncher.api.Base_Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

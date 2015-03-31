@@ -42,7 +42,7 @@ import com.example.android.apis.R;
  * textures created on the fly by compressing images.
  *
  */
-public class CompressedTextureActivity extends Activity {
+public class CompressedTextureActivity extends org.bbs.apklauncher.api.Base_Activity {
     private final static String TAG = "CompressedTextureActivity";
     /**
      * Choose between creating a compressed texture on the fly or

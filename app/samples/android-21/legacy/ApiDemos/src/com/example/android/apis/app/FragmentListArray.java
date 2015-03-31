@@ -30,7 +30,7 @@ import android.widget.ListView;
  * Demonstration of using ListFragment to show a list of items
  * from a canned array.
  */
-public class FragmentListArray extends Activity {
+public class FragmentListArray extends org.bbs.apklauncher.api.Base_Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

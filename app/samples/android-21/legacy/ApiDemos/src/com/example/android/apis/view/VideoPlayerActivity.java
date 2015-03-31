@@ -49,7 +49,7 @@ import com.example.android.apis.R;
  * when the user isn't interacting with the screen to achieve full screen
  * video playback).
  */
-public class VideoPlayerActivity extends Activity
+public class VideoPlayerActivity extends org.bbs.apklauncher.api.Base_Activity
         implements OnQueryTextListener, ActionBar.TabListener {
 
     /**
@@ -194,7 +194,7 @@ public class VideoPlayerActivity extends Activity
 
         setContentView(R.layout.video_player);
         mContent = (Content)findViewById(R.id.content);
-        mContent.init(this, (TextView)findViewById(R.id.title),
+        mContent.init(this.getHostActivity(), (TextView)findViewById(R.id.title),
                 (Button)findViewById(R.id.play),
                 (SeekBar)findViewById(R.id.seekbar));
 

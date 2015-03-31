@@ -24,7 +24,7 @@ import android.view.animation.DecelerateInterpolator;
  * the picture by 90 degrees on the Y axis. When the first half finishes, the
  * list is made invisible and the picture is set visible.
  */
-public class Transition3d extends Activity implements
+public class Transition3d extends org.bbs.apklauncher.api.Base_Activity implements
         AdapterView.OnItemClickListener, View.OnClickListener {
     private ListView mPhotosList;
     private ViewGroup mContainer;

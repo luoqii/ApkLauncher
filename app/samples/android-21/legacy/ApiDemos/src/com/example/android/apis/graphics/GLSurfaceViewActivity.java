@@ -24,7 +24,7 @@ import android.os.Bundle;
  * Wrapper activity demonstrating the use of {@link GLSurfaceView}, a view
  * that uses OpenGL drawing into a dedicated surface.
  */
-public class GLSurfaceViewActivity extends Activity {
+public class GLSurfaceViewActivity extends org.bbs.apklauncher.api.Base_Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

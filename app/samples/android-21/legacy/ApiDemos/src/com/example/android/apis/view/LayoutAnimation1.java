@@ -30,7 +30,7 @@ import android.widget.ImageView;
 
 import java.util.List;
 
-public class LayoutAnimation1 extends Activity {
+public class LayoutAnimation1 extends org.bbs.apklauncher.api.Base_Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

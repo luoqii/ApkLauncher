@@ -32,7 +32,7 @@ import android.view.SurfaceView;
 import android.widget.Toast;
 
 
-public class MediaPlayerDemo_Video extends Activity implements
+public class MediaPlayerDemo_Video extends org.bbs.apklauncher.api.Base_Activity implements
         OnBufferingUpdateListener, OnCompletionListener,
         OnPreparedListener, OnVideoSizeChangedListener, SurfaceHolder.Callback {
 

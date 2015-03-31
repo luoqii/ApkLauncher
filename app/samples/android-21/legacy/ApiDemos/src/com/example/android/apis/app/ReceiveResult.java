@@ -68,7 +68,7 @@ App/Activity/Receive Result
 </table>
 
  */
-public class ReceiveResult extends Activity {
+public class ReceiveResult extends org.bbs.apklauncher.api.Base_Activity {
     /**
      * Initialization of the Activity after it is first created.  Must at least
      * call {@link android.app.Activity#setContentView setContentView()} to

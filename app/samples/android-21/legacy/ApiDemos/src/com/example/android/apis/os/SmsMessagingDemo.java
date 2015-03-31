@@ -43,7 +43,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.example.android.apis.R;
 
-public class SmsMessagingDemo extends Activity {
+public class SmsMessagingDemo extends org.bbs.apklauncher.api.Base_Activity {
     /** Tag string for our debug logs */
     private static final String TAG = "SmsMessagingDemo";
 

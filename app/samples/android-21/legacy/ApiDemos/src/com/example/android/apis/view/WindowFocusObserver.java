@@ -31,7 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.example.android.apis.R;
 
-public class WindowFocusObserver extends Activity implements SearchView.OnQueryTextListener {
+public class WindowFocusObserver extends org.bbs.apklauncher.api.Base_Activity implements SearchView.OnQueryTextListener {
     TextView mState;
 
     final FocusObserver mObserver = new WindowId.FocusObserver() {

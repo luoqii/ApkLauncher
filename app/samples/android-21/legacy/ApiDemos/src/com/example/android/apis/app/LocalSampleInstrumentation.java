@@ -16,6 +16,8 @@
 
 package com.example.android.apis.app;
 
+import org.bbs.apklauncher.api.Util;
+
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
@@ -55,16 +57,16 @@ public class LocalSampleInstrumentation extends Instrumentation {
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setClass(getTargetContext(), SaveRestoreState.class);
-        SaveRestoreState activity = (SaveRestoreState)startActivitySync(intent);
+        SaveRestoreState activity = (SaveRestoreState)Util.getTargetActivity((startActivitySync(intent)));
 
         // This is the Activity object that was started, to do with as we want.
         Log.i("LocalSampleInstrumentation",
               "Initial text: " + activity.getSavedText());
 
         // Clear the text so we start fresh.
-        runOnMainSync(new ActivityRunnable(activity) {
+        runOnMainSync(new ActivityRunnable(activity.getHostActivity()) {
             public void run() {
-                ((SaveRestoreState)activity).setSavedText("");
+                ((SaveRestoreState)Util.getTargetActivity(activity)).setSavedText("");
             }
         });
 

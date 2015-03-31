@@ -27,7 +27,7 @@ import android.os.Bundle;
  * This sample shows how to check for OpenGL ES 2.0 support at runtime, and then
  * use either OpenGL ES 1.0 or OpenGL ES 2.0, as appropriate.
  */
-public class GLES20Activity extends Activity {
+public class GLES20Activity extends org.bbs.apklauncher.api.Base_Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

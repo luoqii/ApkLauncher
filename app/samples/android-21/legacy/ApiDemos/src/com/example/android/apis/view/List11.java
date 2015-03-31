@@ -26,7 +26,7 @@ import android.widget.ListView;
  * in CHOICE_MODE_MULTIPLE mode, which means the items behave like
  * checkboxes.
  */
-public class List11 extends ListActivity {
+public class List11 extends org.bbs.apklauncher.api.Base_ListActivity {
     
     @Override
     public void onCreate(Bundle savedInstanceState) {

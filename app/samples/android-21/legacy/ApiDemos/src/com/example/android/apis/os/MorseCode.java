@@ -47,7 +47,7 @@ OS / Morse Code Vibrator
  *         </tr>
  * </table> 
  */
-public class MorseCode extends Activity
+public class MorseCode extends org.bbs.apklauncher.api.Base_Activity
 {
     /** Our text view */
     private TextView mTextView;

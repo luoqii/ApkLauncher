@@ -30,7 +30,7 @@ import com.example.android.apis.R;
  * are loaded from resource files and transitions are run between those scenes
  * as well as a dynamically-configured scene.
  */
-public class Transitions extends Activity {
+public class Transitions extends org.bbs.apklauncher.api.Base_Activity {
 
     Scene mScene1, mScene2, mScene3;
     ViewGroup mSceneRoot;

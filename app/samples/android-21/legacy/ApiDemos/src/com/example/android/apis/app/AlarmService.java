@@ -37,7 +37,7 @@ import android.widget.Toast;
  * be started.  This is useful when you want to schedule alarms that initiate
  * long-running operations, such as retrieving recent e-mails.
  */
-public class AlarmService extends Activity {
+public class AlarmService extends org.bbs.apklauncher.api.Base_Activity {
     private PendingIntent mAlarmSender;
     
     @Override

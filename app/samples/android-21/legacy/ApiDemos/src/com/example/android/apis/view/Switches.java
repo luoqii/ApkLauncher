@@ -27,7 +27,7 @@ import com.example.android.apis.R;
 /**
  * Demonstrates the use of the toggle switch widget.
  */
-public class Switches extends Activity implements CompoundButton.OnCheckedChangeListener {
+public class Switches extends org.bbs.apklauncher.api.Base_Activity implements CompoundButton.OnCheckedChangeListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

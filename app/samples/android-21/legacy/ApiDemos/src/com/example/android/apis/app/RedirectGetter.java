@@ -30,7 +30,7 @@ import android.widget.TextView;
  * Sub-activity that is executed by the redirection example when input is needed
  * from the user.
  */
-public class RedirectGetter extends Activity
+public class RedirectGetter extends org.bbs.apklauncher.api.Base_Activity
 {
     private String mTextPref;
     private TextView mText;

@@ -30,7 +30,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-public class Animation3 extends Activity implements AdapterView.OnItemSelectedListener {
+public class Animation3 extends org.bbs.apklauncher.api.Base_Activity implements AdapterView.OnItemSelectedListener {
     private static final String[] INTERPOLATORS = {
             "Accelerate", "Decelerate", "Accelerate/Decelerate",
             "Anticipate", "Overshoot", "Anticipate/Overshoot",

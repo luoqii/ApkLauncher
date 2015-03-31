@@ -17,7 +17,7 @@ import android.widget.Button;
 /**
  * Example of various Intent flags to modify the activity stack.
  */
-public class IntentActivityFlags extends Activity {
+public class IntentActivityFlags extends org.bbs.apklauncher.api.Base_Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

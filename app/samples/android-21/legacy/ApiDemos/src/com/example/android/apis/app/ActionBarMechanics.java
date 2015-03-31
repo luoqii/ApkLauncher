@@ -27,7 +27,7 @@ import android.widget.Toast;
  * standard options menu. This demo is for informative purposes only; see ActionBarUsage for
  * an example of using the Action Bar in a more idiomatic manner.
  */
-public class ActionBarMechanics extends Activity {
+public class ActionBarMechanics extends org.bbs.apklauncher.api.Base_Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

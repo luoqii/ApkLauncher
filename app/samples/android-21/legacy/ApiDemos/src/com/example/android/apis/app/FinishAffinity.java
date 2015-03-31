@@ -27,7 +27,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class FinishAffinity extends Activity {
+public class FinishAffinity extends org.bbs.apklauncher.api.Base_Activity {
     int mNesting;
 
     @Override
