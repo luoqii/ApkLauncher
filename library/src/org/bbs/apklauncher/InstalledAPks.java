@@ -19,8 +19,11 @@ import org.bbs.apkparser.PackageInfoX.ServiceInfoX;
 import android.app.Application;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
+import android.text.TextUtils;
 import dalvik.system.DexClassLoader;
 
 public class InstalledAPks {
@@ -37,6 +40,34 @@ public class InstalledAPks {
 	
 	private InstalledAPks() {
 		
+	}
+	
+	public List<ResolveInfo> queryIntentActivities(Intent intent, int flag) {
+		List<ResolveInfo> result = new ArrayList<>();
+		for (PackageInfoX p : mInfos){
+			queryIntentActivities(p.packageName, intent, flag, result);
+		}
+		return result;
+	}
+	
+	public List<ResolveInfo> queryIntentActivities(String packageName, Intent intent, int flag) {
+		List<ResolveInfo> result = new ArrayList<>();
+		queryIntentActivities(packageName, intent, flag, result);
+		return result;
+	}
+	
+	private void queryIntentActivities(String packageName, Intent intent, int flag, List<ResolveInfo> result){
+		if (TextUtils.isEmpty(packageName)) return;
+		
+		for (PackageInfoX p : mInfos){
+			queryIntentActivities(p.packageName, intent, flag, result);
+			if (packageName.equals(p.packageName)){
+				for (ActivityInfo a : p.activities){
+					ActivityInfoX aX = (ActivityInfoX) a;
+//					aX.
+				}
+			}
+		}
 	}
 
 	public static ClassLoader getClassLoader(String packageName) {
