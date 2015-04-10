@@ -21,8 +21,10 @@ public class ResultActivity extends Base_Activity {
 		setContentView(R.layout.activity_main);
 		
 		Intent intent = getIntent();
-		int pa = ((MainActivity.P)intent.getParcelableExtra(EXTRA_PARCEL)).a;
-		int sa = ((MainActivity.S)intent.getSerializableExtra(EXTRA_SERIABLE)).a;
+		int pa = -1;
+//		pa = ((MainActivity.P)intent.getParcelableExtra(EXTRA_PARCEL)).a;
+		int sa = -1;
+		sa = ((MainActivity.S)intent.getSerializableExtra(EXTRA_SERIABLE)).a;
 		
 		CharSequence text;
 		text = "pa: " + pa;
