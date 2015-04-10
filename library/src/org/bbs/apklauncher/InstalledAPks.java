@@ -261,4 +261,19 @@ public class InstalledAPks {
 	
 		return cl;
 	}
+	
+	class TargetClassLoader extends DexClassLoader {
+
+		public TargetClassLoader(String dexPath, String optimizedDirectory,
+				String libraryPath, ClassLoader parent) {
+			super(dexPath, optimizedDirectory, libraryPath, parent);
+		}
+		
+		@Override
+		protected Class<?> loadClass(String className, boolean resolve)
+				throws ClassNotFoundException {
+			return super.loadClass(className, resolve);
+		}
+		
+	}
 }
