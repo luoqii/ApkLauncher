@@ -79,6 +79,8 @@ implements CallBack {
 	private void onPrepareActivityStub() {
 		
 		Intent intent = getIntent();
+		// TODO is there a way to update ClassLoader before parse intent?
+		//intent.getExtras().setClassLoader(loader);
 		
 		// get target activity info
 		String targetActivityClassName = intent.getStringExtra(EXTRA_COMPONENT_CLASS_NAME);

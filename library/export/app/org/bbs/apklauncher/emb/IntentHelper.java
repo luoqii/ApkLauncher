@@ -206,22 +206,22 @@ public class IntentHelper extends android.content.Intent {
 	public <T extends Parcelable> T getParcelableExtra(String name) {
 //		notSupported();
 //		
-//		return mTarget.getParcelableExtra(name);
+		return mTarget.getParcelableExtra(name);
 		
-		Log.d(TAG, "getParcelableExtra(). name: " + name);
-		T value = null;
-		if (mTarget.getBooleanExtra(EXTRA_INJECT, false) == false){
-			value =  mTarget.getParcelableExtra(name);
-		} else {
-			String fName = null;
-			fName = mTarget.getStringExtra(name);
-			if (!TextUtils.isEmpty(fName)) {
-				value =  (T) PersistentObject.getsInstance().getObject(fName);
-			}
-		}
-
-		Log.d(TAG, "getParcelableExtra(). name: " + name + " value: " + value);
-		return value;
+//		Log.d(TAG, "getParcelableExtra(). name: " + name);
+//		T value = null;
+//		if (mTarget.getBooleanExtra(EXTRA_INJECT, false) == false){
+//			value =  mTarget.getParcelableExtra(name);
+//		} else {
+//			String fName = null;
+//			fName = mTarget.getStringExtra(name);
+//			if (!TextUtils.isEmpty(fName)) {
+//				value =  (T) PersistentObject.getsInstance().getObject(fName);
+//			}
+//		}
+//
+//		Log.d(TAG, "getParcelableExtra(). name: " + name + " value: " + value);
+//		return value;
 	}
 
 	@Override
@@ -504,18 +504,16 @@ public class IntentHelper extends android.content.Intent {
 	@Override
 	public android.content.Intent putExtra(String name, Parcelable value) {
 		mTarget.putExtra(name, value);
-		
-		notSupported();
-		Log.d(TAG, "putExtra(). name: " + name + " value: " + value);
-		if (! (value instanceof Serializable)) {
-			throw new RuntimeException("input paramater must be Serializable. value: " + value);
-		}
-		File f = PersistentObject.getsInstance().saveObject((Serializable) value);
-		if (f != null) {
-			mTarget.putExtra(name, f.getName());
-		}
+//			Log.d(TAG, "putExtra(). name: " + name + " value: " + value);
+//			if (! (value instanceof Serializable)) {
+//				throw new RuntimeException("input paramater must be Serializable. value: " + value);
+//			}
+//			File f = PersistentObject.getsInstance().saveObject((Serializable) value);
+//			if (f != null) {
+//				mTarget.putExtra(name, f.getName());
+//			}
 		 
-		return this;
+		 return this;
 	}
 
 	@Override
@@ -779,7 +777,7 @@ public class IntentHelper extends android.content.Intent {
 	}
 	
 	void notSupported() {
-		throw new RuntimeException("not supported. you can use putExtra(String,Serializable) instead.");
+		throw new RuntimeException("not supported.");
 	}
 	
 	public static class PersistentObject {
@@ -809,17 +807,13 @@ public class IntentHelper extends android.content.Intent {
 	    }
 
 	    public void init(Application application, ClassLoader classLoader){
-	    	if (mHasInit) {
-	    		Log.i(TAG, "has inited, ignore.");
-	    		return;
-	    	}
-	    	
 	        mDir = application.getDir("tmp_object", Context.MODE_WORLD_READABLE);
+	        
+	        for (File f : mDir.listFiles()){
+	        	f.delete();
+	        }
+	        
 	        mClassLoader = classLoader;
-	        // clean last object
-//	        for (File f : mDir.listFiles()){
-//	        	f.delete();
-//	        }
 	        
 	        mHasInit = true;
 	    }
@@ -838,8 +832,7 @@ public class IntentHelper extends android.content.Intent {
 	        } catch (IOException e) {
 	            e.printStackTrace();
 	        }
-	        
-	        f.deleteOnExit();
+
 	        return f;
 	    }
 
