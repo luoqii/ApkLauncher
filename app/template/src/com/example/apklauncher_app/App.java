@@ -1,4 +1,4 @@
-package com.example.apklauncher_app_alt_res;
+package com.example.apklauncher_app;
 
 import android.app.Application;
 import android.util.Log;
