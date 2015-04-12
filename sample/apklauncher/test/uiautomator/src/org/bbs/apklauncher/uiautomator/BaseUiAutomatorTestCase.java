@@ -24,68 +24,68 @@ public class BaseUiAutomatorTestCase extends UiAutomatorTestCase {
     
     public void pressBack() {
         mDevice.pressBack();
-        waitForIdle();
+        safeWaitForIdle();
     }   
     
     public void pressBack(int limit) {
         for (int i = 0 ; i < limit; i++) {
             mDevice.pressBack();
-            waitForIdle();
+            safeWaitForIdle();
         }
     }
     
     public void pressDPadLeft() {
         mDevice.pressDPadLeft();
-        waitForIdle();
+        safeWaitForIdle();
     }
     
     public void pressDPadRight() {
         mDevice.pressDPadRight();
-        waitForIdle();
+        safeWaitForIdle();
     }
     
     public void pressDPadUp() {
         mDevice.pressDPadUp();
-        waitForIdle();
+        safeWaitForIdle();
     }
     
     public void pressDPadDown() {
         mDevice.pressDPadDown();
-        waitForIdle();
+        safeWaitForIdle();
     }
     
     public void pressDPadDown(int limit) {
         for (int i = 0 ; i < limit; i++) {
             mDevice.pressDPadDown();
-            waitForIdle();
+            safeWaitForIdle();
         }
     }
     
     public void pressDPadUp(int limit) {
         for (int i = 0 ; i < limit; i++) {
             mDevice.pressDPadUp();
-            waitForIdle();
+            safeWaitForIdle();
         }
     }
     
     public void pressDPadLeft(int limit) {
         for (int i = 0 ; i < limit; i++) {
             mDevice.pressDPadLeft();
-            waitForIdle();
+            safeWaitForIdle();
         }
     }
     
     public void pressDPadRight(int limit) {
         for (int i = 0 ; i < limit; i++) {
             mDevice.pressDPadRight();
-            waitForIdle();
+            safeWaitForIdle();
         }
     }
     
     public void pressDPadCenter(int limit) {
         for (int i = 0 ; i < limit; i++) {
             mDevice.pressDPadCenter();
-            waitForIdle();
+            safeWaitForIdle();
         }
     }
     
@@ -97,6 +97,10 @@ public class BaseUiAutomatorTestCase extends UiAutomatorTestCase {
     public void waitForIdle() {
         mDevice.waitForIdle();
     }  
+    
+    public void safeWaitForIdle(){
+    	waitForIdle(3 * 1000);
+    }
     
     public void waitForIdle(long timeout) {
         mDevice.waitForIdle(timeout);
