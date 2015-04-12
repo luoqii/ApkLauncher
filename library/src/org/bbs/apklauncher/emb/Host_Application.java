@@ -1,6 +1,6 @@
 package org.bbs.apklauncher.emb;
 
-import org.bbs.apklauncher.InstalledAPks;
+import org.bbs.apklauncher.ApkPackageManager;
 import org.bbs.apklauncher.PackageManagerProxy;
 import org.bbs.apklauncher.ReflectUtil;
 import org.bbs.apklauncher.ResourcesMerger;
@@ -33,7 +33,7 @@ Application
 	public /*static*/ Application onPrepareApplictionStub(ApplicationInfo appInfo, 
 			ClassLoader classLoader, PackageManager pm) {
 		String apkPath = appInfo.publicSourceDir;
-		Application app = InstalledAPks.getApplication(appInfo.packageName);
+		Application app = ApkPackageManager.getApplication(appInfo.packageName);
 		if (null == app) {
 			mPersistent.init(this, classLoader);
 			
@@ -42,7 +42,7 @@ Application
 				try {
 
 					TargetContext appBaseContext = new TargetContext(this);
-					Resources appRes = InstalledAPks.makeTargetResource(apkPath, this);
+					Resources appRes = ApkPackageManager.makeTargetResource(apkPath, this);
 					appRes = new ResourcesMerger(appRes, getResources());
 					appBaseContext.resReady(appRes);
 					int appTheme = appInfo.theme;
@@ -63,7 +63,7 @@ Application
 
 					attachBundleAplication(app, appBaseContext);
 
-					InstalledAPks.putApplication(appInfo.packageName, app);
+					ApkPackageManager.putApplication(appInfo.packageName, app);
 				} catch (Exception e) {
 					e.printStackTrace();
 					throw new RuntimeException("error in create application: " + appClassName , e);

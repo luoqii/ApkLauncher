@@ -100,10 +100,10 @@ public class PackageManagerProxy extends PackageManager {
 	public ApplicationInfo getApplicationInfo(String packageName, int flags)
 			throws NameNotFoundException {
 		Log.d(TAG, "getApplicationInfo(). packageName: " + packageName + " flags: " + flags);
-		InstalledAPks apks = InstalledAPks.getInstance();
-		if (apks.hasApplicationInfo(packageName)
+		ApkPackageManager pm = ApkPackageManager.getInstance();
+		if (pm.hasApplicationInfo(packageName)
 				&& (flags | PackageManager.GET_META_DATA) != 0) {
-			ApplicationInfoX aInfo = apks.getApplicationInfo(packageName);
+			ApplicationInfoX aInfo = pm.getApplicationInfo(packageName);
 
 			Log.d(TAG, "use pased ApplicationInfoX: " + aInfo);
 			return aInfo;

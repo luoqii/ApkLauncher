@@ -2,12 +2,13 @@ package org.bbs.apklauncher.demo;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bbs.apklauncher.InstalledAPks;
+import org.bbs.apklauncher.ApkPackageManager;
 import org.bbs.apklauncher.emb.IntentHelper;
 import org.bbs.apklauncher.emb.LoadedApk;
 import org.bbs.apklauncher.emb.auto_gen.Stub_Activity;
 import org.bbs.apkparser.PackageInfoX;
 import org.bbs.apkparser.PackageInfoX.ActivityInfoX;
+import org.bbs.apkparser.PackageInfoX.IntentFilterX;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -34,7 +35,7 @@ public class ApkLuncherActivity extends Activity {
 		
 		setContentView(R.layout.activity_apk_launcher);
 		
-		InstalledAPks apks = InstalledAPks.getInstance();
+		ApkPackageManager apks = ApkPackageManager.getInstance();
 		ListAdapter adapter = new ArrayAdapter<PackageInfoX.ActivityInfoX>(this, android.R.layout.simple_list_item_1, parseLauncher(apks.getAllApks())){
 			@Override
 			public View getView(int position, View convertView, ViewGroup parent) {
@@ -105,8 +106,8 @@ public class ApkLuncherActivity extends Activity {
 			if (m.activities != null) {
 				for (ActivityInfo a : m.activities) {
 					PackageInfoX.ActivityInfoX aX = (ActivityInfoX) a;
-					if (aX.mIntents != null) {
-						for (PackageInfoX.IntentInfoX i : aX.mIntents) {
+					if (aX.mIntentFilters != null) {
+						for (IntentFilterX i : aX.mIntentFilters) {
 							if (i.hasAction(IntentHelper.ACTION_MAIN) && i.hasCategory(IntentHelper.CATEGORY_LAUNCHER)) {
 								launchers.add(aX);
 								break;

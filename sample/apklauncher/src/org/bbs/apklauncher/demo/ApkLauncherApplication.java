@@ -5,7 +5,7 @@ import java.io.PrintStream;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.Date;
 
-import org.bbs.apklauncher.InstalledAPks;
+import org.bbs.apklauncher.ApkPackageManager;
 import org.bbs.apklauncher.emb.Host_Application;
 
 import android.annotation.SuppressLint;
@@ -32,7 +32,7 @@ Host_Application
 		apkDir = new File(Environment.getExternalStorageDirectory(), "apk");
 		
 		Log.d(TAG, "apkDir: " + apkDir);
-		InstalledAPks apks = InstalledAPks.getInstance();
+		ApkPackageManager apks = ApkPackageManager.getInstance();
 		apks.init(this, apkDir);
 	}
 	

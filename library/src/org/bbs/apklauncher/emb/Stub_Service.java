@@ -4,7 +4,7 @@ import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.bbs.apklauncher.InstalledAPks;
+import org.bbs.apklauncher.ApkPackageManager;
 import org.bbs.apklauncher.ReflectUtil;
 import org.bbs.apklauncher.ResourcesMerger;
 import org.bbs.apkparser.PackageInfoX.ServiceInfoX;
@@ -41,8 +41,8 @@ public class Stub_Service extends Host_Service {
 		}
 		
 		// how to get classloader berfore parse intent.
-		if (InstalledAPks.sLastClassLoader != null) {
-			sLastClassLoader = InstalledAPks.sLastClassLoader;
+		if (ApkPackageManager.sLastClassLoader != null) {
+			sLastClassLoader = ApkPackageManager.sLastClassLoader;
 		} 
 		if (sLastClassLoader != null) {
 //			mTargetContext.classLoaderReady(sLastClassLoader);
@@ -52,13 +52,13 @@ public class Stub_Service extends Host_Service {
 		
 		mComponent = intent.getParcelableExtra(EXTRA_COMPONENT);
 		mServiceClassNmae = mComponent.getClassName();
-		ServiceInfoX s = InstalledAPks.getInstance().getServiceInfo(mServiceClassNmae);
+		ServiceInfoX s = ApkPackageManager.getInstance().getServiceInfo(mServiceClassNmae);
 		
 		mApkPath = s.applicationInfo.publicSourceDir;
-		mClassLoader = InstalledAPks.getClassLoader(mApkPath);
+		mClassLoader = ApkPackageManager.getClassLoader(mApkPath);
 		if (null == mClassLoader) {
 			mClassLoader = onCreateClassLoader(mApkPath, s.mPackageInfo.mLibPath);
-			InstalledAPks.putClassLoader(mApkPath, (mClassLoader));
+			ApkPackageManager.putClassLoader(mApkPath, (mClassLoader));
 		}
 		sLastClassLoader = mClassLoader;
 		
@@ -68,7 +68,7 @@ public class Stub_Service extends Host_Service {
 				mResourceMerger = rr.get();
 				mTargetResource = mResourceMerger.mFirst;
 			} else {
-				mTargetResource = InstalledAPks.makeTargetResource(mApkPath, this);
+				mTargetResource = ApkPackageManager.makeTargetResource(mApkPath, this);
 				mResourceMerger = new ResourcesMerger(mTargetResource, getResources());
 				sApk2ResourceMap.put(mApkPath, new WeakReference<ResourcesMerger>(mResourceMerger));
 			}
@@ -105,7 +105,7 @@ public class Stub_Service extends Host_Service {
 	}
 	
 	private ClassLoader onCreateClassLoader(String apkPath, String libPath) {	
-		return InstalledAPks.createClassLoader(apkPath, libPath, this);
+		return ApkPackageManager.createClassLoader(apkPath, libPath, this);
 	}
 	
 	@Override

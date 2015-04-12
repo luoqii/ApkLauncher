@@ -16,15 +16,6 @@
 
 package com.example.android.apis;
 
-import android.app.ListActivity;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
-
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,6 +23,16 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.bbs.apklauncher.ApkPackageManager;
+
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 
 public class ApiDemos extends org.bbs.apklauncher.api.Base_ListActivity {
 
@@ -60,6 +61,8 @@ public class ApiDemos extends org.bbs.apklauncher.api.Base_ListActivity {
 
         PackageManager pm = getPackageManager();
         List<ResolveInfo> list = pm.queryIntentActivities(mainIntent, 0);
+        
+        list = ApkPackageManager.getInstance().queryIntentActivities(getPackageName(), mainIntent, 0);
 
         if (null == list)
             return myData;

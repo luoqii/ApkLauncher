@@ -3,7 +3,7 @@ package org.bbs.apklauncher.emb;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.bbs.apklauncher.InstalledAPks;
+import org.bbs.apklauncher.ApkPackageManager;
 import org.bbs.apklauncher.emb.auto_gen.Stub_Activity;
 import org.bbs.apkparser.PackageInfoX.ActivityInfoX;
 import org.bbs.apkparser.PackageInfoX.ServiceInfoX;
@@ -44,7 +44,7 @@ public class Util {
 				com = new ComponentName(realContext.getPackageName(), superClassName.replace("Target", "Stub"));
                 // inject and replace with our component.
 				intent.setComponent(com);
-				ActivityInfoX a = InstalledAPks.getInstance().getActivityInfo(c);
+				ActivityInfoX a = ApkPackageManager.getInstance().getActivityInfo(c);
 				if (a != null) {
 //					ApkLuncherActivity.putExtra(a, intent);
 					intent.putExtra(Stub_Activity.EXTRA_COMPONENT_CLASS_NAME, a.name);
@@ -65,7 +65,7 @@ public class Util {
 				com = new ComponentName(realContext.getPackageName(), superClassName.replace("Target", "Stub"));
                 // inject and replace with our component.
 				intent.setComponent(com);
-				ServiceInfoX a = InstalledAPks.getInstance().getServiceInfo(c);
+				ServiceInfoX a = ApkPackageManager.getInstance().getServiceInfo(c);
 				if (a != null) {
 //					intent.putExtra(Stub_Service.EXTRA_COMPONENT, new ComponentName(a.packageName, a.name));
 					intent.putExtra(Stub_Activity.EXTRA_COMPONENT_CLASS_NAME, a.name);

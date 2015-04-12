@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.bbs.apklauncher.ReflectUtil.ActivityReflectUtil;
 
-import org.bbs.apklauncher.InstalledAPks;
+import org.bbs.apklauncher.ApkPackageManager;
 import org.bbs.apklauncher.PackageManagerProxy;
 import org.bbs.apklauncher.emb.Host_Application;
 import org.bbs.apklauncher.emb.IntentHelper;
@@ -84,7 +84,7 @@ implements CallBack {
 		
 		// get target activity info
 		String targetActivityClassName = intent.getStringExtra(EXTRA_COMPONENT_CLASS_NAME);
-		mTargetActivityInfo = InstalledAPks.getInstance().getActivityInfo(targetActivityClassName);
+		mTargetActivityInfo = ApkPackageManager.getInstance().getActivityInfo(targetActivityClassName);
 		String libPath = mTargetActivityInfo.mPackageInfo.mLibPath;
 		String targetApplicationClassName = mTargetActivityInfo.applicationInfo.className;
 		int targetThemeId = mTargetActivityInfo.theme;
@@ -104,7 +104,7 @@ implements CallBack {
 		Log.d(TAG, "libPath                    : " + libPath);
 		
 		// create target classloader if necessary.
-		mTargetClassLoader = InstalledAPks.makeClassLoader(mRealBaseContext, mTargetApkPath, libPath);
+		mTargetClassLoader = ApkPackageManager.makeClassLoader(mRealBaseContext, mTargetApkPath, libPath);
 		mTargetContext.classLoaderReady(mTargetClassLoader);
 
 		// do application init. must before activity init.
@@ -114,7 +114,7 @@ implements CallBack {
 		// do activity init
 		InstrumentationWrapper.injectInstrumentation(this, this);
 		try {
-			mResourceMerger = InstalledAPks.makeTargetResource(mTargetApkPath, mRealBaseContext);
+			mResourceMerger = ApkPackageManager.makeTargetResource(mTargetApkPath, mRealBaseContext);
 
 			targetThemeId = ReflectUtil.ResourceUtil.selectDefaultTheme(mResourceMerger, targetThemeId, 
 																			mTargetActivityInfo.applicationInfo.targetSdkVersion);
@@ -123,7 +123,7 @@ implements CallBack {
 			mTargetContext.setTheme(targetThemeId);
 			mTargetContext.themeReady(targetThemeId);
 			mTargetContext.resReady(mResourceMerger);
-			mTargetContext.applicationContextReady(InstalledAPks.getApplication(targetPackageName));
+			mTargetContext.applicationContextReady(ApkPackageManager.getApplication(targetPackageName));
 			
 			ReflectUtil.ActivityReflectUtil.setActivityApplication(this, app);
 			Class clazz = mTargetClassLoader.loadClass(targetActivityClassName);
