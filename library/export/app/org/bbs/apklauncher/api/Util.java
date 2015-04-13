@@ -5,12 +5,13 @@ import java.lang.reflect.Method;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.support.v4.app.Fragment;
 
 public class Util {
 	private static final String TAG = Util.class.getSimpleName();
 	
-	public static Object getTargetActivity(Activity a) {
+	public static Object getTargetActivity(Context a) {
 		
 		return a;
 	}
