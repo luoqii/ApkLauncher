@@ -3,9 +3,9 @@
 set -x
 
 export PROJECT_NAME=uiautomator
-appPackageName="org.bbs.apklauncher.demo"
-className="org.bbs.apklauncher.demo.ApkLuncherActivity"
-testPackaeName="org.bbs.apklauncher.uiautomator"
+appPackageName   ="org.bbs.apklauncher.demo"
+appMainclassName ="org.bbs.apklauncher.demo.ApkLuncherActivity"
+testPackaeName   ="org.bbs.apklauncher.uiautomator"
 
 if [[ "x$ANDROID_TARGET" == "x" ]] ; then
   echo "no ANDROID_TARGET, you should export it"
