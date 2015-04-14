@@ -3,9 +3,9 @@
 set -x
 
 export PROJECT_NAME=uiautomator
-appPackageName   ="org.bbs.apklauncher.demo"
-appMainclassName ="org.bbs.apklauncher.demo.ApkLuncherActivity"
-testPackaeName   ="org.bbs.apklauncher.uiautomator"
+appPackageName="org.bbs.apklauncher.demo"
+appMainclassName="org.bbs.apklauncher.demo.ApkLuncherActivity"
+testPackaeName="org.bbs.apklauncher.uiautomator"
 
 if [[ "x$ANDROID_TARGET" == "x" ]] ; then
   echo "no ANDROID_TARGET, you should export it"
@@ -37,7 +37,7 @@ function pid()
 
 PID=$(pid --exact $appPackageName)
 adb shell kill -9 $PID
-adb shell am start $appPackageName/$className
+adb shell am start $appPackageName/$appMainclassName
 sleep 3s
 
 android create uitest-project -n $PROJECT_NAME -t $ANDROID_TARGET -p .
@@ -46,7 +46,8 @@ adb push bin/$PROJECT_NAME.jar /data/local/tmp/
 #adb shell uiautomator runtest $PROJECT_NAME.jar -e class com.youku.tv.uiautomator.HomeUiTest#testFocusSaveAndRestore_top
 #adb shell uiautomator runtest $PROJECT_NAME.jar -e class com.youku.tv.uiautomator.HomeUiTest#testFocusSaveAndRestore_left2right
 
-adb shell uiautomator runtest $PROJECT_NAME.jar -c ${testPackaeName}.ApiDemo_UiTest 
+#adb shell uiautomator runtest $PROJECT_NAME.jar -c ${testPackaeName}.ApiDemo_UiTest 
+adb shell uiautomator runtest $PROJECT_NAME.jar -c ${testPackaeName}.ApiDemo_UiTest#testApiDemo_tranverse
 #adb shell uiautomator dump /data/local/tmp/window_dump.xml
 #adb pull /data/local/tmp/window_dump.xml .
 #cat window_dump.xml

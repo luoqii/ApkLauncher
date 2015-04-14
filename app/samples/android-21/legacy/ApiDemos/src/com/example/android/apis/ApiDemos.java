@@ -40,6 +40,7 @@ public class ApiDemos extends org.bbs.apklauncher.api.Base_ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
+        findViewById(android.R.id.content).setContentDescription("Xapidemo");
         Intent intent = getIntent();
         String path = intent.getStringExtra("com.example.android.apis.Path");
         
