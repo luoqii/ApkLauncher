@@ -10,7 +10,8 @@ import com.android.uiautomator.core.UiScrollable;
 import com.android.uiautomator.core.UiSelector;
 
 public class ApiDemo_UiTest extends BaseUiAutomatorTestCase {
-    private static final String TAG = ApiDemo_UiTest.class.getSimpleName();
+    private static final String TEXT_API_DEMOS = "API Demos";
+	private static final String TAG = ApiDemo_UiTest.class.getSimpleName();
     private UiObject mTmpUiObject;
     
     private List<List<UiNode>> mUiTree = new ArrayList<List<UiNode>>();
@@ -68,13 +69,23 @@ public class ApiDemo_UiTest extends BaseUiAutomatorTestCase {
 	public void testApiDemo_tranverse() throws UiObjectNotFoundException{
 		logD(TAG, "testApiDemo_tranverse. ");
 		
+		List<String> ignoreLables = new ArrayList<String>();
+		ignoreLables.add("Action Bar Usage");
 		UiNode top = new UiNode("TOP");
 		gatherAllUiNode(top, true);
-		tranverse(top, 1);
+		tranverse(top, 1, ignoreLables);
 	}
 	
-	void tranverse(UiNode uiTree, int deep) throws UiObjectNotFoundException{
+	void tranverse(UiNode uiTree, int deep, List<String> ignoreLables) throws UiObjectNotFoundException{
 		logD(TAG, "tranverse. uiTree: " + uiTree + " deep: " + deep);
+		String path = uiTree.label;
+		UiNode p = uiTree.parent;
+		while (p != null) {
+			path = path + "->" + p.label;
+			p = p.parent;
+		}
+		logD(TAG, "path: " + path);
+		
 		uiTree.finished = true;
 		for (UiNode n : uiTree.children) {
 			if (!n.finished){
@@ -89,23 +100,25 @@ public class ApiDemo_UiTest extends BaseUiAutomatorTestCase {
 		} else {
 			for (UiNode n : uiTree.children) {
 				
-				UiObject o = new UiObject(new UiSelector().className(A_TEXTVIEW).text("API Demos"));
 				waitForIdle();
+				UiObject o = new UiObject(new UiSelector().description("Xapidemo"));
 				if (!o.exists()){
 					uiTree.finished = true;
 				} else 	if (!n.finished){
-					findNodeAndClick(n);
-					o = new UiObject(new UiSelector().className(A_TEXTVIEW).text("API Demos"));
-					o = new UiObject(new UiSelector().description("Xapidemo"));
-					UiObject listO = new UiObject(new UiSelector().className(A_LISTVIEW));
-					if (!o.exists() 
-//							|| !listO.exists()
-							) {
+					if (shouldIgnore(ignoreLables, n.label)) {
 						n.finished = true;
-						pressBack();
+						continue;
 					} else {
-						gatherAllUiNode(n, true);
-						tranverse(n, deep + 1);
+						findNodeAndClick(n);
+						o = new UiObject(new UiSelector().description("Xapidemo"));
+						UiObject listO = new UiObject(new UiSelector().className(A_LISTVIEW));
+						if (!o.exists() ) {
+							n.finished = true;
+							pressBack();
+						} else {
+							gatherAllUiNode(n, true);
+							tranverse(n, deep + 1, ignoreLables);
+						}
 					}
 				}
 			}
@@ -115,8 +128,13 @@ public class ApiDemo_UiTest extends BaseUiAutomatorTestCase {
 		}
 	}
 
+	private boolean shouldIgnore(List<String> ignoreLables, String text) {
+//		logD(TAG, "text: " + text);
+		return ignoreLables.contains(text);
+	}
+
 	private void findNodeAndClick(final UiNode n) throws UiObjectNotFoundException {
-		logD(TAG, "findNodeAndClick, n: " + n);
+//		logD(TAG, "findNodeAndClick, n: " + n);
 		String label = n.label;
 
 		UiNodeAction a = new UiNodeAction(){
@@ -126,10 +144,10 @@ public class ApiDemo_UiTest extends BaseUiAutomatorTestCase {
 				String label;
 				try {
 					label = o.getText();
-					logD(TAG, "findNodeAndClick, label: " + label);
+//					logD(TAG, "findNodeAndClick, label: " + label);
 					if (n.label.equalsIgnoreCase(label)){
+						logD(TAG, "clickAndWaitForNewWindow. n: " + o.getText());
 						o.clickAndWaitForNewWindow();
-						logD(TAG, "clickAndWaitForNewWindow");
 						return true;
 					}
 				} catch (UiObjectNotFoundException e) {
@@ -144,7 +162,7 @@ public class ApiDemo_UiTest extends BaseUiAutomatorTestCase {
 
 	private void gatherAllUiNode(final UiNode uiTree, boolean scrollToHeadAfter)
 			throws UiObjectNotFoundException {
-		logD(TAG, "gatherAllUiNode, scrollToHeadAfter: " + scrollToHeadAfter + " uiTree: " + uiTree);
+//		logD(TAG, "gatherAllUiNode, scrollToHeadAfter: " + scrollToHeadAfter + " uiTree: " + uiTree);
 		
 		UiNodeAction a = new UiNodeAction(){
 
@@ -168,7 +186,7 @@ public class ApiDemo_UiTest extends BaseUiAutomatorTestCase {
 		logD(TAG, "gotoReallApp. ");
 		
 		int step = 0;
-		UiObject o = new UiObject(new UiSelector().className(A_TEXTVIEW).text("API Demos"));
+		UiObject o = new UiObject(new UiSelector().className(A_TEXTVIEW).text(TEXT_API_DEMOS));
 		waitForIdle();
 		while (o.exists()) {
 			assertUiExist(o);
@@ -198,19 +216,19 @@ public class ApiDemo_UiTest extends BaseUiAutomatorTestCase {
 	
 	private void tranverseCurrentUi(UiNodeAction action)
 			throws UiObjectNotFoundException {
-		logD(TAG, "tranverseCurrentUi. action: " + action);
+//		logD(TAG, "tranverseCurrentUi. action: " + action);
 		UiSelector selector = new UiSelector().className(A_LISTVIEW);
 		UiCollection collection = new UiCollection(selector);
 		int count = collection.getChildCount();
 		String firstText = "";
 		String lastText = "";
-		logD(TAG, "tranverseCurrentUi. count : " + count);
+//		logD(TAG, "tranverseCurrentUi. count : " + count);
 		boolean handled = true;
 		for (int i = 0 ; i < count ; i++) {
 			UiObject o = collection.getChildByInstance(new UiSelector().className(A_TEXTVIEW),i);
 			String text = o.getText();
 			handled = action.handle(o);
-			logD(TAG, "tranverseCurrentUi. handled : " + handled + " o: " + o);
+//			logD(TAG, "tranverseCurrentUi. handled : " + handled + " o: " + o);
 			if (handled) {
 				return;
 			}
@@ -222,9 +240,8 @@ public class ApiDemo_UiTest extends BaseUiAutomatorTestCase {
 			lastText = text;
 		}
 	
-		logD(TAG, "tranverseCurrentUi. firstText : " + firstText);
+//		logD(TAG, "tranverseCurrentUi. firstText : " + firstText);
 		String tempFirstText = "";
-		boolean startHandle = false;
 		int maxTry = 1;
 		do {
 			UiScrollable scrollable = new UiScrollable(selector);
@@ -233,13 +250,14 @@ public class ApiDemo_UiTest extends BaseUiAutomatorTestCase {
 			
 			collection = new UiCollection(selector);
 			count = collection.getChildCount();
-			logD(TAG, "tranverseCurrentUi. count : " + count);
+//			logD(TAG, "tranverseCurrentUi. count : " + count);
+			boolean startHandle = false;
 			for (int i = 0 ; i < count ; i++) {
 				UiObject o = collection.getChildByInstance(new UiSelector().className(A_TEXTVIEW),i);
 				String text = o.getText();			
 				if (startHandle) {
 					handled = action.handle(o);
-					logD(TAG, "tranverseCurrentUi. handled : " + handled + " o: " + o);
+//					logD(TAG, "tranverseCurrentUi. handled : " + handled + " o: " + o);
 					if (handled) {
 						return;
 					}
@@ -252,7 +270,7 @@ public class ApiDemo_UiTest extends BaseUiAutomatorTestCase {
 				}
 			}
 	
-			logD(TAG, "tranverseCurrentUi. tempFirstText : " + tempFirstText);
+//			logD(TAG, "tranverseCurrentUi. tempFirstText : " + tempFirstText);
 			
 			maxTry--;
 		} while (! firstText.equalsIgnoreCase(tempFirstText) && maxTry > 0);
@@ -295,7 +313,8 @@ public class ApiDemo_UiTest extends BaseUiAutomatorTestCase {
 			
 			if (!found) {
 				UiNode e = new UiNode(label);
-				logD(TAG, this + " add " + label + " as child");
+				e.parent = this;
+//				logD(TAG, this + " add " + label + " as child");
 				children.add(e);
 			}
 		}
