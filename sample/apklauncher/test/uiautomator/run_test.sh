@@ -36,6 +36,7 @@ function pid()
 }
 
 PID=$(pid --exact $appPackageName)
+adb root
 adb shell kill -9 $PID
 adb shell am start $appPackageName/$appMainclassName
 sleep 3s

@@ -73,17 +73,30 @@ public class ApiDemo_UiTest extends BaseUiAutomatorTestCase {
 		logD(TAG, "testApiDemo_tranverse. ");
 		
 		List<String> ignoreLables = new ArrayList<String>();
-		//app -> activity -> actionbar
+		//[TOP]->[App]->[Action Bar]->[Action Provider]
 		ignoreLables.add("Action Bar Usage");
-		//app -> activity
+		//[TOP]->[App]->[Activity]
 		ignoreLables.add("Custom Title");
-		//app -> activity
+		//[TOP]->[App]->[Activity]
 		ignoreLables.add("Persistent State");
+		//[TOP]->[App]->[Alarm]
+		ignoreLables.add("Alarm Service");
+		ignoreLables.add("Voice Recognition");
+		//[TOP]->[Graphics]
+		ignoreLables.add("BitmapPixels");
+		//[TOP]->[Media]
+		ignoreLables.add("AudioFx");
+		ignoreLables.add("VideoView");
+		//[TOP]->[NFC]
+		ignoreLables.add("ForegroundDispatch");
+		//[TOP]->[OS]
+		ignoreLables.add("SMS Messaging");
+		ignoreLables.add("KeyStore");
 		
 		UiNode top = new UiNode("TOP");
 		gatherAllUiNode(top, true);
 		
-		int skip = 2;
+		int skip = 10;
 		for (int i = 0; i < skip ; i++) {
 			top.children.get(i).finished = true;
 		}
@@ -132,7 +145,7 @@ public class ApiDemo_UiTest extends BaseUiAutomatorTestCase {
 				} else 	if (!n.finished){
 					if (shouldIgnore(ignoreLables, n.label)) {
 						n.finished = true;
-						String label = "";
+						String label = n.label;
 						label = makePrefix(deep) + " X tranverse. ingore this node. label: " + label;
 						logD(TAG, label);
 						continue;
