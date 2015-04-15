@@ -20,6 +20,9 @@ public class ApiDemo_UiTest extends BaseUiAutomatorTestCase {
     protected void setUp() throws Exception {
         super.setUp();
         
+        registerWatcher(WATCHER_DISMISS_NPE, sWatcherDismissNpe);
+        registerWatcher(WATCHER_WAIT_ANR, sWatchWaitAnr);
+        
         enter2Home();
         enter2App();
     }
@@ -70,21 +73,42 @@ public class ApiDemo_UiTest extends BaseUiAutomatorTestCase {
 		logD(TAG, "testApiDemo_tranverse. ");
 		
 		List<String> ignoreLables = new ArrayList<String>();
+		//app -> activity -> actionbar
 		ignoreLables.add("Action Bar Usage");
+		//app -> activity
+		ignoreLables.add("Custom Title");
+		//app -> activity
+		ignoreLables.add("Persistent State");
+		
 		UiNode top = new UiNode("TOP");
 		gatherAllUiNode(top, true);
+		
+		int skip = 2;
+		for (int i = 0; i < skip ; i++) {
+			top.children.get(i).finished = true;
+		}
+		
 		tranverse(top, 1, ignoreLables);
 	}
 	
 	void tranverse(UiNode uiTree, int deep, List<String> ignoreLables) throws UiObjectNotFoundException{
-		logD(TAG, "tranverse. uiTree: " + uiTree + " deep: " + deep);
-		String path = uiTree.label;
+		logD(TAG, makePrefix(deep) + "tranverse. deep: " + deep + " uiTree: " + uiTree);
+		String path = "[" + uiTree.label + "]";
+		List<UiNode> nodePath = new ArrayList<ApiDemo_UiTest.UiNode>();
 		UiNode p = uiTree.parent;
+		nodePath.add(uiTree);
 		while (p != null) {
-			path = path + "->" + p.label;
+			path = path + "->" + "[" + p.label + "]";
+			nodePath.add(p);
 			p = p.parent;
 		}
-		logD(TAG, "path: " + path);
+		path = "";
+		int S = nodePath.size();
+		for (int i = S -1 ; i >= 0 ; i--) {
+			path = path + "[" + nodePath.get(i).label + "]->";
+		}
+		path = path.replaceAll("->$", "");
+		logD(TAG, makePrefix(deep) + "tranverse. path: " + path);
 		
 		uiTree.finished = true;
 		for (UiNode n : uiTree.children) {
@@ -98,8 +122,9 @@ public class ApiDemo_UiTest extends BaseUiAutomatorTestCase {
 			pressBack();
 			return;
 		} else {
+			int i = 0;
 			for (UiNode n : uiTree.children) {
-				
+				i++;
 				waitForIdle();
 				UiObject o = new UiObject(new UiSelector().description("Xapidemo"));
 				if (!o.exists()){
@@ -107,9 +132,18 @@ public class ApiDemo_UiTest extends BaseUiAutomatorTestCase {
 				} else 	if (!n.finished){
 					if (shouldIgnore(ignoreLables, n.label)) {
 						n.finished = true;
+						String label = "";
+						label = makePrefix(deep) + " X tranverse. ingore this node. label: " + label;
+						logD(TAG, label);
 						continue;
 					} else {
-						findNodeAndClick(n);
+						o = findNode(n);
+					    waitForExists(o);
+						String label = o.getText();
+//						label = String.format(makePrefix(deep) + " %1$" + i + " tranverse. label: " + label, i);
+						label = makePrefix(deep) + " " + i + " tranverse. label: " + label;
+						logD(TAG, label);
+						o.clickAndWaitForNewWindow();
 						o = new UiObject(new UiSelector().description("Xapidemo"));
 						UiObject listO = new UiObject(new UiSelector().className(A_LISTVIEW));
 						if (!o.exists() ) {
@@ -122,10 +156,20 @@ public class ApiDemo_UiTest extends BaseUiAutomatorTestCase {
 					}
 				}
 			}
-			
+
+			logD(TAG, makePrefix(deep) + " @ finish. n: " + uiTree);
 			uiTree.finished = true;
 			pressBack();
 		}
+	}
+	
+	String makePrefix(int deep){
+		String prefix = "";
+		for (int i = 0 ; i < deep ; i++) {
+			prefix += "  ";
+		}
+		prefix = prefix.length() / 2 + prefix;
+		return prefix;
 	}
 
 	private boolean shouldIgnore(List<String> ignoreLables, String text) {
@@ -133,31 +177,13 @@ public class ApiDemo_UiTest extends BaseUiAutomatorTestCase {
 		return ignoreLables.contains(text);
 	}
 
-	private void findNodeAndClick(final UiNode n) throws UiObjectNotFoundException {
+	private UiObject findNode(final UiNode n) throws UiObjectNotFoundException {
 //		logD(TAG, "findNodeAndClick, n: " + n);
-		String label = n.label;
 
-		UiNodeAction a = new UiNodeAction(){
-
-			@Override
-			public boolean handle(UiObject o) {
-				String label;
-				try {
-					label = o.getText();
-//					logD(TAG, "findNodeAndClick, label: " + label);
-					if (n.label.equalsIgnoreCase(label)){
-						logD(TAG, "clickAndWaitForNewWindow. n: " + o.getText());
-						o.clickAndWaitForNewWindow();
-						return true;
-					}
-				} catch (UiObjectNotFoundException e) {
-					e.printStackTrace();
-				}
-				return false;
-			}
-		};
-
+		NodeAction a = new NodeAction(n);
 		tranverseCurrentUi(a);
+		
+		return a.obj;
 	}
 
 	private void gatherAllUiNode(final UiNode uiTree, boolean scrollToHeadAfter)
@@ -224,6 +250,9 @@ public class ApiDemo_UiTest extends BaseUiAutomatorTestCase {
 		String lastText = "";
 //		logD(TAG, "tranverseCurrentUi. count : " + count);
 		boolean handled = true;
+		UiScrollable scrollable = new UiScrollable(selector);
+		scrollable.setAsVerticalList();
+		scrollable.scrollToBeginning(10);
 		for (int i = 0 ; i < count ; i++) {
 			UiObject o = collection.getChildByInstance(new UiSelector().className(A_TEXTVIEW),i);
 			String text = o.getText();
@@ -244,8 +273,7 @@ public class ApiDemo_UiTest extends BaseUiAutomatorTestCase {
 		String tempFirstText = "";
 		int maxTry = 1;
 		do {
-			UiScrollable scrollable = new UiScrollable(selector);
-			scrollable.setAsVerticalList();
+			scrollable = new UiScrollable(selector);
 			scrollable.scrollForward();
 			
 			collection = new UiCollection(selector);
@@ -324,6 +352,33 @@ public class ApiDemo_UiTest extends BaseUiAutomatorTestCase {
 			return label + "[" + children.size() + "]";
 		}
 		
+		
+	}
+	
+	class NodeAction implements UiNodeAction {
+		
+		public UiNode n;
+		public UiObject obj;
+		public NodeAction(UiNode n){
+			this.n = n;
+		}
+		@Override
+		public boolean handle(UiObject o) {
+			String label;
+			try {
+				label = o.getText();
+//				logD(TAG, "findNodeAndClick, label: " + label);
+				if (n.label.equalsIgnoreCase(label)){
+//					logD(TAG, "clickAndWaitForNewWindow. n: " + o.getText());
+//					o.clickAndWaitForNewWindow();
+					obj = o;
+					return true;
+				}
+			} catch (UiObjectNotFoundException e) {
+				e.printStackTrace();
+			}
+			return false;
+		}
 		
 	}
 }

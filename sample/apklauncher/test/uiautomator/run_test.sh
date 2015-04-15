@@ -42,6 +42,10 @@ sleep 3s
 
 android create uitest-project -n $PROJECT_NAME -t $ANDROID_TARGET -p .
 ant build
+if [[ "$?" != "0" ]] ; then
+	echo "build error, please fix this error."
+	exit 1
+fi
 adb push bin/$PROJECT_NAME.jar /data/local/tmp/
 #adb shell uiautomator runtest $PROJECT_NAME.jar -e class com.youku.tv.uiautomator.HomeUiTest#testFocusSaveAndRestore_top
 #adb shell uiautomator runtest $PROJECT_NAME.jar -e class com.youku.tv.uiautomator.HomeUiTest#testFocusSaveAndRestore_left2right
