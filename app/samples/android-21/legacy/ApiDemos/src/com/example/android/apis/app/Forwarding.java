@@ -75,7 +75,7 @@ public class Forwarding extends org.bbs.apklauncher.api.Base_Activity
             // Here we start the next activity, and then call finish()
             // so that our own will stop running and be removed from the
             // history stack.
-            Intent intent = new Intent();
+            Intent intent = new org.bbs.apklauncher.emb.IntentHelper();
             intent.setClass(Forwarding.this, ForwardTarget.class);
             startActivity(intent);
             finish();

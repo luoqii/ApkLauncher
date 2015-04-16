@@ -38,7 +38,7 @@ public class ReorderThree extends org.bbs.apklauncher.api.Base_Activity {
 
     private final OnClickListener mClickListener = new OnClickListener() {
         public void onClick(View v) {
-            startActivity(new Intent(ReorderThree.this, ReorderFour.class));
+            startActivity(new org.bbs.apklauncher.emb.IntentHelper(ReorderThree.this, ReorderFour.class));
         }
     };
 }

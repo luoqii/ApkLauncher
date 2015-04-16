@@ -44,7 +44,7 @@ import com.example.android.apis.R;
  * against the Android 2.0 SDK, and it will against everything down to
  * Android 1.0.
  */
-public class ForegroundService extends Service {
+public class ForegroundService extends org.bbs.apklauncher.api.Base_Service {
     static final String ACTION_FOREGROUND = "com.example.android.apis.FOREGROUND";
     static final String ACTION_BACKGROUND = "com.example.android.apis.BACKGROUND";
     
@@ -167,12 +167,12 @@ public class ForegroundService extends Service {
             CharSequence text = getText(R.string.foreground_service_started);
 
             // Set the icon, scrolling text and timestamp
-            Notification notification = new Notification(R.drawable.stat_sample, text,
+            Notification notification = new Notification(getHostIdentifier("demo_notification", "image", null), text,
                     System.currentTimeMillis());
 
             // The PendingIntent to launch our activity if the user selects this notification
-            PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                    new Intent(this, Controller.class), 0);
+            PendingIntent contentIntent = org.bbs.apklauncher.emb.PendingIntentHelper.getActivity(this, 0,
+                    new org.bbs.apklauncher.emb.IntentHelper(this, Controller.class), 0);
 
             // Set the info for the views that show in the notification panel.
             notification.setLatestEventInfo(this, getText(R.string.local_service_label),
@@ -216,7 +216,7 @@ public class ForegroundService extends Service {
 
         private OnClickListener mForegroundListener = new OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(ForegroundService.ACTION_FOREGROUND);
+                Intent intent = new org.bbs.apklauncher.emb.IntentHelper(ForegroundService.ACTION_FOREGROUND);
                 intent.setClass(Controller.this, ForegroundService.class);
                 startService(intent);
             }
@@ -224,7 +224,7 @@ public class ForegroundService extends Service {
 
         private OnClickListener mBackgroundListener = new OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(ForegroundService.ACTION_BACKGROUND);
+                Intent intent = new org.bbs.apklauncher.emb.IntentHelper(ForegroundService.ACTION_BACKGROUND);
                 intent.setClass(Controller.this, ForegroundService.class);
                 startService(intent);
             }
@@ -232,7 +232,7 @@ public class ForegroundService extends Service {
 
         private OnClickListener mStopListener = new OnClickListener() {
             public void onClick(View v) {
-                stopService(new Intent(Controller.this,
+                stopService(new org.bbs.apklauncher.emb.IntentHelper(Controller.this,
                         ForegroundService.class));
             }
         };

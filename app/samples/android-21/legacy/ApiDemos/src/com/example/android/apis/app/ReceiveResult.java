@@ -143,7 +143,7 @@ public class ReceiveResult extends org.bbs.apklauncher.api.Base_Activity {
         public void onClick(View v) {
             // Start the activity whose result we want to retrieve.  The
             // result will come back with request code GET_CODE.
-            Intent intent = new Intent(ReceiveResult.this, SendResult.class);
+            Intent intent = new org.bbs.apklauncher.emb.IntentHelper(ReceiveResult.this, SendResult.class);
             startActivityForResult(intent, GET_CODE);
         }
     };

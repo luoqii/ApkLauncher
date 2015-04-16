@@ -64,7 +64,7 @@ public class ActionBarSettingsActionProviderActivity extends org.bbs.apklauncher
     public static class SettingsActionProvider extends ActionProvider {
 
         /** An intent for launching the system settings. */
-        private static final Intent sSettingsIntent = new Intent(Settings.ACTION_SETTINGS);
+        private static final Intent sSettingsIntent = new org.bbs.apklauncher.emb.IntentHelper(Settings.ACTION_SETTINGS);
 
         /** Context for accessing resources. */
         private final Context mContext;

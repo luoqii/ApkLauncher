@@ -54,8 +54,8 @@ public class ForegroundDispatch extends org.bbs.apklauncher.api.Base_Activity {
         // Create a generic PendingIntent that will be deliver to this activity. The NFC stack
         // will fill in the intent with the details of the discovered tag before delivering to
         // this activity.
-        mPendingIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+        mPendingIntent = org.bbs.apklauncher.emb.PendingIntentHelper.getActivity(this, 0,
+                new org.bbs.apklauncher.emb.IntentHelper(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
 
         // Setup an intent filter for all MIME based dispatches
         IntentFilter ndef = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);

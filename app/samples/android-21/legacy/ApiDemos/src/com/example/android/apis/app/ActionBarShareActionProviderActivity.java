@@ -80,7 +80,7 @@ public class ActionBarShareActionProviderActivity extends org.bbs.apklauncher.ap
      * @return The sharing intent.
      */
     private Intent createShareIntent() {
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        Intent shareIntent = new org.bbs.apklauncher.emb.IntentHelper(Intent.ACTION_SEND);
         shareIntent.setType("image/*");
         Uri uri = Uri.fromFile(getFileStreamPath("shared.png"));
         shareIntent.putExtra(Intent.EXTRA_STREAM, uri);

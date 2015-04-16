@@ -51,7 +51,7 @@ import com.example.android.apis.R;
  * using the {@link android.app.IntentService} class, which takes care of all the
  * work of creating the extra thread and dispatching commands to it.
  */
-public class ServiceStartArguments extends Service {
+public class ServiceStartArguments extends org.bbs.apklauncher.api.Base_Service {
     private NotificationManager mNM;
     private Intent mInvokeIntent;
     private volatile Looper mServiceLooper;
@@ -108,7 +108,7 @@ public class ServiceStartArguments extends Service {
         
         // This is who should be launched if the user selects our persistent
         // notification.
-        mInvokeIntent = new Intent(this, Controller.class);
+        mInvokeIntent = new org.bbs.apklauncher.emb.IntentHelper(this, Controller.class);
 
         // Start up the thread running the service.  Note that we create a
         // separate thread because the service normally runs in the process's
@@ -175,12 +175,12 @@ public class ServiceStartArguments extends Service {
      */
     private void showNotification(String text) {
         // Set the icon, scrolling text and timestamp
-        Notification notification = new Notification(R.drawable.stat_sample, text,
+        Notification notification = new Notification(getHostIdentifier("demo_notification", "image", null), text,
                 System.currentTimeMillis());
 
         // The PendingIntent to launch our activity if the user selects this notification
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, Controller.class), 0);
+        PendingIntent contentIntent = org.bbs.apklauncher.emb.PendingIntentHelper.getActivity(this, 0,
+                new org.bbs.apklauncher.emb.IntentHelper(this, Controller.class), 0);
 
         // Set the info for the views that show in the notification panel.
         notification.setLatestEventInfo(this, getText(R.string.service_start_arguments_label),
@@ -228,7 +228,7 @@ public class ServiceStartArguments extends Service {
 
         private OnClickListener mStart1Listener = new OnClickListener() {
             public void onClick(View v) {
-                startService(new Intent(Controller.this,
+                startService(new org.bbs.apklauncher.emb.IntentHelper(Controller.this,
                         ServiceStartArguments.class)
                                 .putExtra("name", "One"));
             }
@@ -236,7 +236,7 @@ public class ServiceStartArguments extends Service {
 
         private OnClickListener mStart2Listener = new OnClickListener() {
             public void onClick(View v) {
-                startService(new Intent(Controller.this,
+                startService(new org.bbs.apklauncher.emb.IntentHelper(Controller.this,
                         ServiceStartArguments.class)
                                 .putExtra("name", "Two"));
             }
@@ -244,7 +244,7 @@ public class ServiceStartArguments extends Service {
 
         private OnClickListener mStart3Listener = new OnClickListener() {
             public void onClick(View v) {
-                startService(new Intent(Controller.this,
+                startService(new org.bbs.apklauncher.emb.IntentHelper(Controller.this,
                         ServiceStartArguments.class)
                                 .putExtra("name", "Three")
                                 .putExtra("redeliver", true));
@@ -253,7 +253,7 @@ public class ServiceStartArguments extends Service {
 
         private OnClickListener mStartFailListener = new OnClickListener() {
             public void onClick(View v) {
-                startService(new Intent(Controller.this,
+                startService(new org.bbs.apklauncher.emb.IntentHelper(Controller.this,
                         ServiceStartArguments.class)
                                 .putExtra("name", "Failure")
                                 .putExtra("fail", true));

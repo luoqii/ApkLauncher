@@ -62,7 +62,7 @@ public class SendResult extends org.bbs.apklauncher.api.Base_Activity
         {
             // To send a result, simply call setResult() before your
             // activity is finished.
-            setResult(RESULT_OK, (new Intent()).setAction("Corky!"));
+            setResult(RESULT_OK, (new org.bbs.apklauncher.emb.IntentHelper()).setAction("Corky!"));
             finish();
         }
     };
@@ -73,7 +73,7 @@ public class SendResult extends org.bbs.apklauncher.api.Base_Activity
         {
             // To send a result, simply call setResult() before your
             // activity is finished.
-            setResult(RESULT_OK, (new Intent()).setAction("Violet!"));
+            setResult(RESULT_OK, (new org.bbs.apklauncher.emb.IntentHelper()).setAction("Violet!"));
             finish();
         }
     };

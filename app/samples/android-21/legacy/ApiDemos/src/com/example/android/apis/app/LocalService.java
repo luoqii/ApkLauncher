@@ -42,7 +42,7 @@ import com.example.android.apis.R;
  * calling startActivity().
  */
 
-public class LocalService extends Service {
+public class LocalService extends org.bbs.apklauncher.api.Base_Service {
     private NotificationManager mNM;
 
     // Unique Identification Number for the Notification.
@@ -102,12 +102,12 @@ public class LocalService extends Service {
         CharSequence text = getText(R.string.local_service_started);
 
         // Set the icon, scrolling text and timestamp
-        Notification notification = new Notification(R.drawable.stat_sample, text,
+        Notification notification = new Notification(getHostIdentifier("demo_notification", "image", null), text,
                 System.currentTimeMillis());
 
         // The PendingIntent to launch our activity if the user selects this notification
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, LocalServiceActivities.Controller.class), 0);
+        PendingIntent contentIntent = org.bbs.apklauncher.emb.PendingIntentHelper.getActivity(this, 0,
+                new org.bbs.apklauncher.emb.IntentHelper(this, LocalServiceActivities.Controller.class), 0);
 
         // Set the info for the views that show in the notification panel.
         notification.setLatestEventInfo(this, getText(R.string.local_service_label),

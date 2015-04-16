@@ -117,7 +117,7 @@ public class PreferencesFromCode extends org.bbs.apklauncher.api.Base_Preference
 
         // Intent preference
         PreferenceScreen intentPref = getPreferenceManager().createPreferenceScreen(this);
-        intentPref.setIntent(new Intent().setAction(Intent.ACTION_VIEW)
+        intentPref.setIntent(new org.bbs.apklauncher.emb.IntentHelper().setAction(Intent.ACTION_VIEW)
                 .setData(Uri.parse("http://www.android.com")));
         intentPref.setTitle(R.string.title_intent_preference);
         intentPref.setSummary(R.string.summary_intent_preference);

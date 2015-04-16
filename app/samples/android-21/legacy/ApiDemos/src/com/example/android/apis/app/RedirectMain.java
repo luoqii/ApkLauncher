@@ -52,7 +52,7 @@ public class RedirectMain extends org.bbs.apklauncher.api.Base_Activity {
         // temporarily hide our own activity so it is not displayed until the
         // result is returned.
         if (!loadPrefs()) {
-            Intent intent = new Intent(this, RedirectGetter.class);
+            Intent intent = new org.bbs.apklauncher.emb.IntentHelper(this, RedirectGetter.class);
             startActivityForResult(intent, INIT_TEXT_REQUEST);
         }
     }
@@ -113,7 +113,7 @@ public class RedirectMain extends org.bbs.apklauncher.api.Base_Activity {
     private OnClickListener mNewListener = new OnClickListener() {
         public void onClick(View v) {
             // Retrieve new text preferences.
-            Intent intent = new Intent(RedirectMain.this, RedirectGetter.class);
+            Intent intent = new org.bbs.apklauncher.emb.IntentHelper(RedirectMain.this, RedirectGetter.class);
             startActivityForResult(intent, NEW_TEXT_REQUEST);
         }
     };

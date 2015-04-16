@@ -150,8 +150,8 @@ public class StatusBarNotifications extends org.bbs.apklauncher.api.Base_Activit
         // notification.  Note the use of FLAG_UPDATE_CURRENT so that if there
         // is already an active matching pending intent, we will update its
         // extras (and other Intents in the array) to be the ones passed in here.
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, NotificationDisplay.class).putExtra("moodimg", moodId),
+        PendingIntent contentIntent = org.bbs.apklauncher.emb.PendingIntentHelper.getActivity(this, 0,
+                new org.bbs.apklauncher.emb.IntentHelper(this, NotificationDisplay.class).putExtra("moodimg", moodId),
                 PendingIntent.FLAG_UPDATE_CURRENT);
         return contentIntent;
     }
@@ -171,20 +171,20 @@ public class StatusBarNotifications extends org.bbs.apklauncher.api.Base_Activit
                 com.example.android.apis.ApiDemos.class));
 
         // "App"
-        intents[1] = new Intent(this, com.example.android.apis.ApiDemos.class);
+        intents[1] = new org.bbs.apklauncher.emb.IntentHelper(this, com.example.android.apis.ApiDemos.class);
         intents[1].putExtra("com.example.android.apis.Path", "App");
         // "App/Notification"
-        intents[2] = new Intent(this, com.example.android.apis.ApiDemos.class);
+        intents[2] = new org.bbs.apklauncher.emb.IntentHelper(this, com.example.android.apis.ApiDemos.class);
         intents[2].putExtra("com.example.android.apis.Path", "App/Notification");
 
         // Now the activity to display to the user.
-        intents[3] = new Intent(this, StatusBarNotifications.class);
+        intents[3] = new org.bbs.apklauncher.emb.IntentHelper(this, StatusBarNotifications.class);
 
         // The PendingIntent to launch our activity if the user selects this
         // notification.  Note the use of FLAG_UPDATE_CURRENT so that if there
         // is already an active matching pending intent, we will update its
         // extras (and other Intents in the array) to be the ones passed in here.
-        PendingIntent contentIntent = PendingIntent.getActivities(this, 0,
+        PendingIntent contentIntent = org.bbs.apklauncher.emb.PendingIntentHelper.getActivities(this, 0,
                 intents, PendingIntent.FLAG_UPDATE_CURRENT);
         return contentIntent;
     }

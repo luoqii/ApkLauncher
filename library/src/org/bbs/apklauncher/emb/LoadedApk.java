@@ -102,11 +102,8 @@ public class LoadedApk {
 				dumpClassType(clazz, superClassNames);
 				if (superClassNames.contains(Target_Service.class.getName())) {
 					cName = Target_Service.class.getName();
-				} else if (superClassNames.contains(Target_FragmentActivity.class.getName())) {
-					cName = Target_FragmentActivity.class.getName();
 				}
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

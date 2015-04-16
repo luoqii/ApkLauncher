@@ -96,7 +96,7 @@ public class ExampleAppWidgetConfigure extends org.bbs.apklauncher.api.Base_Acti
                     mAppWidgetId, titlePrefix);
 
             // Make sure we pass back the original appWidgetId
-            Intent resultValue = new Intent();
+            Intent resultValue = new org.bbs.apklauncher.emb.IntentHelper();
             resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
             setResult(RESULT_OK, resultValue);
             finish();

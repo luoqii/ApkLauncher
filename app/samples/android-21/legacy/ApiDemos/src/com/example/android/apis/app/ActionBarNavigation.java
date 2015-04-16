@@ -49,12 +49,12 @@ public class ActionBarNavigation extends org.bbs.apklauncher.api.Base_Activity {
     }
 
     public void onNewActivity(View button) {
-        Intent intent = new Intent(this, ActionBarNavigationTarget.class);
+        Intent intent = new org.bbs.apklauncher.emb.IntentHelper(this, ActionBarNavigationTarget.class);
         startActivity(intent);
     }
 
     public void onNewDocument(View button) {
-        Intent intent = new Intent(this, ActionBarNavigationTarget.class);
+        Intent intent = new org.bbs.apklauncher.emb.IntentHelper(this, ActionBarNavigationTarget.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
         startActivity(intent);
     }

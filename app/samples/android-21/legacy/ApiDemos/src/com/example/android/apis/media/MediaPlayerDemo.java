@@ -58,7 +58,7 @@ public class MediaPlayerDemo extends org.bbs.apklauncher.api.Base_Activity {
     private OnClickListener mLocalAudioListener = new OnClickListener() {
         public void onClick(View v) {
             Intent intent =
-                    new Intent(MediaPlayerDemo.this.getApplication(),
+                    new org.bbs.apklauncher.emb.IntentHelper(MediaPlayerDemo.this.getApplication(),
                             MediaPlayerDemo_Audio.class);
             intent.putExtra(MEDIA, LOCAL_AUDIO);
             startActivity(intent);
@@ -68,7 +68,7 @@ public class MediaPlayerDemo extends org.bbs.apklauncher.api.Base_Activity {
     private OnClickListener mResourcesAudioListener = new OnClickListener() {
         public void onClick(View v) {
             Intent intent =
-                    new Intent(MediaPlayerDemo.this.getApplication(),
+                    new org.bbs.apklauncher.emb.IntentHelper(MediaPlayerDemo.this.getApplication(),
                             MediaPlayerDemo_Audio.class);
             intent.putExtra(MEDIA, RESOURCES_AUDIO);
             startActivity(intent);
@@ -79,7 +79,7 @@ public class MediaPlayerDemo extends org.bbs.apklauncher.api.Base_Activity {
     private OnClickListener mLocalVideoListener = new OnClickListener() {
         public void onClick(View v) {
             Intent intent =
-                    new Intent(MediaPlayerDemo.this,
+                    new org.bbs.apklauncher.emb.IntentHelper(MediaPlayerDemo.this,
                             MediaPlayerDemo_Video.class);
             intent.putExtra(MEDIA, LOCAL_VIDEO);
             startActivity(intent);
@@ -89,7 +89,7 @@ public class MediaPlayerDemo extends org.bbs.apklauncher.api.Base_Activity {
     private OnClickListener mStreamVideoListener = new OnClickListener() {
         public void onClick(View v) {
             Intent intent =
-                    new Intent(MediaPlayerDemo.this,
+                    new org.bbs.apklauncher.emb.IntentHelper(MediaPlayerDemo.this,
                             MediaPlayerDemo_Video.class);
             intent.putExtra(MEDIA, STREAM_VIDEO);
             startActivity(intent);

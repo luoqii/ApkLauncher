@@ -18,11 +18,21 @@ function genLib(){
 	clazz=org/bbs/apklauncher/api/*.class
 	if [[ "$dir" == "app" ]] ; then
 		echo "pwd: `pwd`"
-		src=../src/org/bbs/apklauncher/emb/IntentHelper.java
-		dst=$dir/org/bbs/apklauncher/emb/IntentHelper.java
+		src=../src/org/bbs/apklauncher/emb/
+		dst=$dir/org/bbs/apklauncher/emb/
 		mkdir `dirname $dst`
-		cp -f  $src $dst
-		#sed "/^package/ s/.*/package org.bbs.apklauncher.api;/" $src > $dst
+
+		for f in IntentHelper.java PendingIntentHelper.java ; do
+			mkdir -p $dst
+			cp -f  $src/$f $dst/$f
+			#sed "/^package/ s/.*/package org.bbs.apklauncher.api;/" $src > $dst
+			if [[ "$f" == "PendingIntentHelper.java" ]] ; then
+				cp -f $dst/$f $dst/${f}.bak
+				sed "/parseContext(c/ s/\(.*\)\(parseContext(c\)\(.*\)/\1(c\3/" $dst/${f}.bak > $dst/$f
+				rm $dst/${f}.bak
+			fi
+		done
+			
 
 		java_source="$java_source $dir/org/bbs/apklauncher/emb/*.java"
 		clazz="$clazz org/bbs/apklauncher/emb/*.class"
@@ -35,6 +45,10 @@ function genLib(){
 	
 	cd $oldDir
 }
+
+#rm -rf export/app export/plugin
+groovy host_target.groovy
+groovy library.groovy
 
 #version=_v0.2
 genLib app apklauncher_app$version.jar

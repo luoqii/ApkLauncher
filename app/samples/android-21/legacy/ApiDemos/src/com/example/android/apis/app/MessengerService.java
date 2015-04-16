@@ -49,7 +49,7 @@ import com.example.android.apis.app.RemoteService.Controller;
  * calling startActivity().
  */
 
-public class MessengerService extends Service {
+public class MessengerService extends org.bbs.apklauncher.api.Base_Service {
     /** For showing and hiding our notification. */
     NotificationManager mNM;
     /** Keeps track of all current registered clients. */
@@ -150,12 +150,12 @@ public class MessengerService extends Service {
         CharSequence text = getText(R.string.remote_service_started);
 
         // Set the icon, scrolling text and timestamp
-        Notification notification = new Notification(R.drawable.stat_sample, text,
+        Notification notification = new Notification(getHostIdentifier("demo_notification", "image", null), text,
                 System.currentTimeMillis());
 
         // The PendingIntent to launch our activity if the user selects this notification
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, Controller.class), 0);
+        PendingIntent contentIntent = org.bbs.apklauncher.emb.PendingIntentHelper.getActivity(this, 0,
+                new org.bbs.apklauncher.emb.IntentHelper(this, Controller.class), 0);
 
         // Set the info for the views that show in the notification panel.
         notification.setLatestEventInfo(this, getText(R.string.remote_service_label),

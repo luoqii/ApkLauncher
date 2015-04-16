@@ -78,15 +78,15 @@ public class IncomingMessage extends org.bbs.apklauncher.api.Base_Activity {
                 com.example.android.apis.ApiDemos.class));
 
         // "App"
-        intents[1] = new Intent(context, com.example.android.apis.ApiDemos.class);
+        intents[1] = new org.bbs.apklauncher.emb.IntentHelper(context, com.example.android.apis.ApiDemos.class);
         intents[1].putExtra("com.example.android.apis.Path", "App");
         // "App/Notification"
-        intents[2] = new Intent(context, com.example.android.apis.ApiDemos.class);
+        intents[2] = new org.bbs.apklauncher.emb.IntentHelper(context, com.example.android.apis.ApiDemos.class);
         intents[2].putExtra("com.example.android.apis.Path", "App/Notification");
 
         // Now the activity to display to the user.  Also fill in the data it
         // should display.
-        intents[3] = new Intent(context, IncomingMessageView.class);
+        intents[3] = new org.bbs.apklauncher.emb.IntentHelper(context, IncomingMessageView.class);
         intents[3].putExtra(IncomingMessageView.KEY_FROM, from);
         intents[3].putExtra(IncomingMessageView.KEY_MESSAGE, msg);
 
@@ -115,14 +115,14 @@ public class IncomingMessage extends org.bbs.apklauncher.api.Base_Activity {
         // notification.  Note the use of FLAG_CANCEL_CURRENT so that, if there
         // is already an active matching pending intent, cancel it and replace
         // it with the new array of Intents.
-        PendingIntent contentIntent = PendingIntent.getActivities(this, 0,
+        PendingIntent contentIntent = org.bbs.apklauncher.emb.PendingIntentHelper.getActivities(this, 0,
                 makeMessageIntentStack(this, from, message), PendingIntent.FLAG_CANCEL_CURRENT);
 
         // The ticker text, this uses a formatted string so our message could be localized
         String tickerText = getString(R.string.imcoming_message_ticker_text, message);
 
         // construct the Notification object.
-        Notification notif = new Notification(R.drawable.stat_sample, tickerText,
+        Notification notif = new Notification(getHostIdentifier("demo_notification", "image", null), tickerText,
                 System.currentTimeMillis());
 
         // Set the info for the views that show in the notification panel.
@@ -164,18 +164,18 @@ public class IncomingMessage extends org.bbs.apklauncher.api.Base_Activity {
         // notification.  Note the use of FLAG_CANCEL_CURRENT so that, if there
         // is already an active matching pending intent, cancel it and replace
         // it with the new Intent.
-        Intent intent = new Intent(this, IncomingMessageInterstitial.class);
+        Intent intent = new org.bbs.apklauncher.emb.IntentHelper(this, IncomingMessageInterstitial.class);
         intent.putExtra(IncomingMessageView.KEY_FROM, from);
         intent.putExtra(IncomingMessageView.KEY_MESSAGE, message);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+        PendingIntent contentIntent = org.bbs.apklauncher.emb.PendingIntentHelper.getActivity(this, 0,
                 intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         // The ticker text, this uses a formatted string so our message could be localized
         String tickerText = getString(R.string.imcoming_message_ticker_text, message);
 
         // construct the Notification object.
-        Notification notif = new Notification(R.drawable.stat_sample, tickerText,
+        Notification notif = new Notification(getHostIdentifier("demo_notification", "image", null), tickerText,
                 System.currentTimeMillis());
 
         // Set the info for the views that show in the notification panel.

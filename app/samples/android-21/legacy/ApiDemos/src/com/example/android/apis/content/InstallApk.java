@@ -94,7 +94,7 @@ public class InstallApk extends org.bbs.apklauncher.api.Base_Activity {
 
     private OnClickListener mUnknownSourceListener = new OnClickListener() {
         public void onClick(View v) {
-            Intent intent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
+            Intent intent = new org.bbs.apklauncher.emb.IntentHelper(Intent.ACTION_INSTALL_PACKAGE);
             intent.setData(Uri.fromFile(prepareApk("HelloActivity.apk")));
             startActivity(intent);
         }
@@ -102,7 +102,7 @@ public class InstallApk extends org.bbs.apklauncher.api.Base_Activity {
 
     private OnClickListener mMySourceListener = new OnClickListener() {
         public void onClick(View v) {
-            Intent intent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
+            Intent intent = new org.bbs.apklauncher.emb.IntentHelper(Intent.ACTION_INSTALL_PACKAGE);
             intent.setData(Uri.fromFile(prepareApk("HelloActivity.apk")));
             intent.putExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE, true);
             intent.putExtra(Intent.EXTRA_RETURN_RESULT, true);
@@ -114,7 +114,7 @@ public class InstallApk extends org.bbs.apklauncher.api.Base_Activity {
 
     private OnClickListener mReplaceListener = new OnClickListener() {
         public void onClick(View v) {
-            Intent intent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
+            Intent intent = new org.bbs.apklauncher.emb.IntentHelper(Intent.ACTION_INSTALL_PACKAGE);
             intent.setData(Uri.fromFile(prepareApk("HelloActivity.apk")));
             intent.putExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE, true);
             intent.putExtra(Intent.EXTRA_RETURN_RESULT, true);
@@ -127,7 +127,7 @@ public class InstallApk extends org.bbs.apklauncher.api.Base_Activity {
 
     private OnClickListener mUninstallListener = new OnClickListener() {
         public void onClick(View v) {
-            Intent intent = new Intent(Intent.ACTION_UNINSTALL_PACKAGE);
+            Intent intent = new org.bbs.apklauncher.emb.IntentHelper(Intent.ACTION_UNINSTALL_PACKAGE);
             intent.setData(Uri.parse(
                     "package:com.example.android.helloactivity"));
             startActivity(intent);
@@ -136,7 +136,7 @@ public class InstallApk extends org.bbs.apklauncher.api.Base_Activity {
 
     private OnClickListener mUninstallResultListener = new OnClickListener() {
         public void onClick(View v) {
-            Intent intent = new Intent(Intent.ACTION_UNINSTALL_PACKAGE);
+            Intent intent = new org.bbs.apklauncher.emb.IntentHelper(Intent.ACTION_UNINSTALL_PACKAGE);
             intent.setData(Uri.parse(
                     "package:com.example.android.helloactivity"));
             intent.putExtra(Intent.EXTRA_RETURN_RESULT, true);

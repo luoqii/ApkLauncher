@@ -24,8 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.bbs.apklauncher.ApkPackageManager;
-
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -57,13 +55,13 @@ public class ApiDemos extends org.bbs.apklauncher.api.Base_ListActivity {
     protected List<Map<String, Object>> getData(String prefix) {
         List<Map<String, Object>> myData = new ArrayList<Map<String, Object>>();
 
-        Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+        Intent mainIntent = new org.bbs.apklauncher.emb.IntentHelper(Intent.ACTION_MAIN, null);
         mainIntent.addCategory(Intent.CATEGORY_SAMPLE_CODE);
 
         PackageManager pm = getPackageManager();
         List<ResolveInfo> list = pm.queryIntentActivities(mainIntent, 0);
         
-        list = ApkPackageManager.getInstance().queryIntentActivities(getPackageName(), mainIntent, 0);
+//        list = ApkPackageManager.getInstance().queryIntentActivities(getPackageName(), mainIntent, 0);
 
         if (null == list)
             return myData;
@@ -123,13 +121,13 @@ public class ApiDemos extends org.bbs.apklauncher.api.Base_ListActivity {
     };
 
     protected Intent activityIntent(String pkg, String componentName) {
-        Intent result = new Intent();
+        Intent result = new org.bbs.apklauncher.emb.IntentHelper();
         result.setClassName(pkg, componentName);
         return result;
     }
     
     protected Intent browseIntent(String path) {
-        Intent result = new Intent();
+        Intent result = new org.bbs.apklauncher.emb.IntentHelper();
         result.setClass(this, ApiDemos.class);
         result.putExtra("com.example.android.apis.Path", path);
         return result;
@@ -147,7 +145,7 @@ public class ApiDemos extends org.bbs.apklauncher.api.Base_ListActivity {
     protected void onListItemClick(ListView l, View v, int position, long id) {
         Map<String, Object> map = (Map<String, Object>)l.getItemAtPosition(position);
 
-        Intent intent = new Intent((Intent) map.get("intent"));
+        Intent intent = new org.bbs.apklauncher.emb.IntentHelper((Intent) map.get("intent"));
         intent.addCategory(Intent.CATEGORY_SAMPLE_CODE);
         startActivity(intent);
     }

@@ -124,8 +124,8 @@ public class MmsMessagingDemo extends org.bbs.apklauncher.api.Base_Activity {
                        .path(fileName)
                        .scheme(ContentResolver.SCHEME_CONTENT)
                        .build();
-                final PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                        MmsMessagingDemo.this, 0, new Intent(ACTION_MMS_SENT), 0);
+                final PendingIntent pendingIntent = org.bbs.apklauncher.emb.PendingIntentHelper.getBroadcast(
+                        MmsMessagingDemo.this, 0, new org.bbs.apklauncher.emb.IntentHelper(ACTION_MMS_SENT), 0);
                 FileOutputStream writer = null;
                 Uri contentUri = null;
                 try {
@@ -177,8 +177,8 @@ public class MmsMessagingDemo extends org.bbs.apklauncher.api.Base_Activity {
                         .path(fileName)
                         .scheme(ContentResolver.SCHEME_CONTENT)
                         .build();
-                final PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                        MmsMessagingDemo.this, 0, new Intent(ACTION_MMS_RECEIVED), 0);
+                final PendingIntent pendingIntent = org.bbs.apklauncher.emb.PendingIntentHelper.getBroadcast(
+                        MmsMessagingDemo.this, 0, new org.bbs.apklauncher.emb.IntentHelper(ACTION_MMS_RECEIVED), 0);
                 SmsManager.getDefault().downloadMultimediaMessage(getApplicationContext(),
                         locationUrl, contentUri, nullconfigOverrides, pendingIntent);
             }

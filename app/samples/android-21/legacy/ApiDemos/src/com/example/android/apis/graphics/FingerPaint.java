@@ -154,7 +154,7 @@ public class FingerPaint extends GraphicsActivity
         menu.add(0, SRCATOP_MENU_ID, 0, "SrcATop").setShortcut('5', 'z');
 
         /****   Is this the mechanism to extend with filter effects?
-        Intent intent = new Intent(null, getIntent().getData());
+        Intent intent = new org.bbs.apklauncher.emb.IntentHelper(null, getIntent().getData());
         intent.addCategory(Intent.CATEGORY_ALTERNATIVE);
         menu.addIntentOptions(
                               Menu.ALTERNATIVE, 0,

@@ -113,7 +113,7 @@ public class MessengerServiceActivities {
             // Establish a connection with the service.  We use an explicit
             // class name because there is no reason to be able to let other
             // applications replace our component.
-            bindService(new Intent(Binding.this, 
+            bindService(new org.bbs.apklauncher.emb.IntentHelper(Binding.this, 
                     MessengerService.class), mConnection, Context.BIND_AUTO_CREATE);
             mIsBound = true;
             mCallbackText.setText("Binding.");

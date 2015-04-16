@@ -224,7 +224,7 @@ public class DeviceAdminSample extends org.bbs.apklauncher.api.Base_PreferenceAc
         @Override
         public boolean onPreferenceClick(Preference preference) {
             if (mSetPassword != null && preference == mSetPassword) {
-                Intent intent = new Intent(DevicePolicyManager.ACTION_SET_NEW_PASSWORD);
+                Intent intent = new org.bbs.apklauncher.emb.IntentHelper(DevicePolicyManager.ACTION_SET_NEW_PASSWORD);
                 startActivity(intent);
                 return true;
             }
@@ -348,7 +348,7 @@ public class DeviceAdminSample extends org.bbs.apklauncher.api.Base_PreferenceAc
                 if (value != mAdminActive) {
                     if (value) {
                         // Launch the activity to have the user enable our admin.
-                        Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+                        Intent intent = new org.bbs.apklauncher.emb.IntentHelper(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
                         intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, mDeviceAdminSample);
                         intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,
                                 mActivity.getString(R.string.add_admin_extra_app_text));
@@ -950,7 +950,7 @@ public class DeviceAdminSample extends org.bbs.apklauncher.api.Base_PreferenceAc
                     return true;
                 }
                 // Launch the activity to activate encryption.  May or may not return!
-                Intent intent = new Intent(DevicePolicyManager.ACTION_START_ENCRYPTION);
+                Intent intent = new org.bbs.apklauncher.emb.IntentHelper(DevicePolicyManager.ACTION_START_ENCRYPTION);
                 startActivityForResult(intent, REQUEST_CODE_START_ENCRYPTION);
                 return true;
             }

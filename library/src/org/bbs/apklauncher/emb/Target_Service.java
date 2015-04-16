@@ -30,8 +30,8 @@ ContextWrapper
 	
 	Host_Service mHostService;
 	
-	public Context getHostContext() {
-		return mHostService.getHostContext();
+	public Host_Service getHostService() {
+		return mHostService;
 	}
 	
 	public Target_Service(){

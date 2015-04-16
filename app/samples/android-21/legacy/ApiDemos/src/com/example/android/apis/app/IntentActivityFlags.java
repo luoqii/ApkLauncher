@@ -49,12 +49,12 @@ public class IntentActivityFlags extends org.bbs.apklauncher.api.Base_Activity {
         intents[0] = Intent.makeRestartActivityTask(new ComponentName(this,
                 com.example.android.apis.ApiDemos.class));
 
-        Intent intent = new Intent(Intent.ACTION_MAIN);
+        Intent intent = new org.bbs.apklauncher.emb.IntentHelper(Intent.ACTION_MAIN);
         intent.setClass(IntentActivityFlags.this, com.example.android.apis.ApiDemos.class);
         intent.putExtra("com.example.android.apis.Path", "Views");
         intents[1] = intent;
 
-        intent = new Intent(Intent.ACTION_MAIN);
+        intent = new org.bbs.apklauncher.emb.IntentHelper(Intent.ACTION_MAIN);
         intent.setClass(IntentActivityFlags.this, com.example.android.apis.ApiDemos.class);
         intent.putExtra("com.example.android.apis.Path", "Views/Lists");
 
@@ -73,7 +73,7 @@ public class IntentActivityFlags extends org.bbs.apklauncher.api.Base_Activity {
         public void onClick(View v) {
             Context context = IntentActivityFlags.this;
 
-            PendingIntent pi = PendingIntent.getActivities(context, 0,
+            PendingIntent pi = org.bbs.apklauncher.emb.PendingIntentHelper.getActivities(context, 0,
                     buildIntentsToViewsLists(), PendingIntent.FLAG_UPDATE_CURRENT);
 
             try {

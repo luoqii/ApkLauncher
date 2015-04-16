@@ -118,7 +118,7 @@ public class ClipboardSample extends org.bbs.apklauncher.api.Base_Activity {
     }
 
     public void pasteIntent(View button) {
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.android.com/"));
+        Intent intent = new org.bbs.apklauncher.emb.IntentHelper(Intent.ACTION_VIEW, Uri.parse("http://www.android.com/"));
         mClipboard.setPrimaryClip(ClipData.newIntent("VIEW intent", intent));
     }
 

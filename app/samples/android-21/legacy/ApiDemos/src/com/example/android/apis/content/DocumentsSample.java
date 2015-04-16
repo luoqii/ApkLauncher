@@ -77,7 +77,7 @@ public class DocumentsSample extends org.bbs.apklauncher.api.Base_Activity {
         button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                Intent intent = new org.bbs.apklauncher.emb.IntentHelper(Intent.ACTION_OPEN_DOCUMENT);
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
                 intent.setType("*/*");
                 if (multiple.isChecked()) {
@@ -96,7 +96,7 @@ public class DocumentsSample extends org.bbs.apklauncher.api.Base_Activity {
         button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                Intent intent = new org.bbs.apklauncher.emb.IntentHelper(Intent.ACTION_OPEN_DOCUMENT);
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
                 intent.setType("image/*");
                 if (multiple.isChecked()) {
@@ -115,7 +115,7 @@ public class DocumentsSample extends org.bbs.apklauncher.api.Base_Activity {
         button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                Intent intent = new org.bbs.apklauncher.emb.IntentHelper(Intent.ACTION_OPEN_DOCUMENT);
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
                 intent.setType("audio/ogg");
                 if (multiple.isChecked()) {
@@ -134,7 +134,7 @@ public class DocumentsSample extends org.bbs.apklauncher.api.Base_Activity {
         button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                Intent intent = new org.bbs.apklauncher.emb.IntentHelper(Intent.ACTION_OPEN_DOCUMENT);
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
                 intent.setType("*/*");
                 intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[] {
@@ -155,7 +155,7 @@ public class DocumentsSample extends org.bbs.apklauncher.api.Base_Activity {
         button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+                Intent intent = new org.bbs.apklauncher.emb.IntentHelper(Intent.ACTION_CREATE_DOCUMENT);
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
                 intent.setType("text/plain");
                 intent.putExtra(Intent.EXTRA_TITLE, "foobar.txt");
@@ -172,7 +172,7 @@ public class DocumentsSample extends org.bbs.apklauncher.api.Base_Activity {
         button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+                Intent intent = new org.bbs.apklauncher.emb.IntentHelper(Intent.ACTION_CREATE_DOCUMENT);
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
                 intent.setType("image/png");
                 intent.putExtra(Intent.EXTRA_TITLE, "mypicture.png");
@@ -189,7 +189,7 @@ public class DocumentsSample extends org.bbs.apklauncher.api.Base_Activity {
         button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                Intent intent = new org.bbs.apklauncher.emb.IntentHelper(Intent.ACTION_GET_CONTENT);
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
                 intent.setType("*/*");
                 if (multiple.isChecked()) {
@@ -208,7 +208,7 @@ public class DocumentsSample extends org.bbs.apklauncher.api.Base_Activity {
         button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+                Intent intent = new org.bbs.apklauncher.emb.IntentHelper(Intent.ACTION_OPEN_DOCUMENT_TREE);
                 if (localOnly.isChecked()) {
                     intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
                 }
@@ -222,7 +222,7 @@ public class DocumentsSample extends org.bbs.apklauncher.api.Base_Activity {
         button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                Intent intent = new org.bbs.apklauncher.emb.IntentHelper(Intent.ACTION_OPEN_DOCUMENT);
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
                 intent.setType("*/*");
                 startActivityForResult(intent, CODE_RENAME);

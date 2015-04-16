@@ -46,8 +46,8 @@ public class AlarmService extends org.bbs.apklauncher.api.Base_Activity {
 
         // Create an IntentSender that will launch our service, to be scheduled
         // with the alarm manager.
-        mAlarmSender = PendingIntent.getService(AlarmService.this,
-                0, new Intent(AlarmService.this, AlarmService_Service.class), 0);
+        mAlarmSender = org.bbs.apklauncher.emb.PendingIntentHelper.getService(AlarmService.this,
+                0, new org.bbs.apklauncher.emb.IntentHelper(AlarmService.this, AlarmService_Service.class), 0);
         
         setContentView(R.layout.alarm_service);
 

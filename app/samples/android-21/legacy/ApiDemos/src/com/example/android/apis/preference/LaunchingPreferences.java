@@ -72,7 +72,7 @@ public class LaunchingPreferences extends org.bbs.apklauncher.api.Base_Activity 
     public void onClick(View v) {
 
         // When the button is clicked, launch an activity through this intent
-        Intent launchPreferencesIntent = new Intent().setClass(this, AdvancedPreferences.class);
+        Intent launchPreferencesIntent = new org.bbs.apklauncher.emb.IntentHelper().setClass(this, AdvancedPreferences.class);
 
         // Make it a subactivity so we know when it returns
         startActivityForResult(launchPreferencesIntent, REQUEST_CODE_PREFERENCES);

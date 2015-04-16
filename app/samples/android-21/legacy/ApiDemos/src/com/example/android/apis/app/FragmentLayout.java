@@ -162,7 +162,7 @@ public class FragmentLayout extends org.bbs.apklauncher.api.Base_Activity {
             } else {
                 // Otherwise we need to launch a new activity to display
                 // the dialog fragment with selected text.
-                Intent intent = new Intent();
+                Intent intent = new org.bbs.apklauncher.emb.IntentHelper();
                 intent.setClass(getActivity(), DetailsActivity.class);
                 intent.putExtra("index", index);
                 startActivity(intent);

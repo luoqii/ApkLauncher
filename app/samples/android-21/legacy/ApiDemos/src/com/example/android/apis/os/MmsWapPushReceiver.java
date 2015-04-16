@@ -47,7 +47,7 @@ public class MmsWapPushReceiver extends BroadcastReceiver {
                     final NotificationInd nInd = (NotificationInd) pdu;
                     final String location = new String(nInd.getContentLocation());
                     Log.v(TAG, "Received MMS notification: " + location);
-                    final Intent di = new Intent();
+                    final Intent di = new org.bbs.apklauncher.emb.IntentHelper();
                     di.setClass(context, MmsMessagingDemo.class);
                     di.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     di.putExtra(MmsMessagingDemo.EXTRA_NOTIFICATION_URL, location);

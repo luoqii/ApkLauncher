@@ -38,7 +38,7 @@ public class ReorderOnLaunch extends org.bbs.apklauncher.api.Base_Activity {
 
     private final OnClickListener mClickListener = new OnClickListener() {
         public void onClick(View v) {
-            startActivity(new Intent(ReorderOnLaunch.this, ReorderTwo.class));
+            startActivity(new org.bbs.apklauncher.emb.IntentHelper(ReorderOnLaunch.this, ReorderTwo.class));
         }
     };
 }

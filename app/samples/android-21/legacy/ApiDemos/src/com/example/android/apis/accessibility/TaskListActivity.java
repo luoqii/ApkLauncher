@@ -30,7 +30,7 @@ public class TaskListActivity extends org.bbs.apklauncher.api.Base_ListActivity 
 
     /** An intent for launching the system settings. */
     private static final Intent sSettingsIntent =
-        new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+        new org.bbs.apklauncher.emb.IntentHelper(Settings.ACTION_ACCESSIBILITY_SETTINGS);
 
     /** Called when the activity is first created. */
     @Override

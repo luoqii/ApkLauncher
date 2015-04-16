@@ -25,4 +25,11 @@ public class Base_PreferenceActivity extends Target_PreferenceActivity {
 	public StubBase_PreferenceActivity getHostActivity() {
 		return super.getHostActivity();
 	}
+	
+	public int getHostIdentifier(String name, String defType, String defPackage){
+		int resId = -1;
+		resId = org.bbs.apklauncher.emb.Util.getContextImpl(this).getResources().getIdentifier(name, defType, defPackage);
+		
+		return resId;
+	}	
 }

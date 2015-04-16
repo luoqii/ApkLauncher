@@ -89,7 +89,7 @@ public class SmsReceivedDialog extends org.bbs.apklauncher.api.Base_Activity imp
                     .setPositiveButton(R.string.reply, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
                             // Begin creating the reply with the SmsMessagingDemo activity
-                            Intent i = new Intent();
+                            Intent i = new org.bbs.apklauncher.emb.IntentHelper();
                             i.setClass(SmsReceivedDialog.this, SmsMessagingDemo.class);
                             i.putExtra(SmsMessagingDemo.SMS_RECIPIENT_EXTRA, mFromAddress);
                             startActivity(i);

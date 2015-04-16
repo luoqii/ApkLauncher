@@ -30,7 +30,7 @@ ContextWrapper
 
 	private static final String TAG = TargetContext.class.getSimpleName();
 	
-	private static final boolean ENALBE_SERVICE = false;
+	private static final boolean ENALBE_SERVICE = true;
 	
 	private static String mPackageName;
 	private Resources mResource;
@@ -43,10 +43,19 @@ ContextWrapper
 	private Activity mHostActivity;
 
 	private LayoutInflater mInflater;
+
+	private String mCookie;
 	
 	public TargetContext(Context base) {
 		super(base);
 //		this(base, 0);
+	}
+	
+	public void setCookie(String cookie){
+		mCookie = cookie;
+	}
+	public String getCookie() {
+		return mCookie;
 	}
 
 //	public LazyContext(Context base, int themeResId) {

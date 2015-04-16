@@ -4,7 +4,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.bbs.apklauncher.ApkPackageManager;
-import org.bbs.apklauncher.emb.auto_gen.Stub_Activity;
 import org.bbs.apkparser.PackageInfoX.ActivityInfoX;
 import org.bbs.apkparser.PackageInfoX.ServiceInfoX;
 
@@ -12,6 +11,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
@@ -25,6 +25,7 @@ public class Util {
 	private static final String TAG = Util.class.getSimpleName();;
 
     public static final String ACTIVITY_EXTRA_COMPONENT_CLASS_NAME = "EXTRA_COMPONENT_CLASS_NAME";
+    public static final String SERVICE_EXTRA_COMPONENT_CLASS_NAME = "EXTRA_COMPONENT_CLASS_NAME";
 	
 	// TODO
 	public static final String toMemoryLevel(int level) {
@@ -47,7 +48,7 @@ public class Util {
 				ActivityInfoX a = ApkPackageManager.getInstance().getActivityInfo(c);
 				if (a != null) {
 //					ApkLuncherActivity.putExtra(a, intent);
-					intent.putExtra(Stub_Activity.EXTRA_COMPONENT_CLASS_NAME, a.name);
+					intent.putExtra(Util.ACTIVITY_EXTRA_COMPONENT_CLASS_NAME, a.name);
 				}
 			} 
 		} else {
@@ -68,7 +69,7 @@ public class Util {
 				ServiceInfoX a = ApkPackageManager.getInstance().getServiceInfo(c);
 				if (a != null) {
 //					intent.putExtra(Stub_Service.EXTRA_COMPONENT, new ComponentName(a.packageName, a.name));
-					intent.putExtra(Stub_Activity.EXTRA_COMPONENT_CLASS_NAME, a.name);
+					intent.putExtra(Util.SERVICE_EXTRA_COMPONENT_CLASS_NAME, a.name);
 				}
 			} 
 		} else {
@@ -178,5 +179,13 @@ public class Util {
 		return null;
 	}
 	
+    public static Context getContextImpl(Context context) {
+        Context nextContext;
+        while ((context instanceof ContextWrapper) &&
+                (nextContext=((ContextWrapper)context).getBaseContext()) != null) {
+            context = nextContext;
+        }
+        return (Context)context;
+    }
 	
 }

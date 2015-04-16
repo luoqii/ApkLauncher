@@ -54,7 +54,7 @@ public class LocalSampleInstrumentation extends Instrumentation {
         // First start the activity we are instrumenting -- the save/restore
         // state sample, which has a nice edit text into which we can write
         // text.
-        Intent intent = new Intent(Intent.ACTION_MAIN);
+        Intent intent = new org.bbs.apklauncher.emb.IntentHelper(Intent.ACTION_MAIN);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setClass(getTargetContext(), SaveRestoreState.class);
         SaveRestoreState activity = (SaveRestoreState)Util.getTargetActivity((startActivitySync(intent)));

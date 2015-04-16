@@ -88,8 +88,8 @@ public class AlarmController extends org.bbs.apklauncher.api.Base_Activity {
             // name to have our own receiver (which has been published in
             // AndroidManifest.xml) instantiated and called, and then create an
             // IntentSender to have the intent executed as a broadcast.
-            Intent intent = new Intent(AlarmController.this, OneShotAlarm.class);
-            PendingIntent sender = PendingIntent.getBroadcast(AlarmController.this,
+            Intent intent = new org.bbs.apklauncher.emb.IntentHelper(AlarmController.this, OneShotAlarm.class);
+            PendingIntent sender = org.bbs.apklauncher.emb.PendingIntentHelper.getBroadcast(AlarmController.this,
                     0, intent, 0);
 
             // We want the alarm to go off 30 seconds from now.
@@ -120,8 +120,8 @@ public class AlarmController extends org.bbs.apklauncher.api.Base_Activity {
             // IntentSender to have the intent executed as a broadcast.
             // Note that unlike above, this IntentSender is configured to
             // allow itself to be sent multiple times.
-            Intent intent = new Intent(AlarmController.this, RepeatingAlarm.class);
-            PendingIntent sender = PendingIntent.getBroadcast(AlarmController.this,
+            Intent intent = new org.bbs.apklauncher.emb.IntentHelper(AlarmController.this, RepeatingAlarm.class);
+            PendingIntent sender = org.bbs.apklauncher.emb.PendingIntentHelper.getBroadcast(AlarmController.this,
                     0, intent, 0);
             
             // We want the alarm to go off 30 seconds from now.
@@ -147,8 +147,8 @@ public class AlarmController extends org.bbs.apklauncher.api.Base_Activity {
         public void onClick(View v) {
             // Create the same intent, and thus a matching IntentSender, for
             // the one that was scheduled.
-            Intent intent = new Intent(AlarmController.this, RepeatingAlarm.class);
-            PendingIntent sender = PendingIntent.getBroadcast(AlarmController.this,
+            Intent intent = new org.bbs.apklauncher.emb.IntentHelper(AlarmController.this, RepeatingAlarm.class);
+            PendingIntent sender = org.bbs.apklauncher.emb.PendingIntentHelper.getBroadcast(AlarmController.this,
                     0, intent, 0);
             
             // And cancel the alarm.

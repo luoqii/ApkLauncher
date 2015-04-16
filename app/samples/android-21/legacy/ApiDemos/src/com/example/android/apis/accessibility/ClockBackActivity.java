@@ -33,7 +33,7 @@ public class ClockBackActivity extends org.bbs.apklauncher.api.Base_Activity {
 
     /** An intent for launching the system settings. */
     private static final Intent sSettingsIntent =
-        new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+        new org.bbs.apklauncher.emb.IntentHelper(Settings.ACTION_ACCESSIBILITY_SETTINGS);
 
     /**
      * {@inheritDoc}

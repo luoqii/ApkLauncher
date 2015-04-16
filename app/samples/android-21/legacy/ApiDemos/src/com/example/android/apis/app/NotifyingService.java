@@ -36,7 +36,7 @@ import android.os.RemoteException;
  * every 5 seconds for a minute.
  * 
  */
-public class NotifyingService extends Service {
+public class NotifyingService extends org.bbs.apklauncher.api.Base_Service {
     
     // Use a layout id for a unique identifier
     private static int MOOD_NOTIFICATIONS = R.layout.status_bar_notifications;
@@ -102,8 +102,8 @@ public class NotifyingService extends Service {
         Notification notification = new Notification(moodId, null, System.currentTimeMillis());
 
         // The PendingIntent to launch our activity if the user selects this notification
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, NotifyingController.class), 0);
+        PendingIntent contentIntent = org.bbs.apklauncher.emb.PendingIntentHelper.getActivity(this, 0,
+                new org.bbs.apklauncher.emb.IntentHelper(this, NotifyingController.class), 0);
 
         // Set the info for the views that show in the notification panel.
         notification.setLatestEventInfo(this, getText(R.string.status_bar_notifications_mood_title),

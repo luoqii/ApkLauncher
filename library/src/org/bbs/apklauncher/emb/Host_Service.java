@@ -14,26 +14,12 @@ import android.util.Log;
 @SuppressLint("NewApi")
 public abstract class Host_Service extends Service {
 	private static final String TAG = Host_Service.class.getSimpleName();
-	private static boolean DEBUG_LIEFT_CYCLE = true;
-	private static boolean DEBUG_MEMORY = true;
+	public static boolean DEBUG_LIEFT_CYCLE = true;
+	protected static boolean DEBUG_MEMORY = true;
 	private static boolean DEBUG = true;
 	
-	Target_Service mTargetService;
-	protected TargetContext mTargetContext;
-	Context mRealBaseContext;
-	private PackageManager mSysPm;
-
-	@Override
-	protected void attachBaseContext(Context newBase) {
-		mRealBaseContext = newBase;
-		mTargetContext = new TargetContext(newBase);
-		super.attachBaseContext(mTargetContext);
-		mSysPm = getPackageManager();
-	}
-	
-	Context getHostContext() {
-		return mRealBaseContext;
-	}
+	Target_Service mTargetService;	
+	private boolean mCreated;
 
 	abstract protected void onPrepareServiceStub(Intent intent) ;
 	
@@ -42,7 +28,7 @@ public abstract class Host_Service extends Service {
 		if (DEBUG) {
 			Log.d(TAG, "onBind(). intent: " + intent);
 		}
-		onPrepareServiceStub(intent);
+		prepareServiceStub(intent);
 		return mTargetService.onBind(intent);
 	}
 
@@ -60,7 +46,10 @@ public abstract class Host_Service extends Service {
 	@Override
 	@Deprecated
 	public void onStart(Intent intent, int startId) {
-		onPrepareServiceStub(intent);
+		if (DEBUG_LIEFT_CYCLE) {
+			Log.d(TAG, "onStart(). ");
+		}
+		prepareServiceStub(intent);
 		super.onStart(intent, startId);
 		if (null != mTargetService) {
 			mTargetService.onStart(intent, startId);
@@ -69,7 +58,10 @@ public abstract class Host_Service extends Service {
 	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		onPrepareServiceStub(intent);
+		if (DEBUG_LIEFT_CYCLE) {
+			Log.d(TAG, "onStartCommand(). intent: " + intent + " flags: " + flags + " startId: " + startId);
+		}
+		prepareServiceStub(intent);
 //		return super.onStartCommand(intent, flags, startId);
 		return mTargetService.onStartCommand(intent, flags, startId);
 	}
@@ -121,7 +113,7 @@ public abstract class Host_Service extends Service {
 	@Override
 	public boolean onUnbind(Intent intent) {
 //		return super.onUnbind(intent);
-		if (DEBUG) {
+		if (DEBUG || DEBUG_LIEFT_CYCLE) {
 			Log.d(TAG, "onUnbind(). intent: " + intent);
 		}
 		if (null != mTargetService) {
@@ -131,10 +123,9 @@ public abstract class Host_Service extends Service {
 		}
 	}
 	
-	
 	@Override
 	public void onRebind(Intent intent) {
-		if (DEBUG) {
+		if (DEBUG || DEBUG_LIEFT_CYCLE) {
 			Log.d(TAG, "onRebind(). intent: " + intent);
 		}
 		super.onRebind(intent);
@@ -148,6 +139,13 @@ public abstract class Host_Service extends Service {
 		super.onTaskRemoved(rootIntent);
 		if (null != mTargetService) {
 			mTargetService.onTaskRemoved(rootIntent);
+		}
+	}
+
+	private void prepareServiceStub(Intent intent) {
+		if (!mCreated) {
+			onPrepareServiceStub(intent);;
+			mCreated = true;
 		}
 	}
 }

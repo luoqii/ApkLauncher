@@ -40,7 +40,7 @@ import com.example.android.apis.R;
 /**
  * This is an example if implementing a Service that uses android:isolatedProcess.
  */
-public class IsolatedService extends Service {
+public class IsolatedService extends org.bbs.apklauncher.api.Base_Service {
     /**
      * This is a list of callbacks that have been registered with the
      * service.  Note that this is package scoped (instead of private) so
@@ -131,13 +131,13 @@ public class IsolatedService extends Service {
 
             private OnClickListener mStartListener = new OnClickListener() {
                 public void onClick(View v) {
-                    mActivity.startService(new Intent(mActivity, mClz));
+                    mActivity.startService(new org.bbs.apklauncher.emb.IntentHelper(mActivity, mClz));
                 }
             };
 
             private OnClickListener mStopListener = new OnClickListener() {
                 public void onClick(View v) {
-                    mActivity.stopService(new Intent(mActivity, mClz));
+                    mActivity.stopService(new org.bbs.apklauncher.emb.IntentHelper(mActivity, mClz));
                 }
             };
 
@@ -145,7 +145,7 @@ public class IsolatedService extends Service {
                 public void onClick(View v) {
                     if (((CheckBox)v).isChecked()) {
                         if (!mServiceBound) {
-                            if (mActivity.bindService(new Intent(mActivity, mClz),
+                            if (mActivity.bindService(new org.bbs.apklauncher.emb.IntentHelper(mActivity, mClz),
                                     mConnection, Context.BIND_AUTO_CREATE)) {
                                 mServiceBound = true;
                                 mStatus.setText("BOUND");

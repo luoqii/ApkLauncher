@@ -45,7 +45,7 @@ public class LayoutAnimation6 extends org.bbs.apklauncher.api.Base_Activity {
     private List<ResolveInfo> mApps;
 
     private void loadApps() {
-        Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+        Intent mainIntent = new org.bbs.apklauncher.emb.IntentHelper(Intent.ACTION_MAIN, null);
         mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
 
         mApps = getPackageManager().queryIntentActivities(mainIntent, 0);

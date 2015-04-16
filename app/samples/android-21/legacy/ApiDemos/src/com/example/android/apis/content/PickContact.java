@@ -56,7 +56,7 @@ public class PickContact extends org.bbs.apklauncher.api.Base_Activity {
         }
         
         public void onClick(View v) {
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            Intent intent = new org.bbs.apklauncher.emb.IntentHelper(Intent.ACTION_GET_CONTENT);
             intent.setType(mMimeType);
             mPendingResult = this;
             startActivityForResult(intent, 1);

@@ -3147,6 +3147,6 @@
     <instrumentation android:name=".app.LocalSampleInstrumentation"
         android:targetPackage="com.example.android.apis"
         android:label="Local Sample" />
-    <uses-sdk android:targetSdkVersion="21"/>
+    <uses-sdk android:targetSdkVersion="21" android:minSdkVersion="21"/>
 
 </manifest>

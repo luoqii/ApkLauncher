@@ -61,7 +61,7 @@ public class LocalServiceActivities {
                 // the service explicitly specifies our service component, because
                 // we want it running in our own process and don't want other
                 // applications to replace it.
-                startService(new Intent(Controller.this,
+                startService(new org.bbs.apklauncher.emb.IntentHelper(Controller.this,
                         LocalService.class));
             }
         };
@@ -71,7 +71,7 @@ public class LocalServiceActivities {
                 // Cancel a previous call to startService().  Note that the
                 // service will not actually stop at this point if there are
                 // still bound clients.
-                stopService(new Intent(Controller.this,
+                stopService(new org.bbs.apklauncher.emb.IntentHelper(Controller.this,
                         LocalService.class));
             }
         };
@@ -123,7 +123,7 @@ public class LocalServiceActivities {
             // class name because we want a specific service implementation that
             // we know will be running in our own process (and thus won't be
             // supporting component replacement by other applications).
-            bindService(new Intent(Binding.this, 
+            bindService(new org.bbs.apklauncher.emb.IntentHelper(Binding.this, 
                     LocalService.class), mConnection, Context.BIND_AUTO_CREATE);
             mIsBound = true;
         }

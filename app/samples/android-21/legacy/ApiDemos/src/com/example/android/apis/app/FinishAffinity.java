@@ -48,7 +48,7 @@ public class FinishAffinity extends org.bbs.apklauncher.api.Base_Activity {
 
     private OnClickListener mNestListener = new OnClickListener() {
         public void onClick(View v) {
-            Intent intent = new Intent(FinishAffinity.this, FinishAffinity.class);
+            Intent intent = new org.bbs.apklauncher.emb.IntentHelper(FinishAffinity.this, FinishAffinity.class);
             intent.putExtra("nesting", mNesting+1);
             startActivity(intent);
         }

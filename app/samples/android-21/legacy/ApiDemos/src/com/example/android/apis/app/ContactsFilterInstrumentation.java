@@ -45,7 +45,7 @@ public class ContactsFilterInstrumentation extends Instrumentation {
         super.onStart();
         // First start the activity we are instrumenting -- the contacts
         // list.
-        Intent intent = new Intent(Intent.ACTION_MAIN);
+        Intent intent = new org.bbs.apklauncher.emb.IntentHelper(Intent.ACTION_MAIN);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setClassName(getTargetContext(),
                 "com.android.phone.Dialer");

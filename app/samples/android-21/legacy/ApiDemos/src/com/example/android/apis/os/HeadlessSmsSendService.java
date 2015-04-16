@@ -23,7 +23,7 @@ import android.os.IBinder;
 /**
  * Dummy service to make sure this app can be default SMS app
  */
-public class HeadlessSmsSendService extends Service {
+public class HeadlessSmsSendService extends org.bbs.apklauncher.api.Base_Service {
 
     @Override
     public IBinder onBind(Intent intent) {

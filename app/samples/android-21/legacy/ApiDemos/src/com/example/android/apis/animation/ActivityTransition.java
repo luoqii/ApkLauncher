@@ -116,7 +116,7 @@ public class ActivityTransition extends org.bbs.apklauncher.api.Base_Activity {
 
     public void clicked(View v) {
         mHero = (ImageView) v;
-        Intent intent = new Intent(this, ActivityTransitionDetails.class);
+        Intent intent = new org.bbs.apklauncher.emb.IntentHelper(this, ActivityTransitionDetails.class);
         intent.putExtra(KEY_ID, v.getTransitionName());
         ActivityOptions activityOptions
                 = ActivityOptions.makeSceneTransitionAnimation(this.getHostActivity(), mHero, "hero");

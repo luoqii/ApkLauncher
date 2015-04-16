@@ -13,7 +13,14 @@ public class Base_TabActivity extends TabActivity {
 	
 	private static final String TAG = Base_TabActivity.class.getSimpleName();
 	private Intent mIntent;
-	
+
+	public int getHostIdentifier(String name, String defType, String defPackage){
+		int resId = -1;
+		resId = getResources().getIdentifier(name, defType, defPackage);
+		
+		return resId;
+	}
+		
 	//@Override
 	public Base_TabActivity getHostActivity() {
 		return this;

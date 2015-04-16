@@ -13,7 +13,14 @@ public class Base_Activity extends Activity {
 	
 	private static final String TAG = Base_Activity.class.getSimpleName();
 	private Intent mIntent;
-	
+
+	public int getHostIdentifier(String name, String defType, String defPackage){
+		int resId = -1;
+		resId = getResources().getIdentifier(name, defType, defPackage);
+		
+		return resId;
+	}
+		
 	//@Override
 	public Base_Activity getHostActivity() {
 		return this;

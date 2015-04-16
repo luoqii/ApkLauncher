@@ -46,14 +46,14 @@ public class NotifyingController extends org.bbs.apklauncher.api.Base_Activity {
 
     private OnClickListener mStartListener = new OnClickListener() {
         public void onClick(View v) {
-            startService(new Intent(NotifyingController.this, 
+            startService(new org.bbs.apklauncher.emb.IntentHelper(NotifyingController.this, 
                     NotifyingService.class));
         }
     };
 
     private OnClickListener mStopListener = new OnClickListener() {
         public void onClick(View v) {
-            stopService(new Intent(NotifyingController.this, 
+            stopService(new org.bbs.apklauncher.emb.IntentHelper(NotifyingController.this, 
                     NotifyingService.class));
         }
     };

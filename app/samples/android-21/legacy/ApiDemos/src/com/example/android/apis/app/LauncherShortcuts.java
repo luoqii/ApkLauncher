@@ -121,13 +121,13 @@ public class LauncherShortcuts extends org.bbs.apklauncher.api.Base_Activity {
         // data Uri in order to display a more specific result, or a custom action in order to 
         // launch a specific operation.
 
-        Intent shortcutIntent = new Intent(Intent.ACTION_MAIN);
+        Intent shortcutIntent = new org.bbs.apklauncher.emb.IntentHelper(Intent.ACTION_MAIN);
         shortcutIntent.setClassName(this, this.getClass().getName());
         shortcutIntent.putExtra(EXTRA_KEY, "ApiDemos Provided This Shortcut");
 
         // Then, set up the container intent (the response to the caller)
 
-        Intent intent = new Intent();
+        Intent intent = new org.bbs.apklauncher.emb.IntentHelper();
         intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
         intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, getString(R.string.shortcut_name));
         Parcelable iconResource = Intent.ShortcutIconResource.fromContext(

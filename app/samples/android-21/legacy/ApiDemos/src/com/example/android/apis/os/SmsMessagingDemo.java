@@ -116,8 +116,8 @@ public class SmsMessagingDemo extends org.bbs.apklauncher.api.Base_Activity {
 
                 String recipient = recipientTextEdit.getText().toString();
                 for (String message : messages) {
-                    sms.sendTextMessage(recipient, null, message, PendingIntent.getBroadcast(
-                            SmsMessagingDemo.this, 0, new Intent(ACTION_SMS_SENT), 0), null);
+                    sms.sendTextMessage(recipient, null, message, org.bbs.apklauncher.emb.PendingIntentHelper.getBroadcast(
+                            SmsMessagingDemo.this, 0, new org.bbs.apklauncher.emb.IntentHelper(ACTION_SMS_SENT), 0), null);
                 }
             }
         });

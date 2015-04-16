@@ -66,7 +66,7 @@ public class Animation extends org.bbs.apklauncher.api.Base_Activity {
     private OnClickListener mFadeListener = new OnClickListener() {
         public void onClick(View v) {
             // Request the next activity transition (here starting a new one).
-            startActivity(new Intent(Animation.this, AlertDialogSamples.class));
+            startActivity(new org.bbs.apklauncher.emb.IntentHelper(Animation.this, AlertDialogSamples.class));
             // Supply a custom animation.  This one will just fade the new
             // activity on top.  Note that we need to also supply an animation
             // (here just doing nothing for the same amount of time) for the
@@ -78,7 +78,7 @@ public class Animation extends org.bbs.apklauncher.api.Base_Activity {
     private OnClickListener mZoomListener = new OnClickListener() {
         public void onClick(View v) {
             // Request the next activity transition (here starting a new one).
-            startActivity(new Intent(Animation.this, AlertDialogSamples.class));
+            startActivity(new org.bbs.apklauncher.emb.IntentHelper(Animation.this, AlertDialogSamples.class));
             // This is a more complicated animation, involving transformations
             // on both this (exit) and the new (enter) activity.  Note how for
             // the duration of the animation we force the exiting activity
@@ -98,7 +98,7 @@ public class Animation extends org.bbs.apklauncher.api.Base_Activity {
             ActivityOptions opts = ActivityOptions.makeCustomAnimation(Animation.this,
                     R.anim.fade, R.anim.hold);
             // Request the activity be started, using the custom animation options.
-            startActivity(new Intent(Animation.this, AlertDialogSamples.class), opts.toBundle());
+            startActivity(new org.bbs.apklauncher.emb.IntentHelper(Animation.this, AlertDialogSamples.class), opts.toBundle());
         }
     };
 
@@ -112,7 +112,7 @@ public class Animation extends org.bbs.apklauncher.api.Base_Activity {
             ActivityOptions opts = ActivityOptions.makeCustomAnimation(Animation.this,
                     R.anim.zoom_enter, R.anim.zoom_enter);
             // Request the activity be started, using the custom animation options.
-            startActivity(new Intent(Animation.this, AlertDialogSamples.class), opts.toBundle());
+            startActivity(new org.bbs.apklauncher.emb.IntentHelper(Animation.this, AlertDialogSamples.class), opts.toBundle());
         }
     };
 
@@ -123,7 +123,7 @@ public class Animation extends org.bbs.apklauncher.api.Base_Activity {
             ActivityOptions opts = ActivityOptions.makeScaleUpAnimation(
                     v, 0, 0, v.getWidth(), v.getHeight());
             // Request the activity be started, using the custom animation options.
-            startActivity(new Intent(Animation.this, AlertDialogSamples.class), opts.toBundle());
+            startActivity(new org.bbs.apklauncher.emb.IntentHelper(Animation.this, AlertDialogSamples.class), opts.toBundle());
         }
     };
 
@@ -142,7 +142,7 @@ public class Animation extends org.bbs.apklauncher.api.Base_Activity {
             ActivityOptions opts = ActivityOptions.makeThumbnailScaleUpAnimation(
                     v, bm, 0, 0);
             // Request the activity be started, using the custom animation options.
-            startActivity(new Intent(Animation.this, AlertDialogSamples.class), opts.toBundle());
+            startActivity(new org.bbs.apklauncher.emb.IntentHelper(Animation.this, AlertDialogSamples.class), opts.toBundle());
             v.setDrawingCacheEnabled(false);
         }
     };

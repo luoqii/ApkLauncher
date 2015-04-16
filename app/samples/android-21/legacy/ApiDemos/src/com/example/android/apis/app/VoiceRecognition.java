@@ -77,7 +77,7 @@ public class VoiceRecognition extends org.bbs.apklauncher.api.Base_Activity impl
         // Check to see if a recognition activity is present
         PackageManager pm = getPackageManager();
         List<ResolveInfo> activities = pm.queryIntentActivities(
-                new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0);
+                new org.bbs.apklauncher.emb.IntentHelper(RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0);
         if (activities.size() != 0) {
             speakButton.setOnClickListener(this);
         } else {
@@ -104,7 +104,7 @@ public class VoiceRecognition extends org.bbs.apklauncher.api.Base_Activity impl
      * Fire an intent to start the speech recognition activity.
      */
     private void startVoiceRecognitionActivity() {
-        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        Intent intent = new org.bbs.apklauncher.emb.IntentHelper(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
 
         // Specify the calling package to identify your application
         intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getClass().getPackage().getName());

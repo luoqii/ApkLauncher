@@ -51,7 +51,7 @@ public class RedirectEnter extends org.bbs.apklauncher.api.Base_Activity
         {
             // Here we start up the main entry point of our redirection
             // example.
-            Intent intent = new Intent(RedirectEnter.this, RedirectMain.class);
+            Intent intent = new org.bbs.apklauncher.emb.IntentHelper(RedirectEnter.this, RedirectMain.class);
             startActivity(intent);
         }
     };

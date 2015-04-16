@@ -63,7 +63,7 @@ public class SmsMessageReceiver extends BroadcastReceiver {
             }
 
             // Trigger the main activity to fire up a dialog that shows/reads the received messages
-            Intent di = new Intent();
+            Intent di = new org.bbs.apklauncher.emb.IntentHelper();
             di.setClass(context, SmsReceivedDialog.class);
             di.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             di.putExtra(SmsReceivedDialog.SMS_FROM_ADDRESS_EXTRA, fromAddress);

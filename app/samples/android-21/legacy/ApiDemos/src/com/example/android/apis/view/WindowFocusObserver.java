@@ -68,7 +68,7 @@ public class WindowFocusObserver extends org.bbs.apklauncher.api.Base_Activity i
         actionProvider.setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
         // Note that you can set/change the intent any time,
         // say when the user has selected an image.
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        Intent shareIntent = new org.bbs.apklauncher.emb.IntentHelper(Intent.ACTION_SEND);
         shareIntent.setType("image/*");
         Uri uri = Uri.fromFile(getFileStreamPath("shared.png"));
         shareIntent.putExtra(Intent.EXTRA_STREAM, uri);

@@ -54,7 +54,7 @@ import com.example.android.apis.R;
  * running in its own process, the {@link LocalService} sample shows a much
  * simpler way to interact with it.
  */
-public class RemoteService extends Service {
+public class RemoteService extends org.bbs.apklauncher.api.Base_Service {
     /**
      * This is a list of callbacks that have been registered with the
      * service.  Note that this is package scoped (instead of private) so
@@ -184,12 +184,12 @@ public class RemoteService extends Service {
         CharSequence text = getText(R.string.remote_service_started);
 
         // Set the icon, scrolling text and timestamp
-        Notification notification = new Notification(R.drawable.stat_sample, text,
+        Notification notification = new Notification(getHostIdentifier("demo_notification", "image", null), text,
                 System.currentTimeMillis());
 
         // The PendingIntent to launch our activity if the user selects this notification
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, Controller.class), 0);
+        PendingIntent contentIntent = org.bbs.apklauncher.emb.PendingIntentHelper.getActivity(this, 0,
+                new org.bbs.apklauncher.emb.IntentHelper(this, Controller.class), 0);
 
         // Set the info for the views that show in the notification panel.
         notification.setLatestEventInfo(this, getText(R.string.remote_service_label),
@@ -232,7 +232,7 @@ public class RemoteService extends Service {
                 // We use an action code here, instead of explictly supplying
                 // the component name, so that other packages can replace
                 // the service.
-                startService(new Intent(
+                startService(new org.bbs.apklauncher.emb.IntentHelper(
                         "com.example.android.apis.app.REMOTE_SERVICE"));
             }
         };
@@ -242,7 +242,7 @@ public class RemoteService extends Service {
                 // Cancel a previous call to startService().  Note that the
                 // service will not actually stop at this point if there are
                 // still bound clients.
-                stopService(new Intent(
+                stopService(new org.bbs.apklauncher.emb.IntentHelper(
                         "com.example.android.apis.app.REMOTE_SERVICE"));
             }
         };
@@ -361,9 +361,9 @@ public class RemoteService extends Service {
                 // by interface names.  This allows other applications to be
                 // installed that replace the remote service by implementing
                 // the same interface.
-                bindService(new Intent(IRemoteService.class.getName()),
+                bindService(new org.bbs.apklauncher.emb.IntentHelper(IRemoteService.class.getName()),
                         mConnection, Context.BIND_AUTO_CREATE);
-                bindService(new Intent(ISecondary.class.getName()),
+                bindService(new org.bbs.apklauncher.emb.IntentHelper(ISecondary.class.getName()),
                         mSecondaryConnection, Context.BIND_AUTO_CREATE);
                 mIsBound = true;
                 mCallbackText.setText("Binding.");
@@ -548,7 +548,7 @@ public class RemoteService extends Service {
                     mCurConnection = null;
                 }
                 ServiceConnection conn = new MyServiceConnection();
-                if (bindService(new Intent(IRemoteService.class.getName()),
+                if (bindService(new org.bbs.apklauncher.emb.IntentHelper(IRemoteService.class.getName()),
                         conn, Context.BIND_AUTO_CREATE)) {
                     mCurConnection = conn;
                 }
@@ -562,7 +562,7 @@ public class RemoteService extends Service {
                     mCurConnection = null;
                 }
                 ServiceConnection conn = new MyServiceConnection();
-                if (bindService(new Intent(IRemoteService.class.getName()),
+                if (bindService(new org.bbs.apklauncher.emb.IntentHelper(IRemoteService.class.getName()),
                         conn, Context.BIND_AUTO_CREATE | Context.BIND_NOT_FOREGROUND)) {
                     mCurConnection = conn;
                 }
@@ -576,7 +576,7 @@ public class RemoteService extends Service {
                     mCurConnection = null;
                 }
                 ServiceConnection conn = new MyServiceConnection();
-                if (bindService(new Intent(IRemoteService.class.getName()),
+                if (bindService(new org.bbs.apklauncher.emb.IntentHelper(IRemoteService.class.getName()),
                         conn, Context.BIND_AUTO_CREATE | Context.BIND_ABOVE_CLIENT)) {
                     mCurConnection = conn;
                 }
@@ -590,7 +590,7 @@ public class RemoteService extends Service {
                     mCurConnection = null;
                 }
                 ServiceConnection conn = new MyServiceConnection();
-                if (bindService(new Intent(IRemoteService.class.getName()),
+                if (bindService(new org.bbs.apklauncher.emb.IntentHelper(IRemoteService.class.getName()),
                         conn, Context.BIND_AUTO_CREATE | Context.BIND_ALLOW_OOM_MANAGEMENT)) {
                     mCurConnection = conn;
                 }
@@ -604,7 +604,7 @@ public class RemoteService extends Service {
                     mCurConnection = null;
                 }
                 ServiceConnection conn = new MyServiceConnection(true);
-                if (bindService(new Intent(IRemoteService.class.getName()),
+                if (bindService(new org.bbs.apklauncher.emb.IntentHelper(IRemoteService.class.getName()),
                         conn, Context.BIND_AUTO_CREATE | Context.BIND_WAIVE_PRIORITY)) {
                     mCurConnection = conn;
                 }
@@ -618,7 +618,7 @@ public class RemoteService extends Service {
                     mCurConnection = null;
                 }
                 ServiceConnection conn = new MyServiceConnection();
-                if (bindService(new Intent(IRemoteService.class.getName()),
+                if (bindService(new org.bbs.apklauncher.emb.IntentHelper(IRemoteService.class.getName()),
                         conn, Context.BIND_AUTO_CREATE | Context.BIND_IMPORTANT)) {
                     mCurConnection = conn;
                 }
@@ -632,7 +632,7 @@ public class RemoteService extends Service {
                     mCurConnection = null;
                 }
                 ServiceConnection conn = new MyServiceConnection();
-                if (bindService(new Intent(IRemoteService.class.getName()),
+                if (bindService(new org.bbs.apklauncher.emb.IntentHelper(IRemoteService.class.getName()),
                         conn, Context.BIND_AUTO_CREATE | Context.BIND_ADJUST_WITH_ACTIVITY
                         | Context.BIND_WAIVE_PRIORITY)) {
                     mCurConnection = conn;

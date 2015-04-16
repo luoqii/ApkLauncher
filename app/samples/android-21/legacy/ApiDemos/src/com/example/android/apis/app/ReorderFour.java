@@ -38,7 +38,7 @@ public class ReorderFour extends org.bbs.apklauncher.api.Base_Activity {
 
     private final OnClickListener mClickListener = new OnClickListener() {
         public void onClick(View v) {
-            Intent intent = new Intent(ReorderFour.this, ReorderTwo.class);
+            Intent intent = new org.bbs.apklauncher.emb.IntentHelper(ReorderFour.this, ReorderTwo.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             startActivity(intent);
         }
