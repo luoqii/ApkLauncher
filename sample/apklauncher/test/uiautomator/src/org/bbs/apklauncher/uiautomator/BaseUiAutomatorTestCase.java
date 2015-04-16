@@ -291,18 +291,59 @@ public class BaseUiAutomatorTestCase extends UiAutomatorTestCase {
 	public static void doActionUntil(Runnable action, TestCondition condition, int maxRetry){
 		do {
 			action.run();
-		} while (!condition.evalute());
+		} while (condition.evalute());
+	}
+	public static void doActionUntil(WhileBlock whileBlock){
+		do {
+			whileBlock.run();
+		} while (whileBlock.evalute());
 	}	
 	public static void whileDoAction(TestCondition condition, Runnable action){
 		whileDoAction(condition, action, 7);
 	}
 	public static void whileDoAction(TestCondition condition, Runnable action, int maxRetry){
-		while (!condition.evalute()){
+		while (condition.evalute()){
 			action.run();
 		}
 	}
+	public static void whileDoAction(WhileBlock whileBlock){
+		while (whileBlock.evalute()){
+			whileBlock.run();
+		}
+	}
 	public static interface TestCondition {
+		
 		public boolean evalute();
 	}
+	public static interface WhileBlock extends TestCondition, Runnable {
+		
+	}
+	public abstract class BaseAction<T> implements Runnable {
+
+		private T obj;
+		
+		public BaseAction(T t) {
+			this.obj = t;
+		}
+		
+		public T get() {
+			return obj;
+		}
+		
+	}
+	public abstract class BaseCondition<T> implements TestCondition {
+
+		private T obj;
+		
+		public BaseCondition(T t) {
+			this.obj = t;
+		}
+		
+		public T get() {
+			return obj;
+		}
+		
+	}
+	
 	
 }

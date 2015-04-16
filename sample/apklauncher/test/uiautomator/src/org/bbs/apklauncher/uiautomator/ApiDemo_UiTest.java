@@ -93,15 +93,31 @@ public class ApiDemo_UiTest extends BaseUiAutomatorTestCase {
 		ignoreLables.add("SMS Messaging");
 		ignoreLables.add("KeyStore");
 		
+		List<String> goPath = new ArrayList<String>();
+		goPath.add("App");
+		goPath.add("Service");
+		gotoNode(goPath);
+		int skip = 0;
+		
 		UiNode top = new UiNode("TOP");
 		gatherAllUiNode(top, true);
 		
-		int skip = 10;
 		for (int i = 0; i < skip ; i++) {
-			top.children.get(i).finished = true;
+			UiNode c = top.children.get(i);
+			c.finished = true;
+			
+			logD(TAG, "ignore n: " + c);
 		}
 		
 		tranverse(top, 1, ignoreLables);
+	}
+	
+	void gotoNode(List<String> nodePath) {
+		logD(TAG, "gotoNode: " + toPathStringS(nodePath));
+		
+		TestCondition condition = new PathCondition(nodePath.size());
+		Runnable action = new PathAction(nodePath);
+		whileDoAction(condition, action);;
 	}
 	
 	void tranverse(UiNode uiTree, int deep, List<String> ignoreLables) throws UiObjectNotFoundException{
@@ -116,11 +132,7 @@ public class ApiDemo_UiTest extends BaseUiAutomatorTestCase {
 			p = p.parent;
 		}
 		path = "";
-		int S = nodePath.size();
-		for (int i = S -1 ; i >= 0 ; i--) {
-			path = path + "[" + nodePath.get(i).label + "]->";
-		}
-		path = path.replaceAll("->$", "");
+		path = toPathString(nodePath);
 		logD(TAG, makePrefix(deep) + "tranverse. path: " + path);
 		
 		uiTree.finished = true;
@@ -174,6 +186,26 @@ public class ApiDemo_UiTest extends BaseUiAutomatorTestCase {
 			uiTree.finished = true;
 			pressBack();
 		}
+	}
+
+	private String toPathString(List<UiNode> nodePath) {
+		String path = "";
+		int S = nodePath.size();
+		for (int i = S -1 ; i >= 0 ; i--) {
+			path = path + "[" + nodePath.get(i).label + "]->";
+		}
+		path = path.replaceAll("->$", "");
+		return path;
+	}
+	
+	private String toPathStringS(List<String> nodePath) {
+		String path = "";
+		int S = nodePath.size();
+		for (int i = 0 ; i < S ; i++) {
+			path = path + "[" + nodePath.get(i) + "]->";
+		}
+		path = path.replaceAll("->$", "");
+		return path;
 	}
 	
 	String makePrefix(int deep){
@@ -284,10 +316,10 @@ public class ApiDemo_UiTest extends BaseUiAutomatorTestCase {
 	
 //		logD(TAG, "tranverseCurrentUi. firstText : " + firstText);
 		String tempFirstText = "";
-		int maxTry = 1;
+		boolean scrollToEnd = false;
 		do {
 			scrollable = new UiScrollable(selector);
-			scrollable.scrollForward();
+			scrollToEnd = !scrollable.scrollForward();
 			
 			collection = new UiCollection(selector);
 			count = collection.getChildCount();
@@ -312,9 +344,7 @@ public class ApiDemo_UiTest extends BaseUiAutomatorTestCase {
 			}
 	
 //			logD(TAG, "tranverseCurrentUi. tempFirstText : " + tempFirstText);
-			
-			maxTry--;
-		} while (! firstText.equalsIgnoreCase(tempFirstText) && maxTry > 0);
+		} while (! firstText.equalsIgnoreCase(tempFirstText) && !scrollToEnd);
 		
 		new UiScrollable(selector).scrollToBeginning(100);
 	}
@@ -391,6 +421,71 @@ public class ApiDemo_UiTest extends BaseUiAutomatorTestCase {
 				e.printStackTrace();
 			}
 			return false;
+		}
+		
+	}
+	
+	class PathCondition extends BaseCondition<Integer> {
+
+		private int run;
+
+		public PathCondition(int size) {
+			super(size);
+			
+			run = 0;
+		}
+
+		@Override
+		public boolean evalute() {
+
+			boolean going = doEvalute();
+			logD(TAG, "going: " + going);
+			return going;
+		}
+		
+		public boolean doEvalute() {
+			
+			UiObject o = new UiObject(new UiSelector().description("Xapidemo"));
+			waitForExists(o);
+			if ( o.exists() && run < get()) {
+				run++;
+				return true;
+			} else {
+				run++;
+				return false;
+			}
+			
+		}
+		
+	}
+
+	class PathAction extends BaseAction<List<String>>{
+	
+		private int run;
+	
+		public PathAction(List<String> t) {
+			super(t);
+			
+			run = 0;
+		}
+		
+		@Override
+		public void run() {
+			logD(TAG, "run: " + run);
+			if (get().size() > run){
+				UiNode n = new UiNode(get().get(run));
+				try {
+					UiObject node = findNode(n);
+					waitForExists(node);
+					logD(TAG, "click n: " + node);
+					node.clickAndWaitForNewWindow();
+				} catch (UiObjectNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			run++;
 		}
 		
 	}
