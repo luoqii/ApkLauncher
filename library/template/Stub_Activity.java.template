@@ -48,15 +48,15 @@ implements CallBack {
 	
 	private static final String TAG = StubBase_SUPER_CLASS.class.getSimpleName();
 	
-	private ClassLoader mTargetClassLoader;
-	private TargetContext mTargetContext;
-	private ActivityInfoX mTargetActivityInfo;
-	private ResourcesMerger mResourceMerger;
+	private ClassLoader     mTargetClassLoader;
+	private TargetContext   mTargetContext;
+	private ActivityInfoX   mTargetActivityInfo;
+	private ResourcesMerger mTargetResourceMerger;
 	
-	private PackageManager mRealSysPm;
-	private Context 	   mRealBaseContext;	
+	private PackageManager  mRealSysPm;
+	private Context 	    mRealBaseContext;	
 	
-	private IntentHelper mIntent;
+	private IntentHelper    mIntent;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -114,15 +114,15 @@ implements CallBack {
 		// do activity init
 		InstrumentationWrapper.injectInstrumentation(this, this);
 		try {
-			mResourceMerger = ApkPackageManager.makeTargetResource(apkPath, mRealBaseContext);
+			mTargetResourceMerger = ApkPackageManager.makeTargetResource(apkPath, mRealBaseContext);
 
-			targetThemeId = ReflectUtil.ResourceUtil.selectDefaultTheme(mResourceMerger, targetThemeId, 
+			targetThemeId = ReflectUtil.ResourceUtil.selectDefaultTheme(mTargetResourceMerger, targetThemeId, 
 																			mTargetActivityInfo.applicationInfo.targetSdkVersion);
 
 			Log.d(TAG, "resolved activity theme: " + targetThemeId);
 			mTargetContext.setTheme(targetThemeId);
 			mTargetContext.themeReady(targetThemeId);
-			mTargetContext.resReady(mResourceMerger);
+			mTargetContext.resReady(mTargetResourceMerger);
 			mTargetContext.applicationContextReady(ApkPackageManager.getApplication(targetPackageName));
 			
 			ReflectUtil.ActivityReflectUtil.setActivityApplication(this, app);
@@ -148,7 +148,7 @@ implements CallBack {
 	private void updateTitle() {
 		CharSequence title = "";
 		if (mTargetActivityInfo.labelRes  > 0) {
-			title = mResourceMerger.getString(mTargetActivityInfo.labelRes);
+			title = mTargetResourceMerger.getString(mTargetActivityInfo.labelRes);
 		}
 		if (TextUtils.isEmpty(title)) {
 			title = mTargetActivityInfo.nonLocalizedLabel;

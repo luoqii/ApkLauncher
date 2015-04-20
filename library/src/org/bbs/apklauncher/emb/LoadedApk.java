@@ -145,18 +145,5 @@ public class LoadedApk {
 			Log.d(TAG, "super class : " + clazz);
 			superClassName.add(clazz.getName());
 		}
-	}
-	
-	public Class getApplictionClass() {
-//		try {
-//			Class clazz = Class.forName(mApkInfo.applicationInfo.className);
-//		} catch (ClassNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-		
-		return null;
-	}
-	
-	
+	}	
 }
