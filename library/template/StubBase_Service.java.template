@@ -1,8 +1,10 @@
-package org.bbs.apklauncher.emb;
+package org.bbs.apklauncher.emb.auto_gen;
 
 import org.bbs.apklauncher.TargetContext;
+import org.bbs.apklauncher.emb.Util;
 
 import android.annotation.SuppressLint;
+import android.app.IntentService;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -12,14 +14,20 @@ import android.os.IBinder;
 import android.util.Log;
 
 @SuppressLint("NewApi")
-public abstract class Host_Service extends Service {
-	private static final String TAG = Host_Service.class.getSimpleName();
+public abstract class StubBase_SUPER_CLASS extends SUPER_CLASS {
+	private static final String TAG = StubBase_SUPER_CLASS.class.getSimpleName();
 	public static boolean DEBUG_LIEFT_CYCLE = true;
 	protected static boolean DEBUG_MEMORY = true;
 	private static boolean DEBUG = true;
 	
-	Target_Service mTargetService;	
+	Target_SUPER_CLASS mTargetService;	
 	private boolean mCreated;
+	
+	// tag_start:IntentService
+	public StubBase_IntentService(String name) {
+		super(name);
+	}
+	// tag_end:IntentService
 
 	abstract protected void onPrepareServiceStub(Intent intent) ;
 	
@@ -148,4 +156,18 @@ public abstract class Host_Service extends Service {
 			mCreated = true;
 		}
 	}
+	
+	// tag_start:IntentService
+	@Override
+	public void setIntentRedelivery(boolean enabled) {
+		super.setIntentRedelivery(enabled);
+	}
+
+	@Override
+	protected void onHandleIntent(Intent intent) {
+		if (null != mTargetService) {
+			mTargetService.onHandleIntent(intent);
+		}
+	}
+	// tag_end:IntentService
 }

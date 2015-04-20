@@ -63,23 +63,13 @@ public class PendingIntentHelper
 		} else {
 			TargetContext t = new TargetContext(context);
 			t.setCookie(COOKIE);
-			t.packageNameReady(getContextImpl(context).getPackageName());
+			t.packageNameReady(org.bbs.apklauncher.emb.Util.getContextImpl(context).getPackageName());
 			
 			c = t;
 		}
 		
 		return c;
 	}
-	
-    public static Context getContextImpl(Context context) {
-        Context nextContext;
-        while ((context instanceof ContextWrapper) &&
-                (nextContext=((ContextWrapper)context).getBaseContext()) != null) {
-            context = nextContext;
-        }
-        return (Context)context;
-    }
-
 	
 //	public static PendingIntent 	readPendingIntentOrNullFromParcel(Parcel in) {
 //		return PendingIntent.readPendingIntentOrNullFromParcel(in);

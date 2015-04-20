@@ -13,9 +13,9 @@ import android.support.v7.app.ActionBarActivity;
 
 import org.bbs.apklauncher.emb.IntentHelper;
 
-public class Base_ListActivity extends ListActivity {
+public class Base_ActivityGroup extends ActivityGroup {
 	
-	private static final String TAG = Base_ListActivity.class.getSimpleName();
+	private static final String TAG = Base_ActivityGroup.class.getSimpleName();
 	private Intent mIntent;
 
 	public int getHostIdentifier(String name, String defType, String defPackage){
@@ -27,7 +27,7 @@ public class Base_ListActivity extends ListActivity {
 	}
 		
 	//@Override
-	public Base_ListActivity getHostActivity() {
+	public Base_ActivityGroup getHostActivity() {
 		return this;
 	}
 	

@@ -10,7 +10,7 @@ function genLib(){
 	cd export 
 	
 	ANDROID_JAR="/mnt/windows_share/download/adt-bundle-linux-x86_64-20140702/sdk/platforms/android-21/android.jar"
-	CLASSPATH="../bin/apklauncher_sdk.jar:../libs/android-support-v4.jar"
+	CLASSPATH="../bin/apklauncher_sdk.jar:../libs/android-support-v4.jar:../libs/android-support-v7-appcompat.jar"
 	CLASSPATH=${CLASSPATH}:$ANDROID_JAR
 
 	mkdir class
@@ -47,8 +47,8 @@ function genLib(){
 }
 
 #rm -rf export/app export/plugin
-groovy host_target.groovy
-groovy library.groovy
+groovy host_target_activity.groovy
+groovy host_target_service.groovy
 
 #version=_v0.2
 genLib app apklauncher_app$version.jar

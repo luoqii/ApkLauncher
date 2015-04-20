@@ -23,12 +23,12 @@ import org.bbs.apklauncher.emb.auto_gen.Target_ListActivity;
 import org.bbs.apklauncher.emb.auto_gen.Target_PreferenceActivity;
 import org.bbs.apklauncher.emb.auto_gen.Target_TabActivity;
 
-public class Base_PreferenceActivity extends Target_PreferenceActivity {
+public class Base_ExpandableListActivity extends Target_ExpandableListActivity {
 	
-	private static final String TAG = Base_PreferenceActivity.class.getSimpleName();
+	private static final String TAG = Base_ExpandableListActivity.class.getSimpleName();
 	
 	@Override
-	public StubBase_PreferenceActivity getHostActivity() {
+	public StubBase_ExpandableListActivity getHostActivity() {
 		return super.getHostActivity();
 	}
 	

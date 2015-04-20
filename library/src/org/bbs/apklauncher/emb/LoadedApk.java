@@ -11,10 +11,15 @@ import org.bbs.apklauncher.emb.auto_gen.Target_ExpandableListActivity;
 import org.bbs.apklauncher.emb.auto_gen.Target_FragmentActivity;
 import org.bbs.apklauncher.emb.auto_gen.Target_ListActivity;
 import org.bbs.apklauncher.emb.auto_gen.Target_PreferenceActivity;
+import org.bbs.apklauncher.emb.auto_gen.Target_Service;
 import org.bbs.apklauncher.emb.auto_gen.Target_TabActivity;
 import org.bbs.apkparser.PackageInfoX;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
+import android.app.job.JobService;
+import android.inputmethodservice.InputMethodService;
+import android.service.dreams.DreamService;
 import android.text.TextUtils;
 import android.util.Log;
 import dalvik.system.DexClassLoader;
@@ -61,19 +66,19 @@ public class LoadedApk {
 					cName = Target_ActionBarActivity.class.getName();
 				} else if (superClassNames.contains(Target_FragmentActivity.class.getName())) {
 					cName = Target_FragmentActivity.class.getName();
-				} else if (superClassNames.contains(Target_ListActivity.class.getName())) {
-					cName = Target_ListActivity.class.getName();
 				} else if (superClassNames.contains(Target_ExpandableListActivity.class.getName())) {
 					cName = Target_ExpandableListActivity.class.getName();
-				} else if (superClassNames.contains(Target_Activity.class.getName())) {
-					cName = Target_Activity.class.getName();
+				} else if (superClassNames.contains(Target_ListActivity.class.getName())) {
+					cName = Target_ListActivity.class.getName();
 				} else if (superClassNames.contains(Target_PreferenceActivity.class.getName())){
 					cName = Target_PreferenceActivity.class.getName();
 				} else if (superClassNames.contains(Target_TabActivity.class.getName())){
 					cName = Target_TabActivity.class.getName();
 				} else if (superClassNames.contains(Target_ActivityGroup.class.getName())){
 					cName = Target_ActivityGroup.class.getName();
-				}
+				} else if (superClassNames.contains(Target_Activity.class.getName())) {
+					cName = Target_Activity.class.getName();
+				} 
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -90,6 +95,7 @@ public class LoadedApk {
 		return cName;
 	}	
 	
+	@SuppressLint("NewApi")
 	public static String getServiceSuperClassName(ClassLoader classloader, String serviceClassName) {
 		String cName = null;
 		if (sSuperClassNameMap.containsKey(serviceClassName)) {
@@ -100,6 +106,13 @@ public class LoadedApk {
 				Class<?> clazz = classloader.loadClass(serviceClassName);
 				List<String> superClassNames = new ArrayList<String>();
 				dumpClassType(clazz, superClassNames);
+				if (superClassNames.contains(JobService.class.getName())
+						|| superClassNames.contains(DreamService.class.getName())
+						|| superClassNames.contains(InputMethodService.class.getName())
+						
+						) {
+					notImpl();
+				}
 				if (superClassNames.contains(Target_Service.class.getName())) {
 					cName = Target_Service.class.getName();
 				}
@@ -118,14 +131,18 @@ public class LoadedApk {
 		return cName;
 	}
 	
+	private static void notImpl() {
+		throw new RuntimeException("not impl yet.");
+	}
+
 	private static void dumpClassType(Class clazz, List<String> superClassName) {
-		//========1234567890
+		//==========123456789012345678
 		Log.d(TAG, "class        : " + clazz + " name: " + clazz.getName());
 		while (!clazz.getName().equals(Object.class.getName())) {
 			clazz = clazz.getSuperclass();
 
-			//=========1234567890
-			Log.d(TAG, "super class: " + clazz);
+			//=========123456789012345678
+			Log.d(TAG, "super class : " + clazz);
 			superClassName.add(clazz.getName());
 		}
 	}

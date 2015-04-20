@@ -103,7 +103,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name="org.bbs.apklauncher.emb.Stub_Service" />
+        <service android:name="org.bbs.apklauncher.emb.auto_gen.Stub_Service" />
     </application>
 
 </manifest>
