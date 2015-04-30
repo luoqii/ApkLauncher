@@ -43,6 +43,10 @@ import android.text.TextUtils;
 import dalvik.system.DexClassLoader;
 
 public class ApkPackageManager extends PackageManager {
+	private static final String PLUGIN_DIR_NAME = "plugin";
+
+	private static final String APK_FILE_SUFFIX = "apk";
+
 	private static ApkPackageManager sInstance;
 	
 	public static Map<String, WeakReference<ClassLoader>> sApk2ClassLoaderMap = new HashMap<String, WeakReference<ClassLoader>>();
@@ -130,11 +134,20 @@ public class ApkPackageManager extends PackageManager {
 		sApk2ApplicationtMap.put(packageName, new WeakReference<Application>(app));
 	}
 	
+	/**
+	 * @param context
+	 * @param apkDir where apk file located.
+	 * 
+	 */
 	public void init(Application context, File apkDir){
 		mContext = context;
 		mInfos = new ArrayList<PackageInfoX>();
 		
 		scanApkDir(apkDir);
+	}
+	
+	public File getPluginDir() {
+		return mContext.getDir(PLUGIN_DIR_NAME, 0);
 	}
 	
 	public void scanApkDir(File apkDir) {
@@ -146,15 +159,14 @@ public class ApkPackageManager extends PackageManager {
 			return;
 		}
 		
+		File plugDir = getPluginDir();
 		for (String f : files) {
 			File file = new File(apkDir.getAbsolutePath() + "/" + f);
-			if (file.exists() && file.getAbsolutePath().endsWith("apk")){
+			if (file.exists() && file.getAbsolutePath().endsWith(APK_FILE_SUFFIX)){
 				PackageInfoX info = ApkManifestParser.parseAPk(mContext, file.getAbsolutePath());
-				mInfos.add(info);
 				
 				try {
-					File dataDir = mContext.getDir("plugin", 0);
-					File destDir = new File(dataDir, info.packageName + "/lib");
+					File destDir = new File(plugDir, info.packageName + "/lib");
 					
 					//TODO native lib
 					AndroidUtil.extractZipEntry(new ZipFile(info.applicationInfo.publicSourceDir), "lib/armeabi", destDir);
@@ -165,6 +177,8 @@ public class ApkPackageManager extends PackageManager {
 					// asume there is only one apk.
 					ClassLoader cl = createClassLoader(info.applicationInfo.sourceDir, info.mLibPath, mContext);
 					putClassLoader(info.applicationInfo.sourceDir, cl);
+
+					mInfos.add(info);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -284,7 +298,12 @@ public class ApkPackageManager extends PackageManager {
 		return info;
 	}
 	
-	// after call this, must init it.
+	/**
+	 * @return
+	 * 
+	 * NOTE:  <p>
+	 * you must init this before use by {@link #init(Application, File)}.
+	 */
 	public static ApkPackageManager getInstance() {
 		if (null == sInstance) {
 			sInstance = new ApkPackageManager();
