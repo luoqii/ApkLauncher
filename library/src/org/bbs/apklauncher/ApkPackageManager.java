@@ -1,7 +1,12 @@
 package org.bbs.apklauncher;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,6 +27,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.FeatureInfo;
@@ -55,8 +61,12 @@ public class ApkPackageManager extends PackageManager {
 
 	public static ClassLoader sLastClassLoader;
 
-	private ArrayList<PackageInfoX> mInfos;
+	private InstallApks mInfos;
 	private Application mContext;
+
+	private SerializableUtil mSerUtil;
+
+	private UpdateUtil mUpdateU;
 	
 	private ApkPackageManager() {
 		
@@ -139,11 +149,24 @@ public class ApkPackageManager extends PackageManager {
 	 * @param apkDir where apk file located.
 	 * 
 	 */
-	public void init(Application context, File apkDir){
+	public void init(Application context){
 		mContext = context;
-		mInfos = new ArrayList<PackageInfoX>();
+		mInfos = new InstallApks();
+		mSerUtil = new SerializableUtil(context);
 		
-		scanApkDir(apkDir);
+		mUpdateU = new UpdateUtil(UpdateUtil.PREF_KEY_VERSION_ID);
+		if (mUpdateU.isAppUpdate(context) || mUpdateU.isFirstUsage(context)) {
+			// re-build install apk info.
+			scanApkDir(getPluginDir());
+			
+			mSerUtil.put(mInfos);
+		} else {
+			mInfos = mSerUtil.get();
+		}
+		
+		if (mUpdateU.isAppUpdate(context)){
+			mUpdateU.updateVersion(context);
+		}
 	}
 	
 	public File getPluginDir() {
@@ -185,13 +208,15 @@ public class ApkPackageManager extends PackageManager {
 				}
 			}
 		}
+		
+		mSerUtil.put(mInfos);
 	}
 	
-	public ApplicationInfoX getApplicationInfo(String applicationName) {
+	public ApplicationInfoX getApplicationInfo(String className) {
 		ApplicationInfoX a = null;
 		boolean has = false;
 		for (PackageInfoX m : mInfos) {
-			if (applicationName.equals(m.applicationInfo.name)) {
+			if (className.equals(m.applicationInfo.name)) {
 				has = true;
 				a = (ApplicationInfoX) m.applicationInfo;
 				break;
@@ -213,10 +238,10 @@ public class ApkPackageManager extends PackageManager {
 		return p;
 	}
 	
-	public boolean hasApplicationInfo(String applicationName) {
+	public boolean hasApplicationInfo(String applicationClassName) {
 		boolean has = false;
 		for (PackageInfoX m : mInfos) {
-			if (applicationName.equals(m.applicationInfo.packageName)) {
+			if (applicationClassName.equals(m.applicationInfo.packageName)) {
 				has = true;
 				break;
 			}
@@ -225,14 +250,14 @@ public class ApkPackageManager extends PackageManager {
 		return has;
 	}
 	
-	public ActivityInfoX getActivity(String activityName) {
+	public ActivityInfoX getActivity(String activityClassName) {
 		ActivityInfoX aInfo = null;
 		boolean has = false;
 		for (PackageInfoX m : mInfos) {
 			if (m.activities != null) {
 				for (ActivityInfo a : m.activities) {
 					ActivityInfoX aX = (ActivityInfoX) a;
-					if (activityName.equals(a.name)) {
+					if (activityClassName.equals(a.name)) {
 						has = true;
 						aInfo = aX;
 						break;
@@ -242,22 +267,6 @@ public class ApkPackageManager extends PackageManager {
 		}
 		
 		return aInfo;
-	}
-	
-	public boolean hasActivity(String activityName) {
-		boolean has = false;
-		for (PackageInfoX m : mInfos) {
-			if (m.activities != null) {
-				for (ActivityInfo a : m.activities) {
-					if (activityName.equals(a.name)) {
-						has = true;
-						break;
-					}
-				}
-			}
-		}
-		
-		return has;
 	}
 	
 	public List<PackageInfoX> getAllApks(){
@@ -863,5 +872,104 @@ public class ApkPackageManager extends PackageManager {
 	public PackageInstaller getPackageInstaller() {
 		notSupported();
 		return null;
+	}
+	
+	static class InstallApks extends ArrayList<PackageInfoX> implements Serializable {
+		
+	}
+	
+	static class SerializableUtil {
+		public Context mContext;
+		private File mFile;
+		
+		SerializableUtil(Application context){
+			mContext = context;
+			mFile = new File(context.getDir(PLUGIN_DIR_NAME, 0), "plugins.xml");
+		}
+		
+		void put(InstallApks apk) {
+	        try {
+	            ObjectOutputStream oop = new ObjectOutputStream(new FileOutputStream(mFile));
+	            oop.writeObject(apk);
+	            oop.flush();
+	            oop.close();
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+		}
+		
+		InstallApks get(){
+	    	Object o = null;
+	    	try {
+	    		ObjectInputStream oin = new ObjectInputStream(new FileInputStream(mFile));
+	    		o = oin.readObject();
+	    		oin.close();
+	    	} catch (IOException e) {
+	    		e.printStackTrace();
+	    	} catch (ClassNotFoundException e) {
+	    		e.printStackTrace();
+	    	}
+
+	    	return (InstallApks) o;
+		}
+		
+	}
+	
+	public static class UpdateUtil {
+		private static final String PREF_LATEST_VERSION_ID = "latest_version_id";
+		static final String PREF_KEY_VERSION_ID = "apk_internal_version_id";
+		
+		private String mKey;
+		
+		public UpdateUtil(String perfVersionIdKey){
+			mKey = perfVersionIdKey;
+		}
+		
+		public boolean isAppUpdate(Context context) {
+			boolean update = false;
+			
+			try {
+				String version = "" + context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode;
+
+				SharedPreferences sp = context.getSharedPreferences(PREF_LATEST_VERSION_ID, 0);
+				String lastestVersionId = sp.getString(PREF_KEY_VERSION_ID, "");
+				if (!TextUtils.isEmpty(lastestVersionId) && lastestVersionId.equals(version)) {
+					update = true;
+				}
+			} catch (NameNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			return update;
+		}		
+		
+		public boolean updateVersion(Context context) {
+			boolean update = false;
+			
+			try {
+				String version = "" + context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode;
+
+				SharedPreferences sp = context.getSharedPreferences(PREF_LATEST_VERSION_ID, 0);
+				sp.edit().putString(PREF_KEY_VERSION_ID, version).commit();
+			} catch (NameNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			return update;
+		}	
+		
+		public boolean isFirstUsage(Context context) {
+			boolean update = false;
+			
+			SharedPreferences sp = context.getSharedPreferences(PREF_LATEST_VERSION_ID, 0);
+			String lastestVersionId = sp.getString(PREF_KEY_VERSION_ID, "");
+			if (TextUtils.isEmpty(lastestVersionId)) {
+				update = true;
+			}
+			
+			return update;
+		}
 	}
 }

@@ -80,7 +80,7 @@ public class ApkLuncherActivity extends Activity {
 				
 				Log.d(TAG, "onClick. activity: " + a);
 
-				ClassLoader cl = new DexClassLoader(a.applicationInfo.publicSourceDir, getDir("tmp", 0).getPath(), null, getClassLoader());
+				ClassLoader cl = new DexClassLoader(a.applicationInfo.publicSourceDir, null, null, getClassLoader());
 				String superClassName = LoadedApk.getActivitySuperClassName(cl, a.name);
 				Intent launcher = new Intent();
 

@@ -34,7 +34,8 @@ Host_Application
 		
 		Log.d(TAG, "apkDir: " + apkDir);
 		ApkPackageManager apks = ApkPackageManager.getInstance();
-		apks.init(this, apkDir);
+		apks.init(this);
+		apks.scanApkDir(apkDir);
 	}
 	
 	
