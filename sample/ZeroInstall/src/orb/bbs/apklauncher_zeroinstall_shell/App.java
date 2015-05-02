@@ -1,4 +1,4 @@
-package orb.bbs.apklauncher_zeroinstall;
+package orb.bbs.apklauncher_zeroinstall_shell;
 
 import java.io.File;
 import java.io.FileOutputStream;

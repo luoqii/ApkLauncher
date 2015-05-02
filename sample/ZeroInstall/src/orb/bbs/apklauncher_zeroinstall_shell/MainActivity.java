@@ -1,4 +1,4 @@
-package orb.bbs.apklauncher_zeroinstall;
+package orb.bbs.apklauncher_zeroinstall_shell;
 
 import orb.bbs.apklauncher.zeroinstall.shell.R;
 

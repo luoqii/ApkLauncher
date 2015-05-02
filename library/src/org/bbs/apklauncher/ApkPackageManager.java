@@ -168,9 +168,16 @@ public class ApkPackageManager extends PackageManager {
 			mUpdateU.updateVersion(context);
 		}
 	}
-	
+
 	public File getPluginDir() {
 		return mContext.getDir(PLUGIN_DIR_NAME, 0);
+	}
+	
+	public File getAutoUpdatePluginDir() {
+		File dir = new File(getPluginDir(), "auto_update");
+		dir.mkdirs();
+		
+		return dir;
 	}
 	
 	public void scanApkDir(File apkDir) {
