@@ -131,6 +131,8 @@ implements CallBack {
 			mTargetContext.themeReady(targetThemeId);
 			mTargetContext.resReady(mResourceMerger);
 			mTargetContext.applicationContextReady(ApkPackageManager.getApplication(targetPackageName));
+			mTargetContext.packageManagerReady(new PackageManagerProxy(mRealSysPm));
+			mTargetContext.packageNameReady(targetPackageName);
 			
 			ReflectUtil.ActivityReflectUtil.setActivityApplication(this, app);
 			Class clazz = mTargetClassLoader.loadClass(targetActivityClassName);

@@ -12,7 +12,7 @@ import dalvik.system.DexClassLoader;
 
 public class ApkUtil {
 
-	public static void startActvity(Context context, PackageInfoX.ActivityInfoX a) {
+	public static void startActivity(Context context, PackageInfoX.ActivityInfoX a) {
 		if (null == a) {
 			throw new RuntimeException("activity info in null");
 		}

@@ -17,7 +17,7 @@ public abstract class LauncherActivity extends Activity {
 		ApkPackageManager am = ApkPackageManager.getInstance();
 		ActivityInfoX aInfo = am.getActivityInfo(getActivityClassName());
 
-		ApkUtil.startActvity(LauncherActivity.this, aInfo);
+		ApkUtil.startActivity(LauncherActivity.this, aInfo);
 	}
 	
 	protected abstract String getActivityClassName() ;
