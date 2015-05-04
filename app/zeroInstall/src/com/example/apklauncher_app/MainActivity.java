@@ -20,7 +20,7 @@ public class MainActivity extends Base_Activity {
 		
 		setContentView(R.layout.activity_main);
 		
-		String versionInfo = "";
+		String versionInfo = "Nan";
 		try {
 			PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
 			versionInfo = "code: " + pInfo.versionCode + "\nname: " + pInfo.versionName;
