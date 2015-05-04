@@ -13,7 +13,6 @@ public class MainActivity extends LauncherActivity {
 		super.onCreate(savedInstanceState);
 		
 		Intent update = new Intent(this, UpdateService.class);
-		stopService(update);
 		startService(update);
 	}
 

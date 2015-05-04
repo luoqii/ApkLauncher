@@ -16,11 +16,14 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.media.MediaMuxer.OutputFormat;
+import android.os.Process;
 import android.util.Log;
 
 public class AndroidUtil {
 	private static final String TAG = AndroidUtil.class.getSimpleName();
 
+
+	
 	public static String getInstallApkPath(Context context, String packageName) {
 		String path = "";
 		try {

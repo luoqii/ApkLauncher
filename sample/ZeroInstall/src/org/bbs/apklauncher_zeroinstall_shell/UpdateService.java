@@ -53,8 +53,7 @@ public class UpdateService extends Service {
 	}
 
 	private void checkUpdate() {
-		UpdateConfig.setDebug(true);
-        UpdateConfig.setDeltaUpdate(false);
+		Log.d(TAG, "checkUpdate");
         UmengUpdateAgent.setDownloadListener( new UmengDownloadListener(){
 
 			@Override
@@ -112,12 +111,16 @@ public class UpdateService extends Service {
             }
            
         });
-        
-//        UpdateConfig.setUpdateOnlyWifi(true);
+
+		UpdateConfig.setUpdateCheck(false);
+		UpdateConfig.setDebug(true);
+        UpdateConfig.setDeltaUpdate(false);
+        UpdateConfig.setUpdateOnlyWifi(false);
         UpdateConfig.setUpdateAutoPopup(false);
         UmengUpdateAgent.setUpdateAutoPopup(false);
+        // umeng will auto update this, shit!!!!
 //        UmengUpdateAgent.update(this);
-        UmengUpdateAgent.silentUpdate(this);
+//        UmengUpdateAgent.silentUpdate(this);
 	}
 	
 	int toCode(String versionName){
@@ -139,6 +142,7 @@ public class UpdateService extends Service {
 		protected File doInBackground(UpdateResponse... params) {
 			if (null != params && params.length > 0){
 				UpdateResponse r = params[0];
+				Log.d(TAG, "try download file: " + r.path);
 				
 				try {
 					URLConnection u = new URL(r.path).openConnection();
