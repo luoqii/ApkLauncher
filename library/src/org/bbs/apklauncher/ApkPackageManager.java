@@ -205,6 +205,7 @@ public class ApkPackageManager extends PackageManager {
 	}
 	
 	private void scanApkDir(File apkDir, boolean copyFile) {
+		//==========123456789012345678
 		Log.d(TAG, "parse  dir: " + apkDir);
 		if (null == apkDir || !apkDir.exists()) {
 			return ;
@@ -223,6 +224,7 @@ public class ApkPackageManager extends PackageManager {
 	}
 
 	private void parseApkFile(File file, boolean copyFile) {
+		//==========123456789012345678
 		Log.d(TAG, "parse file: " + file);
 		if (file.exists() && file.getAbsolutePath().endsWith(APK_FILE_SUFFIX)){
 			PackageInfoX info = ApkManifestParser.parseAPk(mContext, file.getAbsolutePath());			
@@ -233,6 +235,8 @@ public class ApkPackageManager extends PackageManager {
 					AndroidUtil.copyFile(file, dest);
 					info = ApkManifestParser.parseAPk(mContext, dest.getAbsolutePath());
 				}
+				//==========123456789012345678
+				Log.d(TAG, "apk info  : " + info.packageName + "|" + info.versionCode + "|" +  info.versionName);
 				
 				File destLibDir = new File(getPluginDir(), info.packageName + "/lib");
 				

@@ -90,8 +90,8 @@ public class LoadedApk {
 		} else {
 			throw new RuntimeException("no usefull super class for activity: " + activityClassName);
 		}
-		
-		Log.d(TAG, "superClass: " + cName + " for class: " + activityClassName);
+		//==========123456789012345678
+		Log.d(TAG, "superClass  : " + cName + " for class: " + activityClassName);
 		return cName;
 	}	
 	
@@ -126,8 +126,8 @@ public class LoadedApk {
 		} else {
 			throw new RuntimeException("no usefull super class for service: " + serviceClassName);
 		}
-		
-		Log.d(TAG, "superClass: " + cName + " for class: " + serviceClassName);
+		//==========123456789012345678
+		Log.d(TAG, "super class : " + cName + " for class: " + serviceClassName);
 		return cName;
 	}
 	
@@ -137,11 +137,11 @@ public class LoadedApk {
 
 	private static void dumpClassType(Class clazz, List<String> superClassName) {
 		//==========123456789012345678
-		Log.d(TAG, "class        : " + clazz + " name: " + clazz.getName());
+		Log.d(TAG, "class       : " + clazz);
 		while (!clazz.getName().equals(Object.class.getName())) {
 			clazz = clazz.getSuperclass();
 
-			//=========123456789012345678
+			//==========123456789012345678
 			Log.d(TAG, "super class : " + clazz);
 			superClassName.add(clazz.getName());
 		}
