@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">app template</string>
+    <string name="app_name">0installshell</string>
     <string name="hello_world">Hello world! \nplease replace thies with a new greeting word.</string>
     <string name="action_settings">Settings</string>
 

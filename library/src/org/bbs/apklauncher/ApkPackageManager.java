@@ -46,12 +46,15 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.UserHandle;
 import android.text.TextUtils;
+import android.util.Log;
 import dalvik.system.DexClassLoader;
 
 public class ApkPackageManager extends PackageManager {
 	private static final String PLUGIN_DIR_NAME = "plugin";
 
-	private static final String APK_FILE_SUFFIX = "apk";
+	private static final String APK_FILE_SUFFIX = ".apk";
+
+	private static final String TAG = ApkPackageManager.class.getSimpleName();
 
 	private static ApkPackageManager sInstance;
 	
@@ -157,15 +160,25 @@ public class ApkPackageManager extends PackageManager {
 		mUpdateU = new UpdateUtil(UpdateUtil.PREF_KEY_VERSION_ID);
 		if (mUpdateU.isAppUpdate(context) || mUpdateU.isFirstUsage(context)) {
 			// re-build install apk info.
-			scanApkDir(getPluginDir());
+			scanApkDir(getAppDir(), false);
 			
-			mSerUtil.put(mInfos);
+//			mSerUtil.put(mInfos);
 		} else {
-			mInfos = mSerUtil.get();
+			scanApkDir(getAppDir(), false);
+//			mInfos = mSerUtil.get();
 		}
 		
 		if (mUpdateU.isAppUpdate(context)){
 			mUpdateU.updateVersion(context);
+		}
+		
+		File autoUpdateDir = getAutoUpdatePluginDir();
+		scanApkDir(autoUpdateDir, true);
+		String[] files = autoUpdateDir.list();
+		if (files != null){
+			for (String fname: files){
+				new File(autoUpdateDir, fname).delete();
+			}
 		}
 	}
 
@@ -178,9 +191,21 @@ public class ApkPackageManager extends PackageManager {
 		dir.mkdirs();
 		
 		return dir;
+	}	
+	
+	public File getAppDir() {
+		File dir = new File(getPluginDir(), "app");
+		dir.mkdirs();
+		
+		return dir;
+	}
+
+	public void scanApkDir(File apkDir) {
+		scanApkDir(apkDir, true);
 	}
 	
-	public void scanApkDir(File apkDir) {
+	private void scanApkDir(File apkDir, boolean copyFile) {
+		Log.d(TAG, "parse  dir: " + apkDir);
 		if (null == apkDir || !apkDir.exists()) {
 			return ;
 		}
@@ -189,34 +214,44 @@ public class ApkPackageManager extends PackageManager {
 			return;
 		}
 		
-		File plugDir = getPluginDir();
 		for (String f : files) {
 			File file = new File(apkDir.getAbsolutePath() + "/" + f);
-			if (file.exists() && file.getAbsolutePath().endsWith(APK_FILE_SUFFIX)){
-				PackageInfoX info = ApkManifestParser.parseAPk(mContext, file.getAbsolutePath());
-				
-				try {
-					File destDir = new File(plugDir, info.packageName + "/lib");
-					
-					//TODO native lib
-					AndroidUtil.extractZipEntry(new ZipFile(info.applicationInfo.publicSourceDir), "lib/armeabi", destDir);
-					AndroidUtil.extractZipEntry(new ZipFile(info.applicationInfo.publicSourceDir), "lib/armeabi-v7a", destDir);
-					
-					info.mLibPath = destDir.getPath();
-					
-					// asume there is only one apk.
-					ClassLoader cl = createClassLoader(info.applicationInfo.sourceDir, info.mLibPath, mContext);
-					putClassLoader(info.applicationInfo.sourceDir, cl);
-
-					mInfos.add(info);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+			parseApkFile(file, copyFile);
 		}
 		
-		mSerUtil.put(mInfos);
+//		mSerUtil.put(mInfos);
+	}
+
+	private void parseApkFile(File file, boolean copyFile) {
+		Log.d(TAG, "parse file: " + file);
+		if (file.exists() && file.getAbsolutePath().endsWith(APK_FILE_SUFFIX)){
+			PackageInfoX info = ApkManifestParser.parseAPk(mContext, file.getAbsolutePath());			
+			try {
+				File dest = file;
+				if (copyFile) {
+					dest = new File(getAppDir(), info.packageName + APK_FILE_SUFFIX);
+					AndroidUtil.copyFile(file, dest);
+					info = ApkManifestParser.parseAPk(mContext, dest.getAbsolutePath());
+				}
+				
+				File destLibDir = new File(getPluginDir(), info.packageName + "/lib");
+				
+				//TODO native lib
+				AndroidUtil.extractZipEntry(new ZipFile(info.applicationInfo.publicSourceDir), "lib/armeabi", destLibDir);
+				AndroidUtil.extractZipEntry(new ZipFile(info.applicationInfo.publicSourceDir), "lib/armeabi-v7a", destLibDir);
+				
+				info.mLibPath = destLibDir.getPath();
+				
+				// asume there is only one apk.
+				ClassLoader cl = createClassLoader(info.applicationInfo.sourceDir, info.mLibPath, mContext);
+				putClassLoader(info.applicationInfo.sourceDir, cl);				
+				
+				mInfos.addOrUpdate(info);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public ApplicationInfoX getApplicationInfo(String className) {
@@ -245,10 +280,10 @@ public class ApkPackageManager extends PackageManager {
 		return p;
 	}
 	
-	public boolean hasApplicationInfo(String applicationClassName) {
+	public boolean hasApplicationInfo(String className) {
 		boolean has = false;
 		for (PackageInfoX m : mInfos) {
-			if (applicationClassName.equals(m.applicationInfo.packageName)) {
+			if (className.equals(m.applicationInfo.packageName)) {
 				has = true;
 				break;
 			}
@@ -257,61 +292,38 @@ public class ApkPackageManager extends PackageManager {
 		return has;
 	}
 	
-	public ActivityInfoX getActivity(String activityClassName) {
-		ActivityInfoX aInfo = null;
-		boolean has = false;
-		for (PackageInfoX m : mInfos) {
-			if (m.activities != null) {
-				for (ActivityInfo a : m.activities) {
-					ActivityInfoX aX = (ActivityInfoX) a;
-					if (activityClassName.equals(a.name)) {
-						has = true;
-						aInfo = aX;
-						break;
-					}
-				}
-			}
-		}
-		
-		return aInfo;
-	}
-	
 	public List<PackageInfoX> getAllApks(){
 		return mInfos;
 	}
 	
 	public ActivityInfoX getActivityInfo(String className) {
-		ActivityInfoX info = null;
 		for (PackageInfoX m : mInfos) {
-				if (m.activities != null &&  m.activities.length > 0) {
-					final int count = m.activities.length;
-					for (int i = 0 ; i < count; i++){
-						ActivityInfoX a = (ActivityInfoX) m.activities[i];
-						if (className.equals(a.name)) {
-							info  = a;
-							break;
-						}
-				}}
+			if (m.activities != null) {
+				for (ActivityInfo a : m.activities) {
+					ActivityInfoX aX = (ActivityInfoX) a;
+					if (className.equals(a.name)) {
+						return aX;
+					}
+				}
+			}
 		}
 		
-		return info;
+		return null;
 	}	
 	
 	public ServiceInfoX getServiceInfo(String className) {
-		ServiceInfoX info = null;
 		for (PackageInfoX m : mInfos) {
 				if (m.services != null &&  m.services.length > 0) {
 					final int count = m.services.length;
 					for (int i = 0 ; i < count; i++){
 						ServiceInfoX a = (ServiceInfoX) m.services[i];
 						if (className.equals(a.name)) {
-							info = a;
-							break;
+							return a;
 						}
 				}}
 		}
 		
-		return info;
+		return null;
 	}
 	
 	/**
@@ -882,7 +894,20 @@ public class ApkPackageManager extends PackageManager {
 	}
 	
 	static class InstallApks extends ArrayList<PackageInfoX> implements Serializable {
-		
+		public void addOrUpdate(PackageInfoX info){
+			int index = -1;
+			final int SIZE = size();
+			for (int i = 0 ; i < SIZE ; i++){
+				if (get(i).packageName.equals(info.packageName)){
+					index = i;
+					break;
+				}
+			}
+			if (index >= 0) {
+				remove(index);
+			}
+			add(info);
+		}
 	}
 	
 	static class SerializableUtil {
@@ -940,7 +965,7 @@ public class ApkPackageManager extends PackageManager {
 
 				SharedPreferences sp = context.getSharedPreferences(PREF_LATEST_VERSION_ID, 0);
 				String lastestVersionId = sp.getString(PREF_KEY_VERSION_ID, "");
-				if (!TextUtils.isEmpty(lastestVersionId) && lastestVersionId.equals(version)) {
+				if (!TextUtils.isEmpty(lastestVersionId) && !lastestVersionId.equals(version)) {
 					update = true;
 				}
 			} catch (NameNotFoundException e) {

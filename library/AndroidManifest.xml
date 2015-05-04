@@ -57,15 +57,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="org.bbs.apklauncher.embed.Stub_ListActivity"
-            android:label="StubActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
+        <!-- stub component: activity -->
         <activity
             android:name="org.bbs.apklauncher.emb.auto_gen.Stub_ListActivity"
             android:label="StubActivity" >
@@ -102,7 +95,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
+        <!-- stub component: service -->
         <service android:name="org.bbs.apklauncher.emb.auto_gen.Stub_Service" />
     </application>
 

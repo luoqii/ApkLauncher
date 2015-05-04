@@ -1,9 +1,10 @@
-package orb.bbs.apklauncher_zeroinstall_shell;
+package org.bbs.apklauncher_zeroinstall_shell;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import org.bbs.android.commonlib.ExceptionCatcher;
 import org.bbs.apklauncher.AndroidUtil;
 import org.bbs.apklauncher.ApkPackageManager;
 import org.bbs.apklauncher.emb.Host_Application;
@@ -19,6 +20,8 @@ public class App extends Host_Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		
+		ExceptionCatcher.attachExceptionHandler(this);
 		
 		ApkPackageManager am = ApkPackageManager.getInstance();
 		am.init(this);

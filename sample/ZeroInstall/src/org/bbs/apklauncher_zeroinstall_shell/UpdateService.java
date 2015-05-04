@@ -1,6 +1,12 @@
-package orb.bbs.apklauncher_zeroinstall_shell;
+package org.bbs.apklauncher_zeroinstall_shell;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 
 import org.bbs.apklauncher.AndroidUtil;
 import org.bbs.apklauncher.ApkPackageManager;
@@ -8,6 +14,7 @@ import org.bbs.apklauncher.ApkPackageManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
@@ -33,6 +40,14 @@ public class UpdateService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+	}
+
+	@Override
+	@Deprecated
+	public void onStart(Intent intent, int startId) {
+		super.onStart(intent, startId);
+	
+	    checkUpdate();
 	}
 
 	private void checkUpdate() {
@@ -66,8 +81,13 @@ public class UpdateService extends Service {
                     case UpdateStatus.Yes: // has update
 //                        UmengUpdateAgent.showUpdateDialog(MainActivity.this, updateInfo);
                 		
-                		mMonitor = new ApkDonwloadMonitor(UpdateService.this, updateInfo);
-                        mMonitor.start();
+//                    	if (null != mMonitor) {
+//                    		mMonitor.onError();
+//                    	} 
+//                		mMonitor = new ApkDonwloadMonitor(UpdateService.this, updateInfo);
+//                        mMonitor.start();
+                    	
+                    	new Donwloader().execute(updateInfo);
                         break;
                     case UpdateStatus.No: // has no update
                         Toast.makeText(UpdateService.this, "没有更新", Toast.LENGTH_SHORT).show();
@@ -88,17 +108,60 @@ public class UpdateService extends Service {
 //        UmengUpdateAgent.silentUpdate(this);
 	}
 	
-	
-	
-    @Override
-	@Deprecated
-	public void onStart(Intent intent, int startId) {
-		super.onStart(intent, startId);
+	class Donwloader extends AsyncTask<UpdateResponse, Integer, File>{
 
-        checkUpdate();
+		@Override
+		protected File doInBackground(UpdateResponse... params) {
+			if (null != params && params.length > 0){
+				UpdateResponse r = params[0];
+				
+				try {
+					URLConnection u = new URL(r.path).openConnection();
+					InputStream in = u.getInputStream();
+					
+					File outF = new File(ApkPackageManager.getInstance().getAutoUpdatePluginDir() + "/lasted.apk.donwload");
+					if (outF.exists()){
+						outF.delete();
+					}
+					FileOutputStream out = new FileOutputStream(outF);
+					final int LEN = 1024 * 1024;
+					byte[] buffer = new byte[LEN];
+					int count = -1;
+					while ((count = in.read(buffer, 0, LEN)) != -1){
+						out.write(buffer, 0, count);
+					}
+					File destFile = new File(ApkPackageManager.getInstance().getAutoUpdatePluginDir() + "/lasted.apk");
+					if (destFile.exists()){
+						destFile.delete();
+					}
+					outF.renameTo(destFile);
+					out.flush();
+					out.close();
+					in.close();
+					
+					return destFile;
+				} catch (MalformedURLException e) {
+					Log.e(TAG,"",  e);
+				} catch (IOException e) {
+					Log.e(TAG,"",  e);
+				}	
+			}
+			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(File result) {
+			super.onPostExecute(result);
+			
+			if (result != null){
+				Log.d(TAG, "apk downlod successed. file: " + result);
+			} else {
+				Log.d(TAG, "apk downlod error. file: " + result);
+			}
+		}
 	}
-
-	class ApkDonwloadMonitor extends Thread {
+		
+    class ApkDonwloadMonitor extends Thread {
 		private final  UpdateResponse mInfo;
         private final Context mContext;
 		private boolean mError;
@@ -118,10 +181,12 @@ public class UpdateService extends Service {
 
             UmengUpdateAgent.downloadedFile(UpdateService.this, mInfo);
 
+            int loop = 0;
             while (UmengUpdateAgent.downloadedFile(mContext, mInfo) == null && !mError) {
                 try {
                     sleep(500);
-                    Log.e(TAG, "sleep..");
+                    Log.d(TAG, "sleep... " + loop);
+                    loop++;
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
