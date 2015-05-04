@@ -8,6 +8,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
+import org.bbs.android.commonlib.ActivityUtil;
 import org.bbs.apklauncher.AndroidUtil;
 import org.bbs.apklauncher.ApkPackageManager;
 import org.bbs.apkparser.PackageInfoX;
@@ -47,7 +48,7 @@ public class UpdateService extends Service {
 	@Deprecated
 	public void onStart(Intent intent, int startId) {
 		super.onStart(intent, startId);
-	
+		
 	    checkUpdate();
 	}
 
@@ -112,9 +113,11 @@ public class UpdateService extends Service {
            
         });
         
+//        UpdateConfig.setUpdateOnlyWifi(true);
+        UpdateConfig.setUpdateAutoPopup(false);
         UmengUpdateAgent.setUpdateAutoPopup(false);
-        UmengUpdateAgent.update(this);
-//        UmengUpdateAgent.silentUpdate(this);
+//        UmengUpdateAgent.update(this);
+        UmengUpdateAgent.silentUpdate(this);
 	}
 	
 	int toCode(String versionName){
@@ -176,6 +179,7 @@ public class UpdateService extends Service {
 			super.onPostExecute(result);
 			
 			if (result != null){
+				ActivityUtil.toast(getApplicationContext(), "app has updated", Toast.LENGTH_LONG);
 				Log.d(TAG, "apk downlod successed. file: " + result);
 			} else {
 				Log.d(TAG, "apk downlod error. file: " + result);
