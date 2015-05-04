@@ -9,7 +9,7 @@ function genLib(){
  	oldDir=`pwd`
 	cd export 
 	
-	ANDROID_JAR="/mnt/windows_share/download/adt-bundle-linux-x86_64-20140702/sdk/platforms/android-21/android.jar"
+	ANDROID_JAR="/mnt/big_storage/android_sdk/platforms/android-21/android.jar"
 	CLASSPATH="../bin/apklauncher_sdk.jar:../libs/android-support-v4.jar:../libs/android-support-v7-appcompat.jar"
 	CLASSPATH=${CLASSPATH}:$ANDROID_JAR
 
