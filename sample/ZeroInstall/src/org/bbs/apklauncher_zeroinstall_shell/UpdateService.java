@@ -10,6 +10,7 @@ import java.net.URLConnection;
 
 import org.bbs.apklauncher.AndroidUtil;
 import org.bbs.apklauncher.ApkPackageManager;
+import org.bbs.apkparser.PackageInfoX;
 
 import android.app.Service;
 import android.content.Context;
@@ -86,7 +87,15 @@ public class UpdateService extends Service {
 //                    	} 
 //                		mMonitor = new ApkDonwloadMonitor(UpdateService.this, updateInfo);
 //                        mMonitor.start();
-                    	
+
+        				PackageInfoX pInfo = ApkPackageManager.getInstance().getPackageInfo("com.example.apklauncher_zero_install");
+        				int code = toCode(updateInfo.version);
+        				if (code <= pInfo.versionCode) {
+        					Log.i(TAG, "our versionCode    : " + pInfo.versionCode);
+        					Log.i(TAG, "upgrade versionCode: " + code);
+        					Log.i(TAG, "ignore this upgrade.");
+        					return ;
+        				}
                     	new Donwloader().execute(updateInfo);
                         break;
                     case UpdateStatus.No: // has no update
@@ -108,7 +117,20 @@ public class UpdateService extends Service {
 //        UmengUpdateAgent.silentUpdate(this);
 	}
 	
+	int toCode(String versionName){
+		int code = -1;
+		String[] ver = versionName.split("\\.");
+		code = Integer.parseInt(ver[0]) * 10000;
+		code += Integer.parseInt(ver[1]) * 100;
+		if (ver.length > 2){
+			code += Integer.parseInt(ver[2]);
+		}
+		return code;
+	}
+	
 	class Donwloader extends AsyncTask<UpdateResponse, Integer, File>{
+		
+		
 
 		@Override
 		protected File doInBackground(UpdateResponse... params) {

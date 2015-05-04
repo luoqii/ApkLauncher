@@ -91,7 +91,7 @@ public class LoadedApk {
 			throw new RuntimeException("no usefull super class for activity: " + activityClassName);
 		}
 		//==========123456789012345678
-		Log.d(TAG, "superClass  : " + cName + " for class: " + activityClassName);
+		Log.d(TAG, "superClass  : " + cName + " for " + activityClassName);
 		return cName;
 	}	
 	
@@ -127,7 +127,7 @@ public class LoadedApk {
 			throw new RuntimeException("no usefull super class for service: " + serviceClassName);
 		}
 		//==========123456789012345678
-		Log.d(TAG, "super class : " + cName + " for class: " + serviceClassName);
+		Log.d(TAG, "super class : " + cName + " for " + serviceClassName);
 		return cName;
 	}
 	

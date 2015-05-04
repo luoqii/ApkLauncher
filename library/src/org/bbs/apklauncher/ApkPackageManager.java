@@ -272,10 +272,10 @@ public class ApkPackageManager extends PackageManager {
 		return a;
 	}
 	
-	public PackageInfoX getPackageInfo(ComponentName comName){
+	public PackageInfoX getPackageInfo(String packageName){
 		PackageInfoX p = null;
 		for (PackageInfoX a : mInfos) {
-			if (a.packageName.equals(comName.getPackageName())){
+			if (a.packageName.equals(packageName)){
 				p = a;
 				break;
 			}

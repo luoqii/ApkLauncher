@@ -2,6 +2,7 @@ package org.bbs.apklauncher;
 
 import java.util.List;
 
+import org.bbs.apkparser.PackageInfoX;
 import org.bbs.apkparser.PackageInfoX.ApplicationInfoX;
 
 import android.content.ComponentName;
@@ -43,7 +44,17 @@ public class PackageManagerProxy extends PackageManager {
 
 	@Override
 	public PackageInfo getPackageInfo(String packageName, int flags)
-			throws NameNotFoundException {
+			throws NameNotFoundException {		
+		Log.d(TAG, "getPackageInfo(). packageName: " + packageName + " flags: " + flags);
+		ApkPackageManager pm = ApkPackageManager.getInstance();
+		if (pm.hasApplicationInfo(packageName)
+				&& (flags | PackageManager.GET_META_DATA) != 0) {
+			  PackageInfoX aInfo = pm.getPackageInfo(packageName);
+
+			Log.d(TAG, "use pased PackageInfoX: " + aInfo);
+			return aInfo;
+		}
+			
 		return mProxy.getPackageInfo(packageName, flags);
 	}
 

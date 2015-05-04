@@ -14,7 +14,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
         
-        <meta-data android:value="5542e40d67e58e732b005a5b" android:name="UMENG_APPKEY"/>
+        <meta-data android:value="5542ff9767e58e3e450003c0" android:name="UMENG_APPKEY"/>
 		<meta-data android:value="Channel ID" android:name="UMENG_CHANNEL"/>
 		
         <activity
