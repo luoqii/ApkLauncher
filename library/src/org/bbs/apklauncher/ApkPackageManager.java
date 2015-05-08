@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.zip.ZipFile;
 
+import org.bbs.apklauncher.api.ExportApi;
 import org.bbs.apklauncher.emb.Util;
 import org.bbs.apkparser.ApkManifestParser;
 import org.bbs.apkparser.PackageInfoX;
@@ -71,48 +72,58 @@ public class ApkPackageManager extends PackageManager {
 
 	private UpdateUtil mUpdateU;
 	
-	private ApkPackageManager() {
+	private ApkPackageManager() {}
 		
-	}
-	
-	public List<ResolveInfo> queryIntentActivities(Intent intent, int flag) {
-		List<ResolveInfo> result = new ArrayList<>();
-		for (PackageInfoX p : mInfos){
-			queryIntentActivities(p.packageName, intent, flag, result);
+	/**
+	 * @return
+	 * 
+	 * NOTE:  <p>
+	 * you must init this before use by {@link #init(Application, File)}.
+	 */
+	@ExportApi
+	public static ApkPackageManager getInstance() {
+		if (null == sInstance) {
+			sInstance = new ApkPackageManager();
 		}
-		return result;
-	}
-	
-	public List<ResolveInfo> queryIntentActivities(String packageName, Intent intent, int flag) {
-		List<ResolveInfo> result = new ArrayList<>();
-		queryIntentActivities(packageName, intent, flag, result);
-		return result;
-	}
-	
-	private void queryIntentActivities(String packageName, Intent intent, int flag, List<ResolveInfo> result){
-		if (TextUtils.isEmpty(packageName)) return;
 		
-		String action = intent.getAction();
-		Set<String> categories = intent.getCategories();
-		for (PackageInfoX p : mInfos){
-			if (packageName.equals(p.packageName)){
-				for (ActivityInfo a : p.activities){
-					ActivityInfoX aX = (ActivityInfoX) a;
-					if (aX.mIntentFilters == null) {
-						continue;
-					}
-					for( IntentFilter intentFilter: aX.mIntentFilters) {
-						if (intentFilter.matchAction(action)
-								&& intentFilter.matchCategories(categories) == null) {
-							ResolveInfo info = new ResolveInfo();
-							info.activityInfo = a;
-							result.add(info);
-						}
-					}
+		return sInstance;
+	}
+
+	/**
+		 * @param context
+		 * @param apkDir where apk file located.
+		 * 
+		 */	
+		@ExportApi
+		public void init(Application context){
+			mContext = context;
+			mInfos = new InstallApks();
+			mSerUtil = new SerializableUtil(context);
+			
+			mUpdateU = new UpdateUtil(UpdateUtil.PREF_KEY_VERSION_ID);
+			if (mUpdateU.isAppUpdate(context) || mUpdateU.isFirstUsage(context)) {
+				// re-build install apk info.
+				scanApkDir(getAppDir(), false);
+				
+	//			mSerUtil.put(mInfos);
+			} else {
+				scanApkDir(getAppDir(), false);
+	//			mInfos = mSerUtil.get();
+			}
+			
+			if (mUpdateU.isAppUpdate(context)){
+				mUpdateU.updateVersion(context);
+			}
+			
+			File autoUpdateDir = getAutoUpdatePluginDir();
+			scanApkDir(autoUpdateDir, true);
+			String[] files = autoUpdateDir.list();
+			if (files != null){
+				for (String fname: files){
+					new File(autoUpdateDir, fname).delete();
 				}
 			}
 		}
-	}
 
 	public static ClassLoader getClassLoader(String packageName) {
 		WeakReference<ClassLoader> weakReference = sApk2ClassLoaderMap.get(packageName);
@@ -133,8 +144,9 @@ public class ApkPackageManager extends PackageManager {
 
 			c = new DexClassLoader(apkPath, baseContext.getDir("apk_code_cache", 0).getPath(), libPath, baseContext.getClassLoader());
 			return c;
-		}
-
+	}
+	
+	@ExportApi
 	public static Application getApplication(String packageName) {
 		WeakReference<Application> weakReference = sApk2ApplicationtMap.get(packageName);
 		if (null != weakReference) {
@@ -147,45 +159,12 @@ public class ApkPackageManager extends PackageManager {
 		sApk2ApplicationtMap.put(packageName, new WeakReference<Application>(app));
 	}
 	
-	/**
-	 * @param context
-	 * @param apkDir where apk file located.
-	 * 
-	 */
-	public void init(Application context){
-		mContext = context;
-		mInfos = new InstallApks();
-		mSerUtil = new SerializableUtil(context);
-		
-		mUpdateU = new UpdateUtil(UpdateUtil.PREF_KEY_VERSION_ID);
-		if (mUpdateU.isAppUpdate(context) || mUpdateU.isFirstUsage(context)) {
-			// re-build install apk info.
-			scanApkDir(getAppDir(), false);
-			
-//			mSerUtil.put(mInfos);
-		} else {
-			scanApkDir(getAppDir(), false);
-//			mInfos = mSerUtil.get();
-		}
-		
-		if (mUpdateU.isAppUpdate(context)){
-			mUpdateU.updateVersion(context);
-		}
-		
-		File autoUpdateDir = getAutoUpdatePluginDir();
-		scanApkDir(autoUpdateDir, true);
-		String[] files = autoUpdateDir.list();
-		if (files != null){
-			for (String fname: files){
-				new File(autoUpdateDir, fname).delete();
-			}
-		}
-	}
-
+	@ExportApi
 	public File getPluginDir() {
 		return mContext.getDir(PLUGIN_DIR_NAME, 0);
 	}
 	
+	@ExportApi
 	public File getAutoUpdatePluginDir() {
 		File dir = new File(getPluginDir(), "auto_update");
 		dir.mkdirs();
@@ -193,13 +172,15 @@ public class ApkPackageManager extends PackageManager {
 		return dir;
 	}	
 	
+	@ExportApi
 	public File getAppDir() {
 		File dir = new File(getPluginDir(), "app");
 		dir.mkdirs();
 		
 		return dir;
 	}
-
+	
+	@ExportApi
 	public void scanApkDir(File apkDir) {
 		scanApkDir(apkDir, true);
 	}
@@ -258,6 +239,7 @@ public class ApkPackageManager extends PackageManager {
 		}
 	}
 	
+	@ExportApi
 	public ApplicationInfoX getApplicationInfo(String className) {
 		ApplicationInfoX a = null;
 		boolean has = false;
@@ -272,6 +254,7 @@ public class ApkPackageManager extends PackageManager {
 		return a;
 	}
 	
+	@ExportApi
 	public PackageInfoX getPackageInfo(String packageName){
 		PackageInfoX p = null;
 		for (PackageInfoX a : mInfos) {
@@ -284,6 +267,7 @@ public class ApkPackageManager extends PackageManager {
 		return p;
 	}
 	
+	@ExportApi
 	public boolean hasApplicationInfo(String className) {
 		boolean has = false;
 		for (PackageInfoX m : mInfos) {
@@ -296,10 +280,12 @@ public class ApkPackageManager extends PackageManager {
 		return has;
 	}
 	
+	@ExportApi
 	public List<PackageInfoX> getAllApks(){
 		return mInfos;
 	}
 	
+	@ExportApi
 	public ActivityInfoX getActivityInfo(String className) {
 		for (PackageInfoX m : mInfos) {
 			if (m.activities != null) {
@@ -315,6 +301,7 @@ public class ApkPackageManager extends PackageManager {
 		return null;
 	}	
 	
+	@ExportApi
 	public ServiceInfoX getServiceInfo(String className) {
 		for (PackageInfoX m : mInfos) {
 				if (m.services != null &&  m.services.length > 0) {
@@ -330,18 +317,46 @@ public class ApkPackageManager extends PackageManager {
 		return null;
 	}
 	
-	/**
-	 * @return
-	 * 
-	 * NOTE:  <p>
-	 * you must init this before use by {@link #init(Application, File)}.
-	 */
-	public static ApkPackageManager getInstance() {
-		if (null == sInstance) {
-			sInstance = new ApkPackageManager();
+	@ExportApi
+	public List<ResolveInfo> queryIntentActivities(Intent intent, int flag) {
+		List<ResolveInfo> result = new ArrayList<>();
+		for (PackageInfoX p : mInfos){
+			queryIntentActivities(p.packageName, intent, flag, result);
 		}
+		return result;
+	}
+
+	@ExportApi
+	public List<ResolveInfo> queryIntentActivities(String packageName, Intent intent, int flag) {
+		List<ResolveInfo> result = new ArrayList<>();
+		queryIntentActivities(packageName, intent, flag, result);
+		return result;
+	}
+
+	@ExportApi
+	private void queryIntentActivities(String packageName, Intent intent, int flag, List<ResolveInfo> result){
+		if (TextUtils.isEmpty(packageName)) return;
 		
-		return sInstance;
+		String action = intent.getAction();
+		Set<String> categories = intent.getCategories();
+		for (PackageInfoX p : mInfos){
+			if (packageName.equals(p.packageName)){
+				for (ActivityInfo a : p.activities){
+					ActivityInfoX aX = (ActivityInfoX) a;
+					if (aX.mIntentFilters == null) {
+						continue;
+					}
+					for( IntentFilter intentFilter: aX.mIntentFilters) {
+						if (intentFilter.matchAction(action)
+								&& intentFilter.matchCategories(categories) == null) {
+							ResolveInfo info = new ResolveInfo();
+							info.activityInfo = a;
+							result.add(info);
+						}
+					}
+				}
+			}
+		}
 	}
 
 	public static ResourcesMerger makeTargetResource(String mTargetApkPath,

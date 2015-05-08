@@ -1,5 +1,6 @@
 package org.bbs.apklauncher;
 
+import org.bbs.apklauncher.api.ExportApi;
 import org.bbs.apklauncher.emb.IntentHelper;
 import org.bbs.apklauncher.emb.LoadedApk;
 import org.bbs.apklauncher.emb.auto_gen.Stub_Activity;
@@ -10,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import dalvik.system.DexClassLoader;
 
+@ExportApi
 public class ApkUtil {
 
 	public static void startActivity(Context context, PackageInfoX.ActivityInfoX a) {

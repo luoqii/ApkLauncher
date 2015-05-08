@@ -1,11 +1,14 @@
 package org.bbs.apklauncher;
 
+import org.bbs.apklauncher.api.ExportApi;
+
 import android.util.Log;
 
 /**
  * @author bysong
  *
  */
+@ExportApi
 public class ApkLauncherConfig {
 	private static boolean DEBUG;
 	private static int LOG_LEVEL;

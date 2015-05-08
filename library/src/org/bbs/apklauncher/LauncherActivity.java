@@ -1,10 +1,11 @@
 package org.bbs.apklauncher;
 
+import org.bbs.apklauncher.api.ExportApi;
 import org.bbs.apkparser.PackageInfoX;
 
 import android.app.Activity;
 import android.os.Bundle;
-
+@ExportApi
 public class LauncherActivity extends Activity {
 	private static final String TAG = LauncherActivity.class.getSimpleName();
 	
