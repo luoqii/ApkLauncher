@@ -1,0 +1,7 @@
+// sdk lib
+include ':library'
+
+// sample app use sdk.
+include ":sample:apklauncher"
+
+// plguin app
