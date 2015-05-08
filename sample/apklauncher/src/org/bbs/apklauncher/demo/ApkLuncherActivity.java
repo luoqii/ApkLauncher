@@ -51,20 +51,8 @@ public class ApkLuncherActivity extends Activity {
 						PackageInfoX.ActivityInfoX a = (ActivityInfoX) v.getTag();
 						
 						Log.d(TAG, "onClick. activity: " + a);
-
-						ClassLoader cl = new DexClassLoader(a.applicationInfo.publicSourceDir, getDir("tmp", 0).getPath(), null, getClassLoader());
-						String superClassName = LoadedApk.getActivitySuperClassName(cl, a.name);
-						Intent launcher = new Intent();
-
-		                // inject and replace with our component.
-						String comClassName = superClassName.replace("Target", "Stub");
-						ComponentName com= new ComponentName(getPackageName(), comClassName);
-						launcher.setComponent(com);
-						launcher.putExtra(Stub_Activity.EXTRA_COMPONENT_CLASS_NAME, a.name);
-//						putExtra(a, launcher);
 						
-						launcher.putExtra(IntentHelper.EXTRA_INJECT, false);
-						startActivity(launcher);
+						ApkUtil.startActivity(ApkLuncherActivity.this, a);
 					}
 				});
 				return v ;

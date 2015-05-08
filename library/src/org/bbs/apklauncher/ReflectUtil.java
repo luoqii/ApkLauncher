@@ -331,6 +331,7 @@ public class ReflectUtil {
 					throw new RuntimeException("error in onPause", e);
 				}
 			}			
+			@SuppressLint("NewApi")
 			public static void onRestoreInstanceState(Activity activity,
 					Bundle savedInstanceState, PersistableBundle persistentState) {
 				try {
@@ -845,6 +846,7 @@ public class ReflectUtil {
 				}
 			}
 
+			@SuppressLint("NewApi")
 			public static void onSaveInstanceState(Activity activity,
 					Bundle outState, PersistableBundle outPersistentState) {
 				try {
