@@ -11,7 +11,7 @@ public abstract class Base_IntentService extends Target_IntentService {
 	
 	public int getHostIdentifier(String name, String defType, String defPackage){
 		int resId = -1;
-		resId = org.bbs.apklauncher.emb.Util.getContextImpl(this).getResources().getIdentifier(name, defType, defPackage);
+		resId = org.bbs.apklauncher.AndroidUtil.getContextImpl(this).getResources().getIdentifier(name, defType, defPackage);
 		
 		return resId;
 	}

@@ -2,7 +2,6 @@ package org.bbs.apklauncher;
 
 import org.bbs.apklauncher.api.ExportApi;
 import org.bbs.apklauncher.emb.IntentHelper;
-import org.bbs.apklauncher.emb.LoadedApk;
 import org.bbs.apklauncher.emb.auto_gen.Stub_Activity;
 import org.bbs.apkparser.PackageInfoX;
 

@@ -1,4 +1,4 @@
-package org.bbs.apklauncher.emb;
+package org.bbs.apklauncher;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

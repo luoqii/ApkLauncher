@@ -1,5 +1,7 @@
 package org.bbs.apklauncher.api;
 
+import org.bbs.apklauncher.AndroidUtil;
+
 import org.bbs.apklauncher.emb.auto_gen.StubBase_Activity;
 import org.bbs.apklauncher.emb.auto_gen.StubBase_ActionBarActivity;
 import org.bbs.apklauncher.emb.auto_gen.StubBase_ActivityGroup;
@@ -33,7 +35,7 @@ public class Base_SUPER_CLASS extends Target_SUPER_CLASS {
 	
 	public int getHostIdentifier(String name, String defType, String defPackage){
 		int resId = -1;
-		resId = org.bbs.apklauncher.emb.Util.getContextImpl(this).getResources().getIdentifier(name, defType, defPackage);
+		resId = AndroidUtil.getContextImpl(this).getResources().getIdentifier(name, defType, defPackage);
 		
 		return resId;
 	}	

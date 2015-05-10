@@ -1,11 +1,11 @@
 package org.bbs.apklauncher.emb;
 
+import org.bbs.apklauncher.AndroidUtil;
 import org.bbs.apklauncher.TargetContext;
 
 import android.annotation.TargetApi;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -63,7 +63,7 @@ public class PendingIntentHelper
 		} else {
 			TargetContext t = new TargetContext(context);
 			t.setCookie(COOKIE);
-			t.packageNameReady(org.bbs.apklauncher.emb.Util.getContextImpl(context).getPackageName());
+			t.packageNameReady(AndroidUtil.getContextImpl(context).getPackageName());
 			
 			c = t;
 		}

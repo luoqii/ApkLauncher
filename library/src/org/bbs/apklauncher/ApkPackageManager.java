@@ -16,7 +16,6 @@ import java.util.Set;
 import java.util.zip.ZipFile;
 
 import org.bbs.apklauncher.api.ExportApi;
-import org.bbs.apklauncher.emb.Util;
 import org.bbs.apkparser.ApkManifestParser;
 import org.bbs.apkparser.PackageInfoX;
 import org.bbs.apkparser.PackageInfoX.ActivityInfoX;
@@ -368,7 +367,7 @@ public class ApkPackageManager extends PackageManager {
 			resMerger = rr.get();
 			targetRes = resMerger.mFirst;
 		} else {
-			targetRes = Util.loadApkResource(mTargetApkPath, context);
+			targetRes = LoadedApk.loadApkResource(mTargetApkPath, context);
 			resMerger = new ResourcesMerger(targetRes, context.getResources());
 			ApkPackageManager.sApk2ResourceMap.put(mTargetApkPath, new WeakReference<ResourcesMerger>(resMerger));
 		}

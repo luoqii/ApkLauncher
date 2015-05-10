@@ -12,15 +12,25 @@ import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 import org.bbs.apklauncher.api.ExportApi;
+import org.bbs.apkparser.PackageInfoX.ActivityInfoX;
+import org.bbs.apkparser.PackageInfoX.ServiceInfoX;
 
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.ContextWrapper;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.text.TextUtils;
 import android.util.Log;
 
 @ExportApi
 public class AndroidUtil {
 	private static final String TAG = AndroidUtil.class.getSimpleName();
+
+    public static final String ACTIVITY_EXTRA_COMPONENT_CLASS_NAME = "EXTRA_COMPONENT_CLASS_NAME";
+    public static final String SERVICE_EXTRA_COMPONENT_CLASS_NAME = "EXTRA_COMPONENT_CLASS_NAME";
+	
 	
 	public static String getInstallApkPath(Context context, String packageName) {
 		String path = "";
@@ -127,4 +137,65 @@ public class AndroidUtil {
 			e.printStackTrace();
 		}
 	}
+	
+	// TODO
+		public static final String toMemoryLevel(int level) {
+			String levelStr = "";
+			levelStr = level + "";
+			
+			return levelStr;
+		}
+
+		public static void onProcessStartActivityIntent(Intent intent, ClassLoader classLoader, Context realContext) {
+			Log.d(TAG, "processIntent. intent: " + intent);
+			ComponentName com = intent.getComponent();
+			if (null != com) {
+				String c = com.getClassName();
+				if (!TextUtils.isEmpty(c)) {
+					String superClassName = LoadedApk.getActivitySuperClassName(classLoader, c);
+					com = new ComponentName(realContext.getPackageName(), superClassName.replace("Target", "Stub"));
+	                // inject and replace with our component.
+					intent.setComponent(com);
+					ActivityInfoX a = ApkPackageManager.getInstance().getActivityInfo(c);
+					if (a != null) {
+//						ApkLuncherActivity.putExtra(a, intent);
+						intent.putExtra(ACTIVITY_EXTRA_COMPONENT_CLASS_NAME, a.name);
+					}
+				} 
+			} else {
+				Log.w(TAG, "can not handle intent:  "  + intent);
+			}
+		}
+
+		public static void onProcessStartServiceIntent(Intent intent, ClassLoader classLoader, Context realContext) {
+			Log.d(TAG, "processIntent. intent: " + intent);
+			ComponentName com = intent.getComponent();
+			if (null != com) {
+				String c = com.getClassName();
+				if (!TextUtils.isEmpty(c)) {
+					String superClassName = LoadedApk.getServiceSuperClassName(classLoader, c);
+					com = new ComponentName(realContext.getPackageName(), superClassName.replace("Target", "Stub"));
+	                // inject and replace with our component.
+					intent.setComponent(com);
+					ServiceInfoX a = ApkPackageManager.getInstance().getServiceInfo(c);
+					if (a != null) {
+//						intent.putExtra(Stub_Service.EXTRA_COMPONENT, new ComponentName(a.packageName, a.name));
+						intent.putExtra(SERVICE_EXTRA_COMPONENT_CLASS_NAME, a.name);
+					}
+				} 
+			} else {
+				Log.w(TAG, "can not handle intent:  "  + intent);
+			}
+		}
+		
+
+		
+	    public static Context getContextImpl(Context context) {
+	        Context nextContext;
+	        while ((context instanceof ContextWrapper) &&
+	                (nextContext=((ContextWrapper)context).getBaseContext()) != null) {
+	            context = nextContext;
+	        }
+	        return (Context)context;
+	    }
 }

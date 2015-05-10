@@ -6,12 +6,12 @@ import java.util.Map;
 
 import org.bbs.apklauncher.ReflectUtil.ActivityReflectUtil;
 
+import org.bbs.apklauncher.AndroidUtil;
 import org.bbs.apklauncher.ApkPackageManager;
 import org.bbs.apklauncher.PackageManagerProxy;
 import org.bbs.apklauncher.emb.Host_Application;
 import org.bbs.apklauncher.emb.IntentHelper;
-import org.bbs.apklauncher.emb.Util;
-import org.bbs.apklauncher.emb.ViewCreater;
+import org.bbs.apklauncher.ViewCreater;
 import org.bbs.apklauncher.emb.auto_gen.Target_Activity;
 import org.bbs.apkparser.PackageInfoX.ActivityInfoX;
 import org.bbs.apklauncher.InstrumentationWrapper;
@@ -46,7 +46,7 @@ implements CallBack {
 	/**
 	 * type {@link String}
 	 */
-	public static final String EXTRA_COMPONENT_CLASS_NAME = Util.ACTIVITY_EXTRA_COMPONENT_CLASS_NAME;
+	public static final String EXTRA_COMPONENT_CLASS_NAME = AndroidUtil.ACTIVITY_EXTRA_COMPONENT_CLASS_NAME;
 	
 	private static final String TAG = StubBase_ActivityGroup.class.getSimpleName();
 	
@@ -184,7 +184,7 @@ implements CallBack {
 
 	@Override
 	public void processIntent(android.content.Intent intent) {
-		 Util.onProcessStartActivityIntent(intent, mTargetClassLoader, mRealBaseContext);
+		 AndroidUtil.onProcessStartActivityIntent(intent, mTargetClassLoader, mRealBaseContext);
 	}
 	
 	@Override

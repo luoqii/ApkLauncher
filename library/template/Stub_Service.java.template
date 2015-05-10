@@ -1,12 +1,11 @@
 package org.bbs.apklauncher.emb.auto_gen;
 
-
+import org.bbs.apklauncher.AndroidUtil;
 import org.bbs.apklauncher.ApkPackageManager;
 import org.bbs.apklauncher.ReflectUtil;
 import org.bbs.apklauncher.ResourcesMerger;
 import org.bbs.apklauncher.TargetContext;
 import org.bbs.apklauncher.emb.Host_Application;
-import org.bbs.apklauncher.emb.Util;
 import org.bbs.apkparser.PackageInfoX.ServiceInfoX;
 
 import android.app.Application;
@@ -22,7 +21,7 @@ public class Stub_SUPER_CLASS extends StubBase_SUPER_CLASS {
 	/**
 	 * type {@link String}
 	 */
-	public static final String EXTRA_COMPONENT_CLASS_NAME = Util.SERVICE_EXTRA_COMPONENT_CLASS_NAME;
+	public static final String EXTRA_COMPONENT_CLASS_NAME = AndroidUtil.SERVICE_EXTRA_COMPONENT_CLASS_NAME;
 
 	private ResourcesMerger mResourceMerger;
 	private Application mRealApplication;

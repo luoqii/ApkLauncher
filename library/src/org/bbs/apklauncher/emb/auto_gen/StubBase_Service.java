@@ -1,7 +1,7 @@
 package org.bbs.apklauncher.emb.auto_gen;
 
+import org.bbs.apklauncher.AndroidUtil;
 import org.bbs.apklauncher.TargetContext;
-import org.bbs.apklauncher.emb.Util;
 
 import android.annotation.SuppressLint;
 import android.app.IntentService;
@@ -113,7 +113,7 @@ public abstract class StubBase_Service extends Service {
 	@Override
 	public void onTrimMemory(int level) {
 		if (DEBUG_MEMORY) {
-			Log.d(TAG, "onTrimMemory(). level: " + Util.toMemoryLevel(level));
+			Log.d(TAG, "onTrimMemory(). level: " + AndroidUtil.toMemoryLevel(level));
 		}
 		super.onTrimMemory(level);
 		if (null != mTargetService) {

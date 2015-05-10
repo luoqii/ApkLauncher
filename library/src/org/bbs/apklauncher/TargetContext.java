@@ -1,7 +1,5 @@
 package org.bbs.apklauncher;
 
-import org.bbs.apklauncher.emb.Util;
-
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -218,7 +216,7 @@ ContextWrapper
 	@Override
 	public ComponentName startService(Intent service) {
 		if (ENALBE_SERVICE) {
-			Util.onProcessStartServiceIntent(service, mClassLoader, getBaseContext());
+			AndroidUtil.onProcessStartServiceIntent(service, mClassLoader, getBaseContext());
 			return super.startService(service);
 		} else {
 			Log.w(TAG, "startService not implemented.");
@@ -229,7 +227,7 @@ ContextWrapper
 	@Override
 	public boolean bindService(Intent service, ServiceConnection conn, int flags) {
 		if (ENALBE_SERVICE) {
-			Util.onProcessStartServiceIntent(service, mClassLoader, getBaseContext());
+			AndroidUtil.onProcessStartServiceIntent(service, mClassLoader, getBaseContext());
 			return super.bindService(service, conn, flags);
 		} else {
 			Log.w(TAG, "bindService not implemented.");
@@ -240,7 +238,7 @@ ContextWrapper
 	@Override
 	public boolean stopService(Intent service) {
 		if (ENALBE_SERVICE) {
-			Util.onProcessStartServiceIntent(service, mClassLoader, getBaseContext());
+			AndroidUtil.onProcessStartServiceIntent(service, mClassLoader, getBaseContext());
 			return super.stopService(service);
 		} else {
 			Log.w(TAG, "stopService not implemented.");

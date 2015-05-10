@@ -1,5 +1,7 @@
-package org.bbs.apklauncher.emb;
+package org.bbs.apklauncher;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,10 +20,16 @@ import org.bbs.apkparser.PackageInfoX;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.app.job.JobService;
+import android.content.Context;
+import android.content.res.AssetManager;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.inputmethodservice.InputMethodService;
 import android.service.dreams.DreamService;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.WindowManager;
 import dalvik.system.DexClassLoader;
 
 public class LoadedApk {
@@ -50,6 +58,39 @@ public class LoadedApk {
 		Log.d(TAG, "new classloader for apk: " + c);
 		mClassLoader = c;
 		return c;
+	}
+	
+	public static  Resources loadApkResource(String apkFilePath, Context context) {
+		AssetManager assets = null;
+		try {
+			assets = AssetManager.class.getConstructor(null).newInstance(null);
+			Method method = assets.getClass().getMethod("addAssetPath", new Class[]{String.class});
+			Object r = method.invoke(assets, apkFilePath);
+			DisplayMetrics metrics = new DisplayMetrics();
+			((WindowManager)context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(metrics);
+			// TODO add config & metrics
+			Configuration config = context.getResources().getConfiguration();
+//			metrics = context.getResources().getDisplayMetrics();
+			Resources res = new Resources(assets, metrics, config);
+			res.updateConfiguration(config, metrics);
+			return res;
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public static String getActivitySuperClassName(ClassLoader classloader, String activityClassName) {
