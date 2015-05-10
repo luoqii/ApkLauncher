@@ -24,6 +24,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bbs.apklauncher.ApkPackageManager;
+
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -61,7 +63,7 @@ public class ApiDemos extends org.bbs.apklauncher.api.Base_ListActivity {
         PackageManager pm = getPackageManager();
         List<ResolveInfo> list = pm.queryIntentActivities(mainIntent, 0);
         
-//        list = ApkPackageManager.getInstance().queryIntentActivities(getPackageName(), mainIntent, 0);
+        list = ApkPackageManager.getInstance().queryIntentActivities(getPackageName(), mainIntent, 0);
 
         if (null == list)
             return myData;

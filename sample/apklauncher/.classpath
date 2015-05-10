@@ -6,7 +6,5 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry exported="true" kind="lib" path="/ApkLauncher_Sdk/libs/apkmanifestparser_lib.jar"/>
-	<classpathentry exported="true" kind="lib" path="/ApkLauncher_Sdk/apklauncher_sdk.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
-

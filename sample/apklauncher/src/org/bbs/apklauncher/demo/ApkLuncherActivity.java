@@ -5,16 +5,11 @@ import java.util.List;
 import org.bbs.apklauncher.ApkPackageManager;
 import org.bbs.apklauncher.ApkUtil;
 import org.bbs.apklauncher.emb.IntentHelper;
-import org.bbs.apklauncher.emb.LoadedApk;
-import org.bbs.apklauncher.emb.auto_gen.Stub_Activity;
 import org.bbs.apkparser.PackageInfoX;
 import org.bbs.apkparser.PackageInfoX.ActivityInfoX;
 import org.bbs.apkparser.PackageInfoX.IntentFilterX;
 
 import android.app.Activity;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,7 +21,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import dalvik.system.DexClassLoader;
 
 public class ApkLuncherActivity extends Activity {
 	private static final String TAG = ApkLuncherActivity.class.getSimpleName();

@@ -36,6 +36,8 @@ public class LoadedApk {
 	private static final String TAG = LoadedApk.class.getSimpleName();
 
 	static HashMap<String, String> sActivitySuperClassNameMap = new HashMap<String, String>();
+	static HashMap<String, String> sActivityClassMap = new HashMap<String, String>();
+	static HashMap<String, String> sPreDefinedActivityClassMap = new HashMap<String, String>();
 	static HashMap<String, String> sSuperClassNameMap = new HashMap<String, String>();
 	
 	PackageInfoX mApkInfo;
@@ -45,19 +47,6 @@ public class LoadedApk {
 
 	public LoadedApk(Application appContext, PackageInfoX apkInfo){
 		mApkInfo = apkInfo;
-		
-		mDexCacheDir = appContext.getDir("apk_code_cache", 0).getPath();
-	}
-	
-	public ClassLoader getClassLoader(ClassLoader parentClassLoader, String libPath) {
-		if (mClassLoader != null) {
-			return mClassLoader;
-		}
-		
-		ClassLoader c = new DexClassLoader(mApkInfo.applicationInfo.publicSourceDir, mDexCacheDir, libPath, parentClassLoader);
-		Log.d(TAG, "new classloader for apk: " + c);
-		mClassLoader = c;
-		return c;
 	}
 	
 	public static  Resources loadApkResource(String apkFilePath, Context context) {
@@ -91,6 +80,18 @@ public class LoadedApk {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	static String getHostActivityClassName(ClassLoader classloader, String targetActivityClassName){
+		String cName = null;
+		if (sPreDefinedActivityClassMap.containsKey(targetActivityClassName)){
+			cName = sPreDefinedActivityClassMap.get(targetActivityClassName);
+		}
+		if (TextUtils.isEmpty(cName)) {
+			
+		}
+		
+		return cName;
 	}
 	
 	public static String getActivitySuperClassName(ClassLoader classloader, String activityClassName) {
@@ -178,12 +179,12 @@ public class LoadedApk {
 
 	private static void dumpClassType(Class clazz, List<String> superClassName) {
 		//==========123456789012345678
-		Log.d(TAG, "class       : " + clazz);
+		Log.d(TAG, "class       : " + clazz.getName());
 		while (!clazz.getName().equals(Object.class.getName())) {
 			clazz = clazz.getSuperclass();
 
 			//==========123456789012345678
-			Log.d(TAG, "super class : " + clazz);
+			Log.d(TAG, "super class : " + clazz.getName());
 			superClassName.add(clazz.getName());
 		}
 	}	

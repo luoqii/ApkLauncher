@@ -65,7 +65,11 @@ public class Stub_SUPER_CLASS extends StubBase_SUPER_CLASS {
 		Log.d(TAG, "targetApkPath              : " + apkPath);
 		Log.d(TAG, "targetLibPath              : " + libPath);
 		
-		mTargetClassLoader = ApkPackageManager.makeClassLoader(mRealBaseContext, apkPath, libPath);
+		mTargetClassLoader = ApkPackageManager.getInstance()
+												.createClassLoader(mRealBaseContext, 
+																	apkPath, 
+																	libPath,
+																	serviceInfo.packageName);
 		mTargetContext.classLoaderReady(mTargetClassLoader);
 		
 		// do application init. must before service init.
@@ -89,10 +93,6 @@ public class Stub_SUPER_CLASS extends StubBase_SUPER_CLASS {
 		} catch (Exception e) {
 			throw new RuntimeException("error in create target service.  class: " + mTargetServiceClassName, e);
 		}
-	}
-	
-	private ClassLoader onCreateClassLoader(String apkPath, String libPath) {	
-		return ApkPackageManager.createClassLoader(apkPath, libPath, this);
 	}
 	
 	@Override

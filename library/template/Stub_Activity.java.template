@@ -84,7 +84,8 @@ implements CallBack {
 		
 		// get target activity info
 		String targetActivityClassName = intent.getStringExtra(EXTRA_COMPONENT_CLASS_NAME);
-		mTargetActivityInfo = ApkPackageManager.getInstance().getActivityInfo(targetActivityClassName);
+		mTargetActivityInfo = ApkPackageManager.getInstance()
+												.getActivityInfo(targetActivityClassName);
 		String libPath = mTargetActivityInfo.mPackageInfo.mLibPath;
 		String targetApplicationClassName = mTargetActivityInfo.applicationInfo.className;
 		int targetThemeId = mTargetActivityInfo.theme;
@@ -104,20 +105,28 @@ implements CallBack {
 		Log.d(TAG, "targetLibPath              : " + libPath);
 		
 		// create target classloader if necessary.
-		mTargetClassLoader = ApkPackageManager.makeClassLoader(mRealBaseContext, apkPath, libPath);
+		mTargetClassLoader = ApkPackageManager.getInstance()
+									.createClassLoader(mRealBaseContext, 
+														apkPath, 
+														libPath, 
+														targetPackageName);
 		mTargetContext.classLoaderReady(mTargetClassLoader);
 
 		// do application init. must before activity init.
-		Application app = ((Host_Application)getApplication()).onPrepareApplictionStub(mTargetActivityInfo.applicationInfo, 
-																						mTargetClassLoader, mRealSysPm);
+		Application app = ((Host_Application)getApplication())
+								.onPrepareApplictionStub(mTargetActivityInfo.applicationInfo, 
+														 mTargetClassLoader, 
+														 mRealSysPm);
 		
 		// do activity init
 		InstrumentationWrapper.injectInstrumentation(this, this);
 		try {
 			mTargetResourceMerger = ApkPackageManager.makeTargetResource(apkPath, mRealBaseContext);
 
-			targetThemeId = ReflectUtil.ResourceUtil.selectDefaultTheme(mTargetResourceMerger, targetThemeId, 
-																			mTargetActivityInfo.applicationInfo.targetSdkVersion);
+			targetThemeId = ReflectUtil.ResourceUtil
+											.selectDefaultTheme(mTargetResourceMerger, 
+																targetThemeId, 
+															 	mTargetActivityInfo.applicationInfo.targetSdkVersion);
 
 			Log.d(TAG, "resolved activity theme: " + targetThemeId);
 			mTargetContext.setTheme(targetThemeId);

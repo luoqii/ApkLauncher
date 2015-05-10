@@ -9,7 +9,7 @@ function genLib(){
  	oldDir=`pwd`
 	cd export 
 	
-	ANDROID_JAR="/mnt/big_storage/android_sdk/platforms/android-21/android.jar"
+	ANDROID_JAR="$ANDROID_HOME/platforms/android-21/android.jar"
 	CLASSPATH="../bin/apklauncher_sdk.jar:../libs/android-support-v4.jar:../libs/android-support-v7-appcompat.jar"
 	CLASSPATH=${CLASSPATH}:$ANDROID_JAR
 
@@ -51,5 +51,10 @@ groovy host_target_activity.groovy
 groovy host_target_service.groovy
 
 #version=_v0.2
+if [[ "x$ANDROID_HOME" == "x" ]] ; then
+	echo "on ANDROID_HOME exported."
+	exit 1
+fi
+
 genLib app apklauncher_app$version.jar
 genLib plugin apklauncher_plugin$version.jar

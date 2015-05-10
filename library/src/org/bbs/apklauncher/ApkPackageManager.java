@@ -124,6 +124,35 @@ public class ApkPackageManager extends PackageManager {
 			}
 		}
 
+	public static ResourcesMerger makeTargetResource(String mTargetApkPath,
+			Context context) {
+		WeakReference<ResourcesMerger> rr = ApkPackageManager.sApk2ResourceMap.get(mTargetApkPath);
+		Resources targetRes;
+		ResourcesMerger resMerger;
+		if (rr != null && rr.get() != null) {
+			resMerger = rr.get();
+			targetRes = resMerger.mFirst;
+		} else {
+			targetRes = LoadedApk.loadApkResource(mTargetApkPath, context);
+			resMerger = new ResourcesMerger(targetRes, context.getResources());
+			ApkPackageManager.sApk2ResourceMap.put(mTargetApkPath, new WeakReference<ResourcesMerger>(resMerger));
+		}
+		
+		return resMerger;
+	}
+
+	public ClassLoader createClassLoader(Context baseContext, String apkPath, String libPath, String packageName) {
+		ClassLoader cl = ApkPackageManager.getClassLoader(apkPath);
+		if (null == cl) {
+			String optPath =  getOptDir().getPath();
+			cl = new DexClassLoader(apkPath, optPath, libPath, baseContext.getClassLoader());
+//			cl = new TargetClassLoader(apkPath, optPath, libPath, baseContext.getClassLoader(), mContext);
+			ApkPackageManager.putClassLoader(apkPath, (cl));
+		}
+	
+		return cl;
+	}
+
 	public static ClassLoader getClassLoader(String packageName) {
 		WeakReference<ClassLoader> weakReference = sApk2ClassLoaderMap.get(packageName);
 		if (null != weakReference) {
@@ -136,13 +165,6 @@ public class ApkPackageManager extends PackageManager {
 	public static void putClassLoader(String packageName, ClassLoader classLoader) {
 		sLastClassLoader = classLoader;
 		sApk2ClassLoaderMap.put(packageName, new WeakReference<ClassLoader>(classLoader));
-	}
-	
-	public static ClassLoader createClassLoader(String apkPath, String libPath, Context baseContext) {		
-			ClassLoader c = null;	
-
-			c = new DexClassLoader(apkPath, baseContext.getDir("apk_code_cache", 0).getPath(), libPath, baseContext.getClassLoader());
-			return c;
 	}
 	
 	@ExportApi
@@ -174,6 +196,14 @@ public class ApkPackageManager extends PackageManager {
 	@ExportApi
 	public File getAppDir() {
 		File dir = new File(getPluginDir(), "app");
+		dir.mkdirs();
+		
+		return dir;
+	}
+	
+	@ExportApi
+	public File getOptDir() {
+		File dir = new File(getPluginDir(), "opt");
 		dir.mkdirs();
 		
 		return dir;
@@ -227,8 +257,8 @@ public class ApkPackageManager extends PackageManager {
 				info.mLibPath = destLibDir.getPath();
 				
 				// asume there is only one apk.
-				ClassLoader cl = createClassLoader(info.applicationInfo.sourceDir, info.mLibPath, mContext);
-				putClassLoader(info.applicationInfo.sourceDir, cl);				
+				ClassLoader cl = createClassLoader(mContext, info.applicationInfo.sourceDir, info.mLibPath, info.applicationInfo.packageName);
+				putClassLoader(info.applicationInfo.packageName, cl);
 				
 				mInfos.addOrUpdate(info);
 			} catch (IOException e) {
@@ -358,48 +388,6 @@ public class ApkPackageManager extends PackageManager {
 		}
 	}
 
-	public static ResourcesMerger makeTargetResource(String mTargetApkPath,
-			Context context) {
-		WeakReference<ResourcesMerger> rr = ApkPackageManager.sApk2ResourceMap.get(mTargetApkPath);
-		Resources targetRes;
-		ResourcesMerger resMerger;
-		if (rr != null && rr.get() != null) {
-			resMerger = rr.get();
-			targetRes = resMerger.mFirst;
-		} else {
-			targetRes = LoadedApk.loadApkResource(mTargetApkPath, context);
-			resMerger = new ResourcesMerger(targetRes, context.getResources());
-			ApkPackageManager.sApk2ResourceMap.put(mTargetApkPath, new WeakReference<ResourcesMerger>(resMerger));
-		}
-		
-		return resMerger;
-	}
-
-	public static ClassLoader makeClassLoader(Context context, String apkPath, String libPath) {
-		ClassLoader cl = ApkPackageManager.getClassLoader(apkPath);
-		if (null == cl) {
-			cl = createClassLoader(apkPath, libPath, context);
-			ApkPackageManager.putClassLoader(apkPath, (cl));
-		}
-	
-		return cl;
-	}
-	
-	class TargetClassLoader extends DexClassLoader {
-
-		public TargetClassLoader(String dexPath, String optimizedDirectory,
-				String libraryPath, ClassLoader parent) {
-			super(dexPath, optimizedDirectory, libraryPath, parent);
-		}
-		
-		@Override
-		protected Class<?> loadClass(String className, boolean resolve)
-				throws ClassNotFoundException {
-			return super.loadClass(className, resolve);
-		}
-		
-	}
-	
 	void notSupported() {
 		throw new RuntimeException("not supported. you can impl it instead.");
 	}

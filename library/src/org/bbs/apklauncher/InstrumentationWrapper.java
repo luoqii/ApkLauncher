@@ -170,7 +170,7 @@ public class InstrumentationWrapper extends Instrumentation {
 			}
 		}
 		
-		public static void injectInstrumentation(Activity activity, InstrumentationWrapper.CallBack callback) {
+		public static void injectInstrumentation(Object activity, InstrumentationWrapper.CallBack callback) {
 			Instrumentation i = (Instrumentation) ActivityReflectUtil.getFiledValue(Activity.class, activity, "mInstrumentation");
 			Field f = ActivityReflectUtil.getFiled(Activity.class, activity, "mInstrumentation");
 			InstrumentationWrapper wrapper = new InstrumentationWrapper(i, new Handler());

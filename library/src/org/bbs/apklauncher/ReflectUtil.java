@@ -733,7 +733,7 @@ public class ReflectUtil {
 				}
 			}
 
-			public static void setActivityApplication(Activity activity,
+			public static void setActivityApplication(Object activity,
 					Application app) {
 				try {
 					Field field = Activity.class.getDeclaredField("mApplication");

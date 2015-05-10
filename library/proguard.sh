@@ -10,4 +10,4 @@ if [[ "x$PROGUARD_HOME" == "x" ]] ; then
 	exit 1
 fi
 
-$PROGUARD_HOME/bin/proguard.sh @proguard.config -libraryjar $ANDROID_HOME/platforms/android-21/android.jar -printmapping mapping -printseeds seends
+$PROGUARD_HOME/bin/proguard.sh @proguard.config -libraryjar $ANDROID_HOME/platforms/android-21/android.jar -printmapping mapping -printseeds seeds

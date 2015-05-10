@@ -17,7 +17,9 @@ public class ApkUtil {
 		if (null == a) {
 			throw new RuntimeException("activity info in null");
 		}
+		
 		ClassLoader cl = new DexClassLoader(a.applicationInfo.publicSourceDir, context.getDir("tem_apk_opt", 0).getPath(), null, context.getClassLoader());
+		cl = ApkPackageManager.getInstance().getClassLoader(a.applicationInfo.packageName);
 		String superClassName = LoadedApk.getActivitySuperClassName(cl, a.name);
 		Intent launcher = new Intent();
 
