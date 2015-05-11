@@ -246,7 +246,7 @@ public class ApkPackageManager extends PackageManager {
 					info = ApkManifestParser.parseAPk(mContext, dest.getAbsolutePath());
 				}
 				//==========123456789012345678
-				Log.d(TAG, "apk info  : " + info.packageName + "|" + info.versionCode + "|" +  info.versionName);
+				Log.d(TAG, "apk info  : " + appInfoStr(info));
 				
 				File destLibDir = new File(getPluginDir(), info.packageName + "/lib");
 				
@@ -910,10 +910,16 @@ public class ApkPackageManager extends PackageManager {
 				}
 			}
 			if (index >= 0) {
-				remove(index);
+				PackageInfoX old = remove(index);
+				Log.d(TAG, "old app: "  + appInfoStr(old) );
+				Log.d(TAG, "new app: "  + appInfoStr(info) );
 			}
 			add(info);
 		}
+	}
+	
+	static String appInfoStr(PackageInfoX info) {
+		return info.packageName + "|" + info.versionCode + "|" + info.versionName;
 	}
 	
 	static class SerializableUtil {

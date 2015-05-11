@@ -33,6 +33,6 @@ public class MainActivity extends Base_Activity {
 		
 		UmengUpdateAgent.setDeltaUpdate(false);
 		UpdateConfig.setDebug(true);
-		UmengUpdateAgent.update(this);
+//		UmengUpdateAgent.update(this);
 	}
 }

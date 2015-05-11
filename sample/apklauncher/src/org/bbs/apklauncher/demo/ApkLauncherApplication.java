@@ -23,6 +23,10 @@ Host_Application
 	private static final String TAG = ApkLauncherApplication.class.getSimpleName();
 	public static final String APK_LAUNCHER_DIR = "apklauncher";
 	
+	public ApkLauncherApplication(){
+		super();
+	}
+	
 	@Override
 	public void onCreate() {
 		super.onCreate();

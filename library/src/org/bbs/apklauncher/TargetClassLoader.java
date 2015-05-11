@@ -3,9 +3,10 @@ package org.bbs.apklauncher;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.os.Build;
 import android.util.Log;
 import dalvik.system.DexClassLoader;
 import dalvik.system.DexFile;
@@ -28,9 +29,11 @@ class TargetClassLoader extends DexClassLoader {
 		}
 	}
 	
+	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 	@Override
 	protected Class<?> loadClass(String className, boolean resolve)
 			throws ClassNotFoundException {
+		Log.d(TAG, "" + className);
 		Class<?> c = null;
 		if (shouldLoad(className)){
 			c = mDexFile.loadClass(className, this);
@@ -38,6 +41,10 @@ class TargetClassLoader extends DexClassLoader {
 		}
 		if (c == null ) {
 			c = super.loadClass(className, resolve);
+		}
+		
+		if (resolve){
+			resolveClass(c);
 		}
 		
 		return c;

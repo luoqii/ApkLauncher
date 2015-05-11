@@ -8,11 +8,17 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
+import orb.bbs.apklauncher.zeroinstall.shell.R;
+
 import org.bbs.android.commonlib.ActivityUtil;
 import org.bbs.apklauncher.AndroidUtil;
 import org.bbs.apklauncher.ApkPackageManager;
 import org.bbs.apkparser.PackageInfoX;
 
+import android.annotation.SuppressLint;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -119,7 +125,7 @@ public class UpdateService extends Service {
         UpdateConfig.setUpdateAutoPopup(false);
         UmengUpdateAgent.setUpdateAutoPopup(false);
         // umeng will auto update this, shit!!!!
-//        UmengUpdateAgent.update(this);
+        UmengUpdateAgent.update(this);
 //        UmengUpdateAgent.silentUpdate(this);
 	}
 	
@@ -178,12 +184,26 @@ public class UpdateService extends Service {
 			return null;
 		}
 		
+		@SuppressLint("NewApi")
 		@Override
 		protected void onPostExecute(File result) {
 			super.onPostExecute(result);
 			
 			if (result != null){
 				ActivityUtil.toast(getApplicationContext(), "app has updated", Toast.LENGTH_LONG);
+				
+				Notification n = new Notification();
+				Notification.Builder b = new Notification.Builder(getApplicationContext());
+				b.setSmallIcon(R.drawable.ic_launcher);
+				b.setContentText("new app has upgraded.");
+				b.setContentTitle("Upgrade");
+//				Intent intent = new Intent(getApplicationContext(), );				
+//				PendingIntent pIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, 0);
+//				b.addAction(R.drawable.tb_munion_icon, "restart", pIntent);
+				
+//				b.addAction(action)
+				
+				((NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE)).notify(R.layout.activity_main, b.build());
 				Log.d(TAG, "apk downlod successed. file: " + result);
 			} else {
 				Log.d(TAG, "apk downlod error. file: " + result);
