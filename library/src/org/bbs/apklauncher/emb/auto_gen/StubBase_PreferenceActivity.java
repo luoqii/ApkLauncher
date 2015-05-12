@@ -5,7 +5,6 @@ import java.util.List;
 import org.bbs.apklauncher.ReflectUtil.ActivityReflectUtil;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBarActivity;
 import android.app.Activity;
 import android.app.ActivityGroup;
 import android.app.Dialog;
@@ -44,6 +43,7 @@ import android.view.accessibility.AccessibilityEvent;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.support.v4.app.FragmentActivity;
+import android.app.ActionBarActivity;
 
 /**
  * delegate android framework's method call to {@link #mTargetActivity}

@@ -141,12 +141,12 @@ public class ApkPackageManager extends PackageManager {
 		return resMerger;
 	}
 
-	public ClassLoader createClassLoader(Context baseContext, String apkPath, String libPath, String packageName) {
+	public ClassLoader createClassLoader(Context baseContext, String apkPath, String libPath, String targetPackageName) {
 		ClassLoader cl = ApkPackageManager.getClassLoader(apkPath);
 		if (null == cl) {
 			String optPath =  getOptDir().getPath();
 			cl = new DexClassLoader(apkPath, optPath, libPath, baseContext.getClassLoader());
-//			cl = new TargetClassLoader(apkPath, optPath, libPath, baseContext.getClassLoader(), mContext);
+//			cl = new TargetClassLoader(apkPath, optPath, libPath, baseContext.getClassLoader(), targetPackageName, mContext);
 			ApkPackageManager.putClassLoader(apkPath, (cl));
 		}
 	
@@ -265,6 +265,9 @@ public class ApkPackageManager extends PackageManager {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		} else {
+			//==========123456789012345678
+			Log.i(TAG, "ignre file: " + file);
 		}
 	}
 	
