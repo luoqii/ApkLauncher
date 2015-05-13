@@ -142,7 +142,7 @@ public class ApkPackageManager extends PackageManager {
 	}
 
 	public ClassLoader createClassLoader(Context baseContext, String apkPath, String libPath, String targetPackageName) {
-		ClassLoader cl = ApkPackageManager.getClassLoader(apkPath);
+		ClassLoader cl = ApkPackageManager.getClassLoader(targetPackageName);
 		if (null == cl) {
 			String optPath =  getOptDir().getPath();
 			cl = new DexClassLoader(apkPath, optPath, libPath, baseContext.getClassLoader());
