@@ -257,7 +257,6 @@ public class ApkPackageManager extends PackageManager {
 				
 				// asume there is only one apk.
 				ClassLoader cl = createClassLoader(mContext, info.applicationInfo.sourceDir, info.mLibPath, info.applicationInfo.packageName);
-				putClassLoader(info.applicationInfo.packageName, cl);
 				
 				mInfos.addOrUpdate(info);
 			} catch (IOException e) {
