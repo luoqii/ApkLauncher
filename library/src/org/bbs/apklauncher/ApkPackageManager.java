@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.lang.ref.Reference;
+import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,11 +60,9 @@ public class ApkPackageManager extends PackageManager {
 
 	private static ApkPackageManager sInstance;
 	
-	public static Map<String, WeakReference<ClassLoader>> sApk2ClassLoaderMap = new HashMap<String, WeakReference<ClassLoader>>();
+	public static Map<String, Reference<ClassLoader>> sApk2ClassLoaderMap = new HashMap<String, Reference<ClassLoader>>();
 	public static Map<String, WeakReference<Application>> sApk2ApplicationtMap = new HashMap<String, WeakReference<Application>>();
 	public static Map<String, WeakReference<ResourcesMerger>> sApk2ResourceMap = new HashMap<String, WeakReference<ResourcesMerger>>();
-
-	public static ClassLoader sLastClassLoader;
 
 	private InstallApks mInfos;
 	private Application mContext;
@@ -146,25 +146,24 @@ public class ApkPackageManager extends PackageManager {
 		if (null == cl) {
 			String optPath =  getOptDir().getPath();
 			cl = new DexClassLoader(apkPath, optPath, libPath, baseContext.getClassLoader());
-//			cl = new TargetClassLoader(apkPath, optPath, libPath, baseContext.getClassLoader(), targetPackageName, mContext);
-			ApkPackageManager.putClassLoader(apkPath, (cl));
+			cl = new TargetClassLoader(apkPath, optPath, libPath, baseContext.getClassLoader(), targetPackageName, mContext);
+			ApkPackageManager.putClassLoader(targetPackageName, (cl));
 		}
 	
 		return cl;
 	}
 
 	public static ClassLoader getClassLoader(String packageName) {
-		WeakReference<ClassLoader> weakReference = sApk2ClassLoaderMap.get(packageName);
-		if (null != weakReference) {
-			ClassLoader c = weakReference.get();
+		Reference<ClassLoader> reference = sApk2ClassLoaderMap.get(packageName);
+		if (null != reference) {
+			ClassLoader c = reference.get();
 			return c;
 		}
 		return null;
 	}
 	
 	public static void putClassLoader(String packageName, ClassLoader classLoader) {
-		sLastClassLoader = classLoader;
-		sApk2ClassLoaderMap.put(packageName, new WeakReference<ClassLoader>(classLoader));
+		sApk2ClassLoaderMap.put(packageName, new SoftReference<ClassLoader>(classLoader));
 	}
 	
 	@ExportApi

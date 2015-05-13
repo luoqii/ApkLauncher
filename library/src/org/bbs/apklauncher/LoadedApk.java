@@ -99,11 +99,11 @@ public class LoadedApk {
 		if (sActivitySuperClassNameMap.containsKey(activityClassName)) {
 			cName = sActivitySuperClassNameMap.get(activityClassName);
 		}
+		List<String> superClassNames = new ArrayList<String>();
 		if (TextUtils.isEmpty(cName)) {
 			try {
 				Class<?> clazz = classloader.loadClass(activityClassName);
-				List<String> superClassNames = new ArrayList<String>();
-				dumpClassType(clazz, superClassNames);
+				superClassNames = getClassType(clazz);
 				if (superClassNames.contains(Target_ActionBarActivity.class.getName())) {
 					cName = Target_ActionBarActivity.class.getName();
 				} else if (superClassNames.contains(Target_FragmentActivity.class.getName())) {
@@ -130,6 +130,7 @@ public class LoadedApk {
 		if (!TextUtils.isEmpty(cName)) {
 			sActivitySuperClassNameMap.put(activityClassName, cName);
 		} else {
+			dumpClassType(superClassNames);
 			throw new RuntimeException("no usefull super class for activity: " + activityClassName);
 		}
 		//==========123456789012345678
@@ -143,11 +144,11 @@ public class LoadedApk {
 		if (sSuperClassNameMap.containsKey(serviceClassName)) {
 			cName = sSuperClassNameMap.get(serviceClassName);
 		}
+		List<String> superClassNames = new ArrayList<String>();
 		if (TextUtils.isEmpty(cName)) {
 			try {
 				Class<?> clazz = classloader.loadClass(serviceClassName);
-				List<String> superClassNames = new ArrayList<String>();
-				dumpClassType(clazz, superClassNames);
+				superClassNames = getClassType(clazz);
 				if (superClassNames.contains(JobService.class.getName())
 						|| superClassNames.contains(DreamService.class.getName())
 						|| superClassNames.contains(InputMethodService.class.getName())
@@ -166,6 +167,7 @@ public class LoadedApk {
 		if (!TextUtils.isEmpty(cName)) {
 			sSuperClassNameMap.put(serviceClassName, cName);
 		} else {
+			dumpClassType(superClassNames);
 			throw new RuntimeException("no usefull super class for service: " + serviceClassName);
 		}
 		//==========123456789012345678
@@ -177,15 +179,21 @@ public class LoadedApk {
 		throw new RuntimeException("not impl yet.");
 	}
 
-	private static void dumpClassType(Class clazz, List<String> superClassName) {
-		//==========123456789012345678
-		Log.d(TAG, "class       : " + clazz.getName());
+	public static List<String> getClassType(Class clazz) {
+		List<String> superClassName = new ArrayList<String>();
 		while (!clazz.getName().equals(Object.class.getName())) {
 			clazz = clazz.getSuperclass();
-
-			//==========123456789012345678
-			Log.d(TAG, "super class : " + clazz.getName());
 			superClassName.add(clazz.getName());
+		}
+		
+		return superClassName;
+	}	
+	
+	public static void dumpClassType(List<String> superClassName) {
+		Log.d(TAG, "class hierarchy: ");
+		for (String c : superClassName){
+			//==========123456789012345678
+			Log.d(TAG, "class : " + c);
 		}
 	}	
 }
