@@ -18,6 +18,7 @@
 		<meta-data android:value="Channel ID" android:name="UMENG_CHANNEL"/>
 		
         <activity
+            android:theme="@android:style/Theme.NoDisplay"
             android:name="org.bbs.apklauncher_zeroinstall_shell.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
