@@ -145,7 +145,7 @@ public class ApkPackageManager extends PackageManager {
 		ClassLoader cl = ApkPackageManager.getClassLoader(targetPackageName);
 		if (null == cl) {
 			String optPath =  getOptDir().getPath();
-			cl = new DexClassLoader(apkPath, optPath, libPath, baseContext.getClassLoader());
+//			cl = new DexClassLoader(apkPath, optPath, libPath, baseContext.getClassLoader());
 			cl = new TargetClassLoader(apkPath, optPath, libPath, baseContext.getClassLoader(), targetPackageName, mContext);
 			ApkPackageManager.putClassLoader(targetPackageName, (cl));
 		}
@@ -270,13 +270,13 @@ public class ApkPackageManager extends PackageManager {
 	}
 	
 	@ExportApi
-	public ApplicationInfoX getApplicationInfo(String className) {
+	public ApplicationInfoX getApplicationInfo(String packageName) {
 		ApplicationInfoX a = null;
 		boolean has = false;
-		for (PackageInfoX m : mInfos) {
-			if (className.equals(m.applicationInfo.name)) {
+		for (PackageInfoX i : mInfos) {
+			if (packageName.equals(i.packageName)) {
 				has = true;
-				a = (ApplicationInfoX) m.applicationInfo;
+				a = (ApplicationInfoX) i.applicationInfo;
 				break;
 			}
 		}
@@ -287,9 +287,9 @@ public class ApkPackageManager extends PackageManager {
 	@ExportApi
 	public PackageInfoX getPackageInfo(String packageName){
 		PackageInfoX p = null;
-		for (PackageInfoX a : mInfos) {
-			if (a.packageName.equals(packageName)){
-				p = a;
+		for (PackageInfoX i : mInfos) {
+			if (i.packageName.equals(packageName)){
+				p = i;
 				break;
 			}
 		}

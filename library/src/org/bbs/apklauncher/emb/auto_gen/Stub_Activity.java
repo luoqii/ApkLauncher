@@ -149,7 +149,7 @@ implements CallBack {
 			Class clazz = mTargetClassLoader.loadClass(targetActivityClassName);
 			mTargetActivity = (Target_Activity) clazz.newInstance();
 			mTargetActivity.setHostActivity(this);
-			LoadedApk.dumpClassType(LoadedApk.getClassType(clazz));
+			//LoadedApk.dumpClassType(LoadedApk.getClassType(clazz));
 			ReflectUtil.ActivityReflectUtil.attachBaseContext(mTargetActivity, this);
 		} catch (Exception e) {
 			throw new RuntimeException("error in create activity: " + targetActivityClassName , e);

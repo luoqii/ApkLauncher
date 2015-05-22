@@ -1,6 +1,8 @@
 package org.bbs.apklauncher;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.bbs.apkparser.PackageInfoX;
 import org.bbs.apkparser.PackageInfoX.ApplicationInfoX;
@@ -48,7 +50,8 @@ public class PackageManagerProxy extends PackageManager {
 		Log.d(TAG, "getPackageInfo(). packageName: " + packageName + " flags: " + flags);
 		ApkPackageManager pm = ApkPackageManager.getInstance();
 		if (pm.hasApplicationInfo(packageName)
-				&& (flags | PackageManager.GET_META_DATA) != 0) {
+//				&& (flags | PackageManager.GET_META_DATA) != 0
+				) {
 			  PackageInfoX aInfo = pm.getPackageInfo(packageName);
 
 			Log.d(TAG, "use pased PackageInfoX: " + aInfo);
@@ -113,7 +116,8 @@ public class PackageManagerProxy extends PackageManager {
 		Log.d(TAG, "getApplicationInfo(). packageName: " + packageName + " flags: " + flags);
 		ApkPackageManager pm = ApkPackageManager.getInstance();
 		if (pm.hasApplicationInfo(packageName)
-				&& (flags | PackageManager.GET_META_DATA) != 0) {
+//				&& (flags | PackageManager.GET_META_DATA) != 0
+				) {
 			ApplicationInfoX aInfo = pm.getApplicationInfo(packageName);
 
 			Log.d(TAG, "use pased ApplicationInfoX: " + aInfo);
@@ -504,5 +508,32 @@ public class PackageManagerProxy extends PackageManager {
 	public PackageInstaller getPackageInstaller() {
 		return mProxy.getPackageInstaller();
 	}
+	
+	public static String flag2Str(int flag){
+		String str = "";
+		
+		return str;
+	}
+	
+	public static Map<Integer, String> sFlagMap = new HashMap<Integer, String>();
+	static {
+		sFlagMap.put(GET_ACTIVITIES, "GET_ACTIVITIES");
+		sFlagMap.put(GET_CONFIGURATIONS, "GET_CONFIGURATIONS");
+		sFlagMap.put(GET_DISABLED_COMPONENTS, "GET_DISABLED_COMPONENTS");
+		sFlagMap.put(GET_DISABLED_UNTIL_USED_COMPONENTS, "GET_DISABLED_UNTIL_USED_COMPONENTS");
+		sFlagMap.put(GET_INSTRUMENTATION, "GET_INSTRUMENTATION");
+		sFlagMap.put(GET_INTENT_FILTERS, "GET_INTENT_FILTERS");
+		sFlagMap.put(GET_META_DATA, "GET_META_DATA");
+		sFlagMap.put(GET_PERMISSIONS, "GET_PERMISSIONS");
+		sFlagMap.put(GET_PROVIDERS, "GET_PROVIDERS");
+		sFlagMap.put(GET_RECEIVERS, "GET_RECEIVERS");
+		sFlagMap.put(GET_RESOLVED_FILTER, "GET_RESOLVED_FILTER");
+		sFlagMap.put(GET_SERVICES, "GET_SERVICES");
+		sFlagMap.put(GET_SHARED_LIBRARY_FILES, "GET_SHARED_LIBRARY_FILES");
+		sFlagMap.put(GET_SIGNATURES, "GET_SIGNATURES");
+		sFlagMap.put(GET_UNINSTALLED_PACKAGES, "GET_UNINSTALLED_PACKAGES");
+		sFlagMap.put(GET_URI_PERMISSION_PATTERNS, "GET_URI_PERMISSION_PATTERNS");
+	}
+	
 	
 }
