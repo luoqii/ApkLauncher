@@ -11,6 +11,7 @@ import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,7 @@ import org.bbs.apkparser.PackageInfoX;
 import org.bbs.apkparser.PackageInfoX.ActivityInfoX;
 import org.bbs.apkparser.PackageInfoX.ApplicationInfoX;
 import org.bbs.apkparser.PackageInfoX.ServiceInfoX;
+import org.bbs.apkparser.PackageInfoX.UsesPermissionX;
 
 import android.app.Application;
 import android.content.ComponentName;
@@ -70,6 +72,8 @@ public class ApkPackageManager extends PackageManager {
 	private SerializableUtil mSerUtil;
 
 	private UpdateUtil mUpdateU;
+
+	private PackageInfoX mHostPkgInfo;
 	
 	private ApkPackageManager() {}
 		
@@ -145,8 +149,8 @@ public class ApkPackageManager extends PackageManager {
 		ClassLoader cl = ApkPackageManager.getClassLoader(targetPackageName);
 		if (null == cl) {
 			String optPath =  getOptDir().getPath();
-//			cl = new DexClassLoader(apkPath, optPath, libPath, baseContext.getClassLoader());
-			cl = new TargetClassLoader(apkPath, optPath, libPath, baseContext.getClassLoader(), targetPackageName, mContext);
+			cl = new DexClassLoader(apkPath, optPath, libPath, baseContext.getClassLoader());
+//			cl = new TargetClassLoader(apkPath, optPath, libPath, baseContext.getClassLoader(), targetPackageName, mContext);
 			ApkPackageManager.putClassLoader(targetPackageName, (cl));
 		}
 	
@@ -246,6 +250,7 @@ public class ApkPackageManager extends PackageManager {
 				}
 				//==========123456789012345678
 				Log.d(TAG, "apk info  : " + appInfoStr(info));
+				checkPermission(info);
 				
 				File destLibDir = new File(getPluginDir(), info.packageName + "/lib");
 				
@@ -269,6 +274,67 @@ public class ApkPackageManager extends PackageManager {
 		}
 	}
 	
+	private void checkPermission(PackageInfoX info) {
+		PackageInfoX host = getHostPacageInfoX();
+		List<UsesPermissionX> hostL = toList(host.mUsedPermissions);
+		List<UsesPermissionX> targetL =toList(info.mUsedPermissions);
+		List<UsesPermissionX> l = substract(hostL, targetL);
+		if (l.size() > 0) {
+			//----------1234567890123456789
+			Log.w(TAG, "unused permission:");
+			for (UsesPermissionX p : l){
+				Log.w(TAG, "++" + p.mName);
+			}
+		}
+		l = substract(targetL, hostL);
+		if (l.size() > 0) {
+			//----------1234567890123456789
+			Log.w(TAG, "need   permission:");
+			for (UsesPermissionX p : l){
+				Log.w(TAG, "--" + p.mName);
+			}
+		}
+		
+		// TODO permissionGroup ... 
+	}
+	
+	List<UsesPermissionX> toList(UsesPermissionX[] ps) {
+		List<UsesPermissionX> list = new ArrayList<>();
+		if (ps != null){
+			for (UsesPermissionX p : ps) {
+				list.add(p);
+			}
+		}
+		return list;
+	}
+	
+	
+	List<UsesPermissionX> substract(List<UsesPermissionX> left, List<UsesPermissionX> right){
+		List<UsesPermissionX> list = new ArrayList<>();
+		for (int i = 0; i < left.size() ; i++) {
+			boolean found = false;
+			for (int j = 0; j < right.size() ; j++) {
+				if (left.get(i).mName.equals(right.get(j).mName)){
+					found = true;
+					break;
+				}
+			}
+			
+			if (!found) {
+				list.add(left.get(i));
+			}
+		}
+			
+		return list;
+	}
+	
+	PackageInfoX getHostPacageInfoX(){;
+		if (mHostPkgInfo == null ) {
+			mHostPkgInfo = ApkManifestParser.parseAPk(mContext, mContext.getApplicationInfo().publicSourceDir);
+		}
+		return mHostPkgInfo;
+	}
+
 	@ExportApi
 	public ApplicationInfoX getApplicationInfo(String packageName) {
 		ApplicationInfoX a = null;
@@ -900,6 +966,10 @@ public class ApkPackageManager extends PackageManager {
 		return null;
 	}
 	
+	static String appInfoStr(PackageInfoX info) {
+		return info.packageName + "|" + info.versionCode + "|" + info.versionName;
+	}
+
 	static class InstallApks extends ArrayList<PackageInfoX> implements Serializable {
 		public void addOrUpdate(PackageInfoX info){
 			int index = -1;
@@ -912,15 +982,12 @@ public class ApkPackageManager extends PackageManager {
 			}
 			if (index >= 0) {
 				PackageInfoX old = remove(index);
-				Log.d(TAG, "old app: "  + appInfoStr(old) );
-				Log.d(TAG, "new app: "  + appInfoStr(info) );
+				Log.d(TAG, "app updated:");
+				Log.d(TAG, "old app    : "  + appInfoStr(old) );
+				Log.d(TAG, "new app    : "  + appInfoStr(info) );
 			}
 			add(info);
 		}
-	}
-	
-	static String appInfoStr(PackageInfoX info) {
-		return info.packageName + "|" + info.versionCode + "|" + info.versionName;
 	}
 	
 	static class SerializableUtil {

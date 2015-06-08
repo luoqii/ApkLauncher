@@ -78,6 +78,16 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="org.bbs.apklauncher.emb.auto_gen.Stub_PreferenceActivity"
+            android:label="StubActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <!-- v4 -->
+        <activity
             android:name="org.bbs.apklauncher.emb.auto_gen.Stub_FragmentActivity"
             android:label="StubActivity" >
             <intent-filter>
@@ -86,8 +96,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <!-- v7 -->
         <activity
-            android:name="org.bbs.apklauncher.emb.auto_gen.Stub_PreferenceActivity"
+            android:name="org.bbs.apklauncher.emb.auto_gen.Stub_ActionBarActivity"
             android:label="StubActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -126,11 +126,11 @@ public class LoadedApk {
 				e.printStackTrace();
 			}
 		}
-		
+
+		dumpClassType(superClassNames);
 		if (!TextUtils.isEmpty(cName)) {
 			sActivitySuperClassNameMap.put(activityClassName, cName);
 		} else {
-			dumpClassType(superClassNames);
 			throw new RuntimeException("no usefull super class for activity: " + activityClassName);
 		}
 		//==========123456789012345678
@@ -149,8 +149,12 @@ public class LoadedApk {
 			try {
 				Class<?> clazz = classloader.loadClass(serviceClassName);
 				superClassNames = getClassType(clazz);
-				if (superClassNames.contains(JobService.class.getName())
-						|| superClassNames.contains(DreamService.class.getName())
+				if (
+//						superClassNames.contains(JobService.class.getName())
+						superClassNames.contains("android.app.job.JobService")						
+//						|| superClassNames.contains(DreamService.class.getName())				
+						|| superClassNames.contains("android.service.dreams.DreamService")
+//						|| superClassNames.contains(InputMethodService.class.getName())
 						|| superClassNames.contains(InputMethodService.class.getName())
 						
 						) {

@@ -12,6 +12,8 @@ public class LauncherActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		startLauncherActivity();
 	}
 	
 	@Override
@@ -19,6 +21,10 @@ public class LauncherActivity extends Activity {
 		// TODO Auto-generated method stub
 		super.onPostCreate(savedInstanceState);
 		
+//		startLauncherActivity();
+	}
+
+	private void startLauncherActivity() {
 		PackageInfoX.ActivityInfoX a = ApkPackageManager.getInstance().getActivityInfo(getTargetActivityClassName());
 		ApkUtil.startActivity(this, a);
 		finish();

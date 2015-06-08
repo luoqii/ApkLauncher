@@ -56,7 +56,7 @@ Application
 					appBaseContext.packageManagerReady(new PackageManagerProxy(pm));
 					appBaseContext.packageNameReady(appInfo.packageName);
 
-					Class clazz = classLoader.loadClass(appClassName);
+					Class<?> clazz = classLoader.loadClass(appClassName);
 
 					app = (Application) clazz.newInstance();
 					appBaseContext.applicationContextReady(app);

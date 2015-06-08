@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import org.bbs.android.commonlib.ExceptionCatcher;
+import org.bbs.android.commonlib.Version;
 import org.bbs.apklauncher.AndroidUtil;
 import org.bbs.apklauncher.ApkPackageManager;
 import org.bbs.apklauncher.emb.Host_Application;
@@ -22,16 +23,16 @@ public class App extends Host_Application {
 		super.onCreate();
 		
 		ExceptionCatcher.attachExceptionHandler(this);
+		Version version = Version.getInstance();
+		version.init(this);
 		
 		ApkPackageManager am = ApkPackageManager.getInstance();
 		am.init(this);
-		ApkPackageManager.UpdateUtil update = new ApkPackageManager.UpdateUtil("version_id");
-		if (update.isAppUpdate(this) || update.isFirstUsage(this)) {
+		if (version.appUpdated() || version.firstUsage() || BuildConfig.DEBUG) {
 			doScanApk(am);
 		} else {
 			reScanApkIfNecessary(am);
 		}
-		update.updateVersion(this);
 	}
 
 	private void reScanApkIfNecessary(ApkPackageManager am) {
