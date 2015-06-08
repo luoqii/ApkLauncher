@@ -59,6 +59,9 @@ Application
 					Class<?> clazz = classLoader.loadClass(appClassName);
 
 					app = (Application) clazz.newInstance();
+					if (!(app instanceof Target_Application)) {
+						throw new RuntimeException("youe application must extends " + Target_Application.class.getName());
+					}
 					appBaseContext.applicationContextReady(app);
 
 					attachBundleAplication(app, appBaseContext);
