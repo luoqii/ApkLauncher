@@ -1,6 +1,8 @@
 package org.bbs.apklauncher.emb;
 
 import org.bbs.apklauncher.ApkPackageManager;
+import org.bbs.apklauncher.ApkUtil;
+import org.bbs.apklauncher.LoadedApk;
 import org.bbs.apklauncher.PackageManagerProxy;
 import org.bbs.apklauncher.ReflectUtil;
 import org.bbs.apklauncher.ResourcesMerger;
@@ -23,13 +25,6 @@ Application
 	Application mTargetAppliction;
 	private PersistentObject mPersistent;
 	
-	public void attachBundleAplication(Application app, Context baseCcontext){
-		ReflectUtil.ActivityReflectUtil.attachBaseContext(app, baseCcontext);
-		mTargetAppliction = app;
-		
-		mTargetAppliction.onCreate();
-	}
-	
 	public /*static*/ Application onPrepareApplictionStub(ApplicationInfo appInfo, 
 			ClassLoader classLoader, PackageManager pm) {
 		String apkPath = appInfo.publicSourceDir;
@@ -40,7 +35,7 @@ Application
 			String appClassName = appInfo.className;
 			if (!TextUtils.isEmpty(appClassName)) {
 				try {
-
+	
 					TargetContext appBaseContext = new TargetContext(this);
 					Resources appRes = ApkPackageManager.makeTargetResource(apkPath, this);
 					appRes = new ResourcesMerger(appRes, getResources());
@@ -52,29 +47,39 @@ Application
 					appTheme = ReflectUtil.ResourceUtil.selectDefaultTheme(appRes, appTheme, appInfo.targetSdkVersion);
 					Log.d(TAG, "resolved application theme: " + appTheme);
 					appBaseContext.themeReady(appTheme);
-
+	
 					appBaseContext.packageManagerReady(new PackageManagerProxy(pm));
 					appBaseContext.packageNameReady(appInfo.packageName);
-
+	
 					Class<?> clazz = classLoader.loadClass(appClassName);
-
+	
 					app = (Application) clazz.newInstance();
+					ApkUtil.dumpClassType((app.getClass()));
 					if (!(app instanceof Target_Application)) {
 						throw new RuntimeException("youe application must extends " + Target_Application.class.getName());
 					}
 					appBaseContext.applicationContextReady(app);
-
+	
 					attachBundleAplication(app, appBaseContext);
-
+	
 					ApkPackageManager.putApplication(appInfo.packageName, app);
 				} catch (Exception e) {
 					e.printStackTrace();
 					throw new RuntimeException("error in create application: " + appClassName , e);
 				}
+			} else {
+				throw new RuntimeException("invalid appClassName: " + appClassName);
 			}
 		}
 		
 		return app;
+	}
+
+	public void attachBundleAplication(Application app, Context baseCcontext){
+		ReflectUtil.ActivityReflectUtil.attachBaseContext(app, baseCcontext);
+		mTargetAppliction = app;
+		
+		mTargetAppliction.onCreate();
 	}
 	
 	@Override

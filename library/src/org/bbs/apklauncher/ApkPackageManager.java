@@ -11,11 +11,11 @@ import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.zip.ZipFile;
 
 import org.bbs.apklauncher.api.ExportApi;
@@ -23,42 +23,34 @@ import org.bbs.apkparser.ApkManifestParser;
 import org.bbs.apkparser.PackageInfoX;
 import org.bbs.apkparser.PackageInfoX.ActivityInfoX;
 import org.bbs.apkparser.PackageInfoX.ApplicationInfoX;
+import org.bbs.apkparser.PackageInfoX.IntentFilterX;
 import org.bbs.apkparser.PackageInfoX.ServiceInfoX;
 import org.bbs.apkparser.PackageInfoX.UsesPermissionX;
 
 import android.app.Application;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.FeatureInfo;
-import android.content.pm.InstrumentationInfo;
 import android.content.pm.PackageInfo;
-import android.content.pm.PackageInstaller;
-import android.content.pm.PackageManager;
-import android.content.pm.PermissionGroupInfo;
-import android.content.pm.PermissionInfo;
-import android.content.pm.ProviderInfo;
 import android.content.pm.ResolveInfo;
-import android.content.pm.ServiceInfo;
+import android.content.res.AssetManager;
 import android.content.res.Resources;
-import android.content.res.XmlResourceParser;
-import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
-import android.os.UserHandle;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 import dalvik.system.DexClassLoader;
 
-public class ApkPackageManager extends PackageManager {
-	private static final String PLUGIN_DIR_NAME = "plugin";
-
-	private static final String APK_FILE_SUFFIX = ".apk";
-
+public class ApkPackageManager extends BasePackageManager {
 	private static final String TAG = ApkPackageManager.class.getSimpleName();
+	
+	private static /*final*/ String PLUGIN_DIR_NAME = "plugin_data";
+	private static final String APK_FILE_SUFFIX = ".apk";
+    private static final String PREF_EXTRACT_APK = "extract_apk";
+    private static final String PERF_KEY_APK_HAS_SCANNED = "apk_has_scanned";
+    
+    private static final boolean DEBUG = ApkLauncherConfig.DEBUG && true;
 
 	private static ApkPackageManager sInstance;
 	
@@ -70,12 +62,17 @@ public class ApkPackageManager extends PackageManager {
 	private Application mContext;
 
 	private SerializableUtil mSerUtil;
-
-	private UpdateUtil mUpdateU;
-
-	private PackageInfoX mHostPkgInfo;
+	private PackageInfoX mHostPkgInfo;	
+	private ClassLoaderFactory mClassLoaderFactory;
+	private AtomicBoolean mInited;
 	
-	private ApkPackageManager() {}
+	public static void setPluginDataDir(String name){
+		PLUGIN_DIR_NAME = name;
+	}
+	
+	private ApkPackageManager() {
+		mInited = new AtomicBoolean();
+	}
 		
 	/**
 	 * @return
@@ -91,42 +88,64 @@ public class ApkPackageManager extends PackageManager {
 		
 		return sInstance;
 	}
+	
+	public void setClassLoaderFactory(ClassLoaderFactory f) {
+		mClassLoaderFactory = f;
+	}
 
 	/**
-		 * @param context
-		 * @param apkDir where apk file located.
-		 * 
-		 */	
-		@ExportApi
-		public void init(Application context){
+	 * @param context
+	 * @param apkDir where apk file located.
+	 * 
+	 */	
+	void init(Application context, String assetsPath, boolean force){
+		synchronized (mInited) {
+			if (mInited.get()) {
+				Log.w(TAG, "has inited, ignore.");
+				return;
+			}
 			mContext = context;
 			mInfos = new InstallApks();
 			mSerUtil = new SerializableUtil(context);
-			
-			mUpdateU = new UpdateUtil(UpdateUtil.PREF_KEY_VERSION_ID);
-			if (mUpdateU.isAppUpdate(context) || mUpdateU.isFirstUsage(context)) {
-				// re-build install apk info.
-				scanApkDir(getAppDir(), false);
-				
-	//			mSerUtil.put(mInfos);
+
+			// XXX replace will failed for first time. ???
+			if (!hasUpdateApp()) {
+				Version version = Version.getInstance((Application) mContext.getApplicationContext());
+				if (version.appUpdated() || version.firstUsage()) {
+					// re-build install apk info.
+					scanApkDir(getApkDir(), false);
+
+					//			mSerUtil.put(mInfos);
+				} else {
+					scanApkDir(getApkDir(), false);
+					//			mInfos = mSerUtil.get();
+				}
 			} else {
-				scanApkDir(getAppDir(), false);
-	//			mInfos = mSerUtil.get();
+				Log.i(TAG, "has update app, ignore old app.");
 			}
-			
-			if (mUpdateU.isAppUpdate(context)){
-				mUpdateU.updateVersion(context);
-			}
-			
+
 			File autoUpdateDir = getAutoUpdatePluginDir();
 			scanApkDir(autoUpdateDir, true);
-			String[] files = autoUpdateDir.list();
-			if (files != null){
-				for (String fname: files){
-					new File(autoUpdateDir, fname).delete();
-				}
-			}
+			deleteFile(autoUpdateDir);
+
+			scanAssetDir(assetsPath, force);
+
+			mInited.set(true);
+
 		}
+	}
+	
+	public boolean inInited(){
+		return mInited.get();
+	}
+	
+	boolean hasUpdateApp(){
+		boolean has = false;
+		String[] files = getAutoUpdatePluginDir().list();
+		has = files != null && files.length > 0;
+		
+		return has;
+	}
 
 	public static ResourcesMerger makeTargetResource(String mTargetApkPath,
 			Context context) {
@@ -137,7 +156,7 @@ public class ApkPackageManager extends PackageManager {
 			resMerger = rr.get();
 			targetRes = resMerger.mFirst;
 		} else {
-			targetRes = LoadedApk.loadApkResource(mTargetApkPath, context);
+			targetRes = ApkUtil.loadApkResource(mTargetApkPath, context);
 			resMerger = new ResourcesMerger(targetRes, context.getResources());
 			ApkPackageManager.sApk2ResourceMap.put(mTargetApkPath, new WeakReference<ResourcesMerger>(resMerger));
 		}
@@ -146,11 +165,19 @@ public class ApkPackageManager extends PackageManager {
 	}
 
 	public ClassLoader createClassLoader(Context baseContext, String apkPath, String libPath, String targetPackageName) {
+		return createClassLoader(baseContext, apkPath, libPath, targetPackageName, false);
+	}
+
+	public ClassLoader createClassLoader(Context baseContext, String apkPath, String libPath, String targetPackageName, boolean force) {
 		ClassLoader cl = ApkPackageManager.getClassLoader(targetPackageName);
-		if (null == cl) {
-			String optPath =  getOptDir().getPath();
-			cl = new DexClassLoader(apkPath, optPath, libPath, baseContext.getClassLoader());
-//			cl = new TargetClassLoader(apkPath, optPath, libPath, baseContext.getClassLoader(), targetPackageName, mContext);
+		if (null == cl || force) {
+			if (mClassLoaderFactory != null) {
+				cl = mClassLoaderFactory.createClassLoader(this, baseContext, apkPath, libPath, targetPackageName);
+			} else {
+				String optPath =  getOptDir().getPath();
+				cl = new DexClassLoader(apkPath, optPath, libPath, baseContext.getClassLoader());
+//				cl = new TargetClassLoader(apkPath, optPath, libPath, baseContext.getClassLoader(), targetPackageName, baseContext);
+			}
 			ApkPackageManager.putClassLoader(targetPackageName, (cl));
 		}
 	
@@ -197,7 +224,7 @@ public class ApkPackageManager extends PackageManager {
 	}	
 	
 	@ExportApi
-	public File getAppDir() {
+	public File getApkDir() {
 		File dir = new File(getPluginDir(), "app");
 		dir.mkdirs();
 		
@@ -206,25 +233,90 @@ public class ApkPackageManager extends PackageManager {
 	
 	@ExportApi
 	public File getOptDir() {
-		File dir = new File(getPluginDir(), "opt");
+		File dir = new File(getPluginDir(), "dalvik-cache");
 		dir.mkdirs();
 		
 		return dir;
 	}
 	
+	public File getAppDataDir(String packageName){
+		File dir = new File(getPluginDir() + "/data", packageName);
+		dir.mkdirs();
+		
+		return dir;
+	}
+	
+	public void scanAssetDir(String assetsPath, boolean force){
+        Version version = Version.getInstance((Application) mContext.getApplicationContext());
+        if (version.appUpdated() || version.firstUsage()||force
+        		) {
+            doScanApk(assetsPath);
+        } else {
+        	reScanApkIfNecessary(assetsPath);
+        }
+	}
+
+	private void doScanApk(String assetsPath) {
+		File tempApkDir = mContext.getDir("temp_apk", 0);
+		extractApkFromAsset(assetsPath, tempApkDir.getPath());
+		scanApkDir(tempApkDir);
+		deleteFile(tempApkDir);
+		
+		SharedPreferences s = mContext.getSharedPreferences(PREF_EXTRACT_APK, 0);
+		s.edit().putBoolean(PERF_KEY_APK_HAS_SCANNED, true).commit();		
+	}
+	
+    private void extractApkFromAsset(String srcDir, String destDir) {
+    	long time = System.currentTimeMillis();
+        AssetManager am = mContext.getResources().getAssets();
+        try {
+            String[] files = am.list(srcDir);
+            if (null == files || files.length == 0){
+        		//==========123456789012345678
+            	Log.w(TAG, "empty assets dir:" + srcDir);
+            	return;
+            }
+			for (String fp : files) {
+                AndroidUtil.copyStream(am.open(srcDir + "/" + fp), 
+                		new FileOutputStream(new File(destDir, fp)));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+		time = System.currentTimeMillis() - time;
+		Log.i(TAG, "elapse time[extractApkFromAsset]: " + ((float)time / 1000));
+    }
+	
+	private void reScanApkIfNecessary(String assetsPath) {
+        SharedPreferences s = mContext.getSharedPreferences(PREF_EXTRACT_APK, 0);
+        boolean scanned = s.getBoolean(PERF_KEY_APK_HAS_SCANNED, false);
+        if (!scanned) {
+            doScanApk(assetsPath);
+        } else {
+        	Log.i(TAG, "assets path has scanned before, ignore. path: " + assetsPath);
+        }
+	}
+
 	@ExportApi
 	public void scanApkDir(File apkDir) {
 		scanApkDir(apkDir, true);
 	}
 	
 	private void scanApkDir(File apkDir, boolean copyFile) {
-		//==========123456789012345678
-		Log.d(TAG, "parse  dir: " + apkDir);
+		if (DEBUG){
+			//==========123456789012345678
+			Log.d(TAG, "parse  dir : " + apkDir);
+		}
 		if (null == apkDir || !apkDir.exists()) {
+			//==========123456789012345678
+			Log.w(TAG, "invalid dir: " + apkDir);
 			return ;
 		}
 		String[] files = apkDir.list();
 		if (null == files) {
+			//==========123456789012345678
+			Log.w(TAG, "empyt dir  : " + apkDir);
 			return;
 		}
 		
@@ -237,31 +329,49 @@ public class ApkPackageManager extends PackageManager {
 	}
 
 	private void parseApkFile(File file, boolean copyFile) {
-		//==========123456789012345678
-		Log.d(TAG, "parse file: " + file);
+		long time = System.currentTimeMillis();
+		if (DEBUG){
+			//==========123456789012345678
+			Log.d(TAG, "parse file : " + file + " copyFile: " + copyFile);
+		}
 		if (file.exists() && file.getAbsolutePath().endsWith(APK_FILE_SUFFIX)){
 			PackageInfoX info = ApkManifestParser.parseAPk(mContext, file.getAbsolutePath());			
 			try {
 				File dest = file;
 				if (copyFile) {
-					dest = new File(getAppDir(), info.packageName + APK_FILE_SUFFIX);
+					dest = new File(getApkDir(), info.packageName + APK_FILE_SUFFIX);
+					deleteFile(dest);
 					AndroidUtil.copyFile(file, dest);
 					info = ApkManifestParser.parseAPk(mContext, dest.getAbsolutePath());
 				}
 				//==========123456789012345678
-				Log.d(TAG, "apk info  : " + appInfoStr(info));
-				checkPermission(info);
+				Log.i(TAG, "apk info   : " + appInfoStr(info));
+				compareInfo(getHostPacageInfoX(), info);
 				
-				File destLibDir = new File(getPluginDir(), info.packageName + "/lib");
+				File destLibDir = new File(getAppDataDir(info.packageName), "/lib");
 				
-				//TODO native lib
-				AndroidUtil.extractZipEntry(new ZipFile(info.applicationInfo.publicSourceDir), "lib/armeabi", destLibDir);
-				AndroidUtil.extractZipEntry(new ZipFile(info.applicationInfo.publicSourceDir), "lib/armeabi-v7a", destLibDir);
+				if (copyFile) {
+					//TODO native lib
+					deleteFile(destLibDir);
+					
+//					String[] abis = Build.SUPPORTED_ABIS;
+//					final int L = abis.length;
+//					for (int i = L - 1 ; i >= 0; i--){
+//						AndroidUtil.extractZipEntry(new ZipFile(info.applicationInfo.publicSourceDir), "lib/"+ abis[i], destLibDir);
+//					}
+					
+					AndroidUtil.extractZipEntry(new ZipFile(info.applicationInfo.publicSourceDir), "lib/armeabi", destLibDir);
+//					AndroidUtil.extractZipEntry(new ZipFile(info.applicationInfo.publicSourceDir), "lib/armeabi-v7a", destLibDir);
+				}
 				
 				info.mLibPath = destLibDir.getPath();
 				
 				// asume there is only one apk.
-				ClassLoader cl = createClassLoader(mContext, info.applicationInfo.sourceDir, info.mLibPath, info.applicationInfo.packageName);
+				ClassLoader cl = createClassLoader(mContext, 
+						info.applicationInfo.sourceDir, 
+						info.mLibPath, 
+						info.applicationInfo.packageName,
+						true);
 				
 				mInfos.addOrUpdate(info);
 			} catch (IOException e) {
@@ -270,11 +380,43 @@ public class ApkPackageManager extends PackageManager {
 			}
 		} else {
 			//==========123456789012345678
-			Log.i(TAG, "ignre file: " + file);
+			Log.i(TAG, "ignre file : " + file);
 		}
+		
+		time = System.currentTimeMillis() - time;
+		Log.i(TAG, "elapse time[parseApkFile]: " + ((float)time / 1000));
 	}
 	
-	private void checkPermission(PackageInfoX info) {
+
+	private void compareInfo(PackageInfoX hostPacageInfoX, PackageInfoX info) {
+		checkPermission(hostPacageInfoX, info);
+	}
+
+	private boolean deleteFile(File file) {
+		//==========123456789012345678
+		boolean isD = file.isDirectory();
+		Log.d(TAG, "delete file: " + file + (isD ? "[D]" : ""));
+		
+		boolean ret = deleteFile_intenal(file);
+		
+		return ret;
+	}
+	
+	private boolean deleteFile_intenal(File file) {
+		if (file.isDirectory()) {
+			String[] children = file.list();
+			for (int i = 0; i < children.length; i++) {
+				boolean success = deleteFile_intenal(new File(file, children[i]));
+				if (!success) {
+					return false;
+				}
+			}
+		}
+		// The directory is now empty so now it can be smoked
+		return file.delete();
+	}
+	
+	private void checkPermission(PackageInfoX hostPacageInfoX, PackageInfoX info) {
 		PackageInfoX host = getHostPacageInfoX();
 		List<UsesPermissionX> hostL = toList(host.mUsedPermissions);
 		List<UsesPermissionX> targetL =toList(info.mUsedPermissions);
@@ -397,6 +539,39 @@ public class ApkPackageManager extends PackageManager {
 		return null;
 	}	
 	
+	public List<ActivityInfoX> getLauncherActivityInfo(){
+		List<ActivityInfoX> result = new ArrayList<>();
+		for (PackageInfoX m : mInfos) {
+			if (m.activities != null) {
+				for (ActivityInfo a : m.activities) {
+					ActivityInfoX aX = (ActivityInfoX) a;
+					IntentFilterX[] filters = aX.mIntentFilters;
+					if (filters != null && filters.length > 0){
+						for (IntentFilterX f : filters) {
+							if (f.hasCategory(Intent.CATEGORY_LAUNCHER)) {
+								result.add(aX);
+								break;
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		return result;
+	}
+	
+	public List<ActivityInfoX> getLauncherActivityInfo(String packageName){
+		List<ActivityInfoX> result = new ArrayList<>();
+		List<ActivityInfoX> launchers = getLauncherActivityInfo();
+		for (ActivityInfoX i : launchers){
+			if (i.packageName.equals(packageName)){
+				result.add(i);
+			}
+		}
+		return result;
+	}
+	
 	@ExportApi
 	public ServiceInfoX getServiceInfo(String className) {
 		for (PackageInfoX m : mInfos) {
@@ -455,519 +630,13 @@ public class ApkPackageManager extends PackageManager {
 		}
 	}
 
-	void notSupported() {
-		throw new RuntimeException("not supported. you can impl it instead.");
-	}
-
-	@Override
-	public PackageInfo getPackageInfo(String packageName, int flags)
-			throws NameNotFoundException {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public String[] currentToCanonicalPackageNames(String[] names) {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public String[] canonicalToCurrentPackageNames(String[] names) {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public Intent getLaunchIntentForPackage(String packageName) {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public Intent getLeanbackLaunchIntentForPackage(String packageName) {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public int[] getPackageGids(String packageName)
-			throws NameNotFoundException {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public PermissionInfo getPermissionInfo(String name, int flags)
-			throws NameNotFoundException {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public List<PermissionInfo> queryPermissionsByGroup(String group, int flags)
-			throws NameNotFoundException {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public PermissionGroupInfo getPermissionGroupInfo(String name, int flags)
-			throws NameNotFoundException {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public List<PermissionGroupInfo> getAllPermissionGroups(int flags) {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public ApplicationInfo getApplicationInfo(String packageName, int flags)
-			throws NameNotFoundException {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public ActivityInfo getActivityInfo(ComponentName component, int flags)
-			throws NameNotFoundException {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public ActivityInfo getReceiverInfo(ComponentName component, int flags)
-			throws NameNotFoundException {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public ServiceInfo getServiceInfo(ComponentName component, int flags)
-			throws NameNotFoundException {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public ProviderInfo getProviderInfo(ComponentName component, int flags)
-			throws NameNotFoundException {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public List<PackageInfo> getInstalledPackages(int flags) {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public List<PackageInfo> getPackagesHoldingPermissions(
-			String[] permissions, int flags) {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public int checkPermission(String permName, String pkgName) {
-		notSupported();
-		return 0;
-	}
-
-	@Override
-	public boolean addPermission(PermissionInfo info) {
-		notSupported();
-		return false;
-	}
-
-	@Override
-	public boolean addPermissionAsync(PermissionInfo info) {
-		notSupported();
-		return false;
-	}
-
-	@Override
-	public void removePermission(String name) {
-		notSupported();
-		
-	}
-
-	@Override
-	public int checkSignatures(String pkg1, String pkg2) {
-		notSupported();
-		return 0;
-	}
-
-	@Override
-	public int checkSignatures(int uid1, int uid2) {
-		notSupported();
-		return 0;
-	}
-
-	@Override
-	public String[] getPackagesForUid(int uid) {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public String getNameForUid(int uid) {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public List<ApplicationInfo> getInstalledApplications(int flags) {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public String[] getSystemSharedLibraryNames() {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public FeatureInfo[] getSystemAvailableFeatures() {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public boolean hasSystemFeature(String name) {
-		notSupported();
-		return false;
-	}
-
-	@Override
-	public ResolveInfo resolveActivity(Intent intent, int flags) {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public List<ResolveInfo> queryIntentActivityOptions(ComponentName caller,
-			Intent[] specifics, Intent intent, int flags) {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public List<ResolveInfo> queryBroadcastReceivers(Intent intent, int flags) {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public ResolveInfo resolveService(Intent intent, int flags) {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public List<ResolveInfo> queryIntentServices(Intent intent, int flags) {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public List<ResolveInfo> queryIntentContentProviders(Intent intent,
-			int flags) {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public ProviderInfo resolveContentProvider(String name, int flags) {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public List<ProviderInfo> queryContentProviders(String processName,
-			int uid, int flags) {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public InstrumentationInfo getInstrumentationInfo(ComponentName className,
-			int flags) throws NameNotFoundException {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public List<InstrumentationInfo> queryInstrumentation(String targetPackage,
-			int flags) {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public Drawable getDrawable(String packageName, int resid,
-			ApplicationInfo appInfo) {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public Drawable getActivityIcon(ComponentName activityName)
-			throws NameNotFoundException {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public Drawable getActivityIcon(Intent intent) throws NameNotFoundException {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public Drawable getActivityBanner(ComponentName activityName)
-			throws NameNotFoundException {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public Drawable getActivityBanner(Intent intent)
-			throws NameNotFoundException {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public Drawable getDefaultActivityIcon() {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public Drawable getApplicationIcon(ApplicationInfo info) {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public Drawable getApplicationIcon(String packageName)
-			throws NameNotFoundException {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public Drawable getApplicationBanner(ApplicationInfo info) {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public Drawable getApplicationBanner(String packageName)
-			throws NameNotFoundException {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public Drawable getActivityLogo(ComponentName activityName)
-			throws NameNotFoundException {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public Drawable getActivityLogo(Intent intent) throws NameNotFoundException {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public Drawable getApplicationLogo(ApplicationInfo info) {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public Drawable getApplicationLogo(String packageName)
-			throws NameNotFoundException {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public Drawable getUserBadgedIcon(Drawable icon, UserHandle user) {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public Drawable getUserBadgedDrawableForDensity(Drawable drawable,
-			UserHandle user, Rect badgeLocation, int badgeDensity) {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public CharSequence getUserBadgedLabel(CharSequence label, UserHandle user) {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public CharSequence getText(String packageName, int resid,
-			ApplicationInfo appInfo) {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public XmlResourceParser getXml(String packageName, int resid,
-			ApplicationInfo appInfo) {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public CharSequence getApplicationLabel(ApplicationInfo info) {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public Resources getResourcesForActivity(ComponentName activityName)
-			throws NameNotFoundException {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public Resources getResourcesForApplication(ApplicationInfo app)
-			throws NameNotFoundException {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public Resources getResourcesForApplication(String appPackageName)
-			throws NameNotFoundException {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	public void verifyPendingInstall(int id, int verificationCode) {
-		notSupported();
-		
-	}
-
-	@Override
-	public void extendVerificationTimeout(int id,
-			int verificationCodeAtTimeout, long millisecondsToDelay) {
-		notSupported();
-		
-	}
-
-	@Override
-	public void setInstallerPackageName(String targetPackage,
-			String installerPackageName) {
-		notSupported();
-		
-	}
-
-	@Override
-	public String getInstallerPackageName(String packageName) {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	@Deprecated
-	public void addPackageToPreferred(String packageName) {
-		notSupported();
-		
-	}
-
-	@Override
-	@Deprecated
-	public void removePackageFromPreferred(String packageName) {
-		notSupported();
-		
-	}
-
-	@Override
-	public List<PackageInfo> getPreferredPackages(int flags) {
-		notSupported();
-		return null;
-	}
-
-	@Override
-	@Deprecated
-	public void addPreferredActivity(IntentFilter filter, int match,
-			ComponentName[] set, ComponentName activity) {
-		notSupported();
-		
-	}
-
-	@Override
-	public void clearPackagePreferredActivities(String packageName) {
-		notSupported();
-		
-	}
-
-	@Override
-	public int getPreferredActivities(List<IntentFilter> outFilters,
-			List<ComponentName> outActivities, String packageName) {
-		notSupported();
-		return 0;
-	}
-
-	@Override
-	public void setComponentEnabledSetting(ComponentName componentName,
-			int newState, int flags) {
-		notSupported();
-		
-	}
-
-	@Override
-	public int getComponentEnabledSetting(ComponentName componentName) {
-		notSupported();
-		return 0;
-	}
-
-	@Override
-	public void setApplicationEnabledSetting(String packageName, int newState,
-			int flags) {
-		notSupported();
-		
-	}
-
-	@Override
-	public int getApplicationEnabledSetting(String packageName) {
-		notSupported();
-		return 0;
-	}
-
-	@Override
-	public boolean isSafeMode() {
-		notSupported();
-		return false;
-	}
-
-	@Override
-	public PackageInstaller getPackageInstaller() {
-		notSupported();
-		return null;
-	}
-	
 	static String appInfoStr(PackageInfoX info) {
 		return info.packageName + "|" + info.versionCode + "|" + info.versionName;
+	}
+	
+	public interface ClassLoaderFactory {
+		ClassLoader createClassLoader(ApkPackageManager apkPackageManager, Context baseContext, String apkPath,
+				String libPath, String targetPackageName);		
 	}
 
 	static class InstallApks extends ArrayList<PackageInfoX> implements Serializable {
@@ -982,9 +651,10 @@ public class ApkPackageManager extends PackageManager {
 			}
 			if (index >= 0) {
 				PackageInfoX old = remove(index);
-				Log.d(TAG, "app updated:");
-				Log.d(TAG, "old app    : "  + appInfoStr(old) );
-				Log.d(TAG, "new app    : "  + appInfoStr(info) );
+				//==========123456789012345678
+				Log.i(TAG, "app updated:");
+				Log.i(TAG, "old app    : "  + appInfoStr(old) );
+				Log.i(TAG, "new app    : "  + appInfoStr(info) );
 			}
 			add(info);
 		}
@@ -1027,61 +697,95 @@ public class ApkPackageManager extends PackageManager {
 		
 	}
 	
-	public static class UpdateUtil {
-		private static final String PREF_LATEST_VERSION_ID = "latest_version_id";
-		static final String PREF_KEY_VERSION_ID = "apk_internal_version_id";
+	// copied from https://github.com/luoqii/android_common_lib/blob/master/library/src/org/bbs/android/commonlib/Version.java
+	static class Version {
+		private static final int INVALID_CODE = -1;
+		private /*static*/ /*final*/ String PREF_NAME = Version.class.getSimpleName() + ".pref";
+		private static final String KEY_PREVIOUS_V_CODE = "previous_version_code";
+		private static final String KEY_PREVIOUS_V_NAME = "previous_version_name";
+		private static final String TAG = Version.class.getSimpleName();
+		private static Map<Reference<Application>, Version>  sInstances = new HashMap<Reference<Application>, Version>();
 		
-		private String mKey;
+		public static Version getInstance(Application appContext){
+			Version v = null;
+			for (Reference<Application> r : sInstances.keySet()) {
+				if (r != null && r.get() == appContext) {
+					v = sInstances.get(r);
+					if (null != v){
+						return v;
+					}
+				}
+			}
+			if (null == v){
+				v = new Version(appContext);
+				sInstances.put(new WeakReference<Application>(appContext), v);
+			}
+			
+			return v;
+		}
+
+		private int mCurrentVersionCode;
+		private String mCurrentVersionName;
+		private int mPreviousVersionCode;
+		private String mPreviousVersionName;
+		private boolean mInited;
 		
-		public UpdateUtil(String perfVersionIdKey){
-			mKey = perfVersionIdKey;
+		private Version(Application appContext){
+			PREF_NAME = appContext.getPackageName() + "." + PREF_NAME;
+			init(appContext);
+		};
+		
+		void init(Application appContext){
+			if (mInited) {
+				Log.w(TAG, "this has inited already, ignore.");
+				return;
+			}
+			try {
+				PackageInfo pInfo = appContext.getPackageManager().getPackageInfo(appContext.getPackageName(), 0);
+				mCurrentVersionCode = pInfo.versionCode;
+				mCurrentVersionName = pInfo.versionName;
+				
+				SharedPreferences p = appContext.getSharedPreferences(PREF_NAME, 0);
+				mPreviousVersionCode = p.getInt(KEY_PREVIOUS_V_CODE, INVALID_CODE);
+				mPreviousVersionName = p.getString(KEY_PREVIOUS_V_NAME, "");
+
+				Log.i(TAG, "mCurrentVersionCode  : " + mCurrentVersionCode);
+				Log.i(TAG, "mCurrentVersionName  : " + mCurrentVersionName);
+				Log.i(TAG, "mPreviousVersionCode : " + mPreviousVersionCode);
+				Log.i(TAG, "mPreviousVersionName : " + mPreviousVersionName);
+				
+				p.edit()
+					.putInt(KEY_PREVIOUS_V_CODE, mCurrentVersionCode)
+					.putString(KEY_PREVIOUS_V_NAME, mCurrentVersionName)
+					.commit();
+			} catch (NameNotFoundException e) {
+				throw new RuntimeException("can not get packageinfo. ");
+			}
+			mInited = true;
+		}
+			
+		public int getVersionCode(){
+			return mCurrentVersionCode;
 		}
 		
-		public boolean isAppUpdate(Context context) {
-			boolean update = false;
-			
-			try {
-				String version = "" + context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode;
-
-				SharedPreferences sp = context.getSharedPreferences(PREF_LATEST_VERSION_ID, 0);
-				String lastestVersionId = sp.getString(PREF_KEY_VERSION_ID, "");
-				if (!TextUtils.isEmpty(lastestVersionId) && !lastestVersionId.equals(version)) {
-					update = true;
-				}
-			} catch (NameNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			return update;
-		}		
-		
-		public boolean updateVersion(Context context) {
-			boolean update = false;
-			
-			try {
-				String version = "" + context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode;
-
-				SharedPreferences sp = context.getSharedPreferences(PREF_LATEST_VERSION_ID, 0);
-				sp.edit().putString(PREF_KEY_VERSION_ID, version).commit();
-			} catch (NameNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			return update;
+		public String getVersionName() {
+			return mCurrentVersionName;
 		}	
 		
-		public boolean isFirstUsage(Context context) {
-			boolean update = false;
-			
-			SharedPreferences sp = context.getSharedPreferences(PREF_LATEST_VERSION_ID, 0);
-			String lastestVersionId = sp.getString(PREF_KEY_VERSION_ID, "");
-			if (TextUtils.isEmpty(lastestVersionId)) {
-				update = true;
-			}
-			
-			return update;
+		public int getPreviousVersionCode(){
+			return mPreviousVersionCode;
+		}
+		
+		public String getPreviousVersionName() {
+			return mPreviousVersionName;
+		}
+		
+		public boolean firstUsage(){
+			return mPreviousVersionCode == INVALID_CODE;
+		}
+		
+		public boolean appUpdated(){
+			return mPreviousVersionCode != mCurrentVersionCode;
 		}
 	}
 }

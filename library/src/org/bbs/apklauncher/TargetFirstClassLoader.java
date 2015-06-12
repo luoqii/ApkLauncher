@@ -11,27 +11,27 @@ import android.util.Log;
 import dalvik.system.DexClassLoader;
 import dalvik.system.DexFile;
 
-public class TargetClassLoader extends 
+public class TargetFirstClassLoader extends 
 ClassLoader
 //DexClassLoader
 {
-	private static final String TAG = TargetClassLoader.class.getSimpleName();
-	private static /*final*/ boolean DEBUG = true;
+	private static final String TAG = TargetFirstClassLoader.class.getSimpleName();
+	public static /*final*/ boolean DEBUG = false;
 	
 	private DexFile mHostDexFile;
 	private DexFile mTargetDexFile;
 	private int mLevel;
 
-	public TargetClassLoader(String dexPath, String optimizedDirectory,
+	public TargetFirstClassLoader(String dexPath, String optimizedDirectory,
 			String libraryPath, ClassLoader parent, String targetPackageName, Context hostContext) {
 //		super(dexPath, optimizedDirectory, libraryPath, parent);
 		super(parent);
 		
-		 try {
+		try {
 			String hostApkPath = hostContext.getApplicationInfo().publicSourceDir;
 			String hostPName = hostContext.getPackageName();
 			mHostDexFile = DexFile.loadDex(hostApkPath, optimizedDirectory + "/" + hostPName + ".dex", 0);
-			
+
 			mTargetDexFile = DexFile.loadDex(dexPath, optimizedDirectory + "/" + targetPackageName + ".dex", 0);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -47,17 +47,17 @@ ClassLoader
 			Log.d(TAG, makePrefix(mLevel) + className);
 		}
 		Class<?> c = null;
-		if (shouldLoad(className)){
-			c = mHostDexFile.loadClass(className, this);
-			if (c != null) {
-//				Log.d(TAG, "/\\ /\\ /\\" + className + " ==> " + c.getClassLoader());
-			}
-		}
 		if (c == null ) {
 			c = mTargetDexFile.loadClass(className, this);
 
 			if (c != null) {
 //				Log.d(TAG, "/\\/\\/\\" + className + " ==> " + c.getClassLoader());
+			}
+		}
+		if (c == null){
+			c = mHostDexFile.loadClass(className, this);
+			if (c != null) {
+//				Log.d(TAG, "/\\ /\\ /\\" + className + " ==> " + c.getClassLoader());
 			}
 		}
 		
@@ -87,18 +87,4 @@ ClassLoader
 //		return  (level == 1 ? "\n" : "") + level;
 	}
 
-	protected boolean shouldLoad(String className) {
-		return sList.contains(className)
-//				|| className.matches("android\\.support.*")
-				|| className.startsWith("org.bbs.apklauncher")
-				;
-	}
-	
-	static List<String> sList = new ArrayList<String>();
-	static {
-		sList.add("android.app.Activity");
-		sList.add("android.app.ListActivity");
-		sList.add("android.support.v4.app.FragmentActivity");
-	}
-	
 }

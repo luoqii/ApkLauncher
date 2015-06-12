@@ -32,7 +32,7 @@ public class InstrumentationWrapper extends Instrumentation {
 		private Handler mUiHandler;
 		
 		public static interface CallBack {
-			public void processIntent(Intent intent);
+			public void onProcessIntent(Intent intent);
 		}
 
 		static class ReflectUtil {
@@ -166,7 +166,7 @@ public class InstrumentationWrapper extends Instrumentation {
 		
 		public void processIntent(Intent intent) {
 			if (null != mCallback) {
-				mCallback.processIntent(intent);
+				mCallback.onProcessIntent(intent);
 			}
 		}
 		

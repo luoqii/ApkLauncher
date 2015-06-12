@@ -6,14 +6,14 @@ import org.bbs.apkparser.PackageInfoX;
 import android.app.Activity;
 import android.os.Bundle;
 @ExportApi
-public class LauncherActivity extends Activity {
-	private static final String TAG = LauncherActivity.class.getSimpleName();
+public abstract class BaseLauncherActivity extends Activity {
+	private static final String TAG = BaseLauncherActivity.class.getSimpleName();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		startLauncherActivity();
+//		startLauncherActivity();
 	}
 	
 	@Override
@@ -24,13 +24,11 @@ public class LauncherActivity extends Activity {
 //		startLauncherActivity();
 	}
 
-	private void startLauncherActivity() {
+	protected void startLauncherActivity() {
 		PackageInfoX.ActivityInfoX a = ApkPackageManager.getInstance().getActivityInfo(getTargetActivityClassName());
-		ApkUtil.startActivity(this, a);
+		ApkLauncher.getInstance().startActivity(this, a);
 		finish();
 	}
 
-	protected String getTargetActivityClassName() {
-		return "com.example.apklauncher_app.MainActivity";
-	}
+	abstract protected String getTargetActivityClassName();
 }

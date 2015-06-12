@@ -373,7 +373,7 @@ public class ReflectUtil {
 					throw new RuntimeException("error in onStop", e);
 				}
 			}
-			public static boolean isValidFragment(Activity activity, String fragmentName) {
+			public static boolean isValidFragment(Object activity, String fragmentName) {
 				try {
 					Method m = Activity.class.getDeclaredMethod("isValidFragment", new Class[]{String.class});
 					m.setAccessible(true);

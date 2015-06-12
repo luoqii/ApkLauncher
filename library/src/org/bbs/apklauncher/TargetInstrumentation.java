@@ -36,124 +36,124 @@ public class TargetInstrumentation extends Instrumentation {
 		}
 
 		static class ReflectUtil {
-			
-						public static ActivityResult execStartActivity(Object receiver, Context who,
-								IBinder contextThread, IBinder token, Activity target,
-								Intent intent, int requestCode, Bundle options) {
-							try {
-		//						EmbeddedActivityAgent.ActivityReflectUtil.dumpMethod(Instrumentation.class, "execStartActivity");
-								Method m = Instrumentation.class.getDeclaredMethod("execStartActivity", 
-										new Class[]{Context.class,
-													IBinder.class, 
-													IBinder.class, 
-													Activity.class,
-													Intent.class, 
-													// int.class VS Integer.class
-													int.class, 
-													Bundle.class});
-								m.setAccessible(true);
-								return (ActivityResult) m.invoke(receiver, new Object[]{who,
-													contextThread, 
-													token, 
-													target,
-													intent,
-													requestCode,
-													options});
-							} catch (Exception e) {
-								ActivityReflectUtil.dumpMethod(Instrumentation.class, "execStartActivity");
-								throw new RuntimeException("error in execStartActivity.", e);
-							}
-						}
-		
-						public static void execStartActivitiesAsUser(Instrumentation receiver, Context who,
-								IBinder contextThread, IBinder token, Activity target,
-								Intent[] intents, Bundle options, int userId) {
-							try {
-		//						EmbeddedActivityAgent.ActivityReflectUtil.dumpMethod(Instrumentation.class, "execStartActivitiesAsUser");
-								Method m = Instrumentation.class.getDeclaredMethod("execStartActivitiesAsUser", 
-										new Class[]{Context.class,
-													IBinder.class, 
-													IBinder.class, 
-													Activity.class,
-													Intent.class,
-													Bundle.class,
-													// int.class VS Integer.class
-													int.class});
-								m.setAccessible(true);
-								m.invoke(receiver, new Object[]{who,
-													contextThread, 
-													token, 
-													target,
-													intents,
-													options, 
-													userId});
-							} catch (Exception e) {
-								ActivityReflectUtil.dumpMethod(Instrumentation.class, "execStartActivitiesAsUser");
-								throw new RuntimeException("error in execStartActivitiesAsUser.", e);
-							}
-						}
-		
-						@SuppressLint("NewApi")
-						public static ActivityResult execStartActivity(
-								Instrumentation receiver, Context who,
-								IBinder contextThread, IBinder token, Fragment target,
-								Intent intent, int requestCode, Bundle options) {
-							try {
-		//						EmbeddedActivityAgent.ActivityReflectUtil.dumpMethod(Instrumentation.class, "execStartActivity");
-								Method m = Instrumentation.class.getDeclaredMethod("execStartActivity", 
-										new Class[]{Context.class,
-													IBinder.class, 
-													IBinder.class, 
-													Fragment.class,
-													// int.class VS Integer.class
-													int.class, 
-													Bundle.class});
-								m.setAccessible(true);
-								return (ActivityResult) m.invoke(receiver, 
-										new Object[]{who,
-													contextThread, 
-													token, 
-													target,
-													intent,
-													requestCode,
-													options});
-							}  catch (Exception e) {
-								ActivityReflectUtil.dumpMethod(Instrumentation.class, "execStartActivity");
-								throw new RuntimeException("error in execStartActivity.", e);
-							}
-						}
-		
-						public static Object execStartActivities(Instrumentation receiver,
-								Context who, IBinder contextThread, IBinder token,
-								Activity target, Intent[] intents, Bundle options,
-								int myUseId) {
-							try {
-			//					EmbeddedActivityAgent.ActivityReflectUtil.dumpMethod(Instrumentation.class, "execStartActivities");
-								Method m = Instrumentation.class.getDeclaredMethod("execStartActivities", 
-										new Class[]{Context.class,
-													IBinder.class, 
-													IBinder.class, 
-													Activity.class,
-													array.class,
-													Bundle.class,
-													// int.class VS Integer.class
-													int.class});
-								m.setAccessible(true);
-								return (ActivityResult) m.invoke(receiver, 
-										new Object[]{who,
-													contextThread, 
-													token, 
-													target,
-													intents,
-													options,
-													myUseId});
-							}  catch (Exception e) {
-								ActivityReflectUtil.dumpMethod(Instrumentation.class, "execStartActivities");
-								throw new RuntimeException("error in execStartActivities.", e);
-							}
-						}
-						
-					}
+
+			public static ActivityResult execStartActivity(Object receiver, Context who,
+					IBinder contextThread, IBinder token, Activity target,
+					Intent intent, int requestCode, Bundle options) {
+				try {
+					//EmbeddedActivityAgent.ActivityReflectUtil.dumpMethod(Instrumentation.class, "execStartActivity");
+					Method m = Instrumentation.class.getDeclaredMethod("execStartActivity", 
+							new Class[]{Context.class,
+							IBinder.class, 
+							IBinder.class, 
+							Activity.class,
+							Intent.class, 
+							// int.class VS Integer.class
+							int.class, 
+							Bundle.class});
+					m.setAccessible(true);
+					return (ActivityResult) m.invoke(receiver, new Object[]{who,
+							contextThread, 
+							token, 
+							target,
+							intent,
+							requestCode,
+							options});
+				} catch (Exception e) {
+					ActivityReflectUtil.dumpMethod(Instrumentation.class, "execStartActivity");
+					throw new RuntimeException("error in execStartActivity.", e);
+				}
+			}
+
+			public static void execStartActivitiesAsUser(Instrumentation receiver, Context who,
+					IBinder contextThread, IBinder token, Activity target,
+					Intent[] intents, Bundle options, int userId) {
+				try {
+					//EmbeddedActivityAgent.ActivityReflectUtil.dumpMethod(Instrumentation.class, "execStartActivitiesAsUser");
+					Method m = Instrumentation.class.getDeclaredMethod("execStartActivitiesAsUser", 
+							new Class[]{Context.class,
+							IBinder.class, 
+							IBinder.class, 
+							Activity.class,
+							Intent.class,
+							Bundle.class,
+							// int.class VS Integer.class
+							int.class});
+					m.setAccessible(true);
+					m.invoke(receiver, new Object[]{who,
+							contextThread, 
+							token, 
+							target,
+							intents,
+							options, 
+							userId});
+				} catch (Exception e) {
+					ActivityReflectUtil.dumpMethod(Instrumentation.class, "execStartActivitiesAsUser");
+					throw new RuntimeException("error in execStartActivitiesAsUser.", e);
+				}
+			}
+
+			@SuppressLint("NewApi")
+			public static ActivityResult execStartActivity(
+					Instrumentation receiver, Context who,
+					IBinder contextThread, IBinder token, Fragment target,
+					Intent intent, int requestCode, Bundle options) {
+				try {
+					//EmbeddedActivityAgent.ActivityReflectUtil.dumpMethod(Instrumentation.class, "execStartActivity");
+					Method m = Instrumentation.class.getDeclaredMethod("execStartActivity", 
+							new Class[]{Context.class,
+							IBinder.class, 
+							IBinder.class, 
+							Fragment.class,
+							// int.class VS Integer.class
+							int.class, 
+							Bundle.class});
+					m.setAccessible(true);
+					return (ActivityResult) m.invoke(receiver, 
+							new Object[]{who,
+							contextThread, 
+							token, 
+							target,
+							intent,
+							requestCode,
+							options});
+				}  catch (Exception e) {
+					ActivityReflectUtil.dumpMethod(Instrumentation.class, "execStartActivity");
+					throw new RuntimeException("error in execStartActivity.", e);
+				}
+			}
+
+			public static Object execStartActivities(Instrumentation receiver,
+					Context who, IBinder contextThread, IBinder token,
+					Activity target, Intent[] intents, Bundle options,
+					int myUseId) {
+				try {
+					//EmbeddedActivityAgent.ActivityReflectUtil.dumpMethod(Instrumentation.class, "execStartActivities");
+					Method m = Instrumentation.class.getDeclaredMethod("execStartActivities", 
+							new Class[]{Context.class,
+							IBinder.class, 
+							IBinder.class, 
+							Activity.class,
+							array.class,
+							Bundle.class,
+							// int.class VS Integer.class
+							int.class});
+					m.setAccessible(true);
+					return (ActivityResult) m.invoke(receiver, 
+							new Object[]{who,
+							contextThread, 
+							token, 
+							target,
+							intents,
+							options,
+							myUseId});
+				}  catch (Exception e) {
+					ActivityReflectUtil.dumpMethod(Instrumentation.class, "execStartActivities");
+					throw new RuntimeException("error in execStartActivities.", e);
+				}
+			}
+
+		}
 
 		public TargetInstrumentation(Instrumentation base, Handler uiHandler){
 			mBase = base;

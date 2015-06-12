@@ -26,11 +26,7 @@ import android.util.Log;
 
 @ExportApi
 public class AndroidUtil {
-	private static final String TAG = AndroidUtil.class.getSimpleName();
-
-    public static final String ACTIVITY_EXTRA_COMPONENT_CLASS_NAME = "EXTRA_COMPONENT_CLASS_NAME";
-    public static final String SERVICE_EXTRA_COMPONENT_CLASS_NAME = "EXTRA_COMPONENT_CLASS_NAME";
-	
+	private static final String TAG = AndroidUtil.class.getSimpleName();	
 	
 	public static String getInstallApkPath(Context context, String packageName) {
 		String path = "";
@@ -94,6 +90,7 @@ public class AndroidUtil {
 		if (zipFile == null || entryName == null || destDir == null) return;
 
 		Log.d(TAG, "zipFile: " + zipFile);
+		
 		destDir.getParentFile().mkdirs();
 		ZipEntry zE = zipFile.getEntry(entryName);
 		
@@ -111,13 +108,21 @@ public class AndroidUtil {
 			try {
 				ZipEntry ze;
 				while ((ze = zIn.getNextEntry()) != null) {
-					if (!ze.getName().startsWith(entryName) || ze.isDirectory()) {
+					Log.d(TAG, "ze: " + ze.getName() );
+					String zpath = ze.getName();
+					String zPPath = new File(zpath).getParent();
+					Log.d(TAG, "zPPath: " + zPPath);
+					if (!entryName.equals(zPPath) || ze.isDirectory()) {
 						continue;
 					}
 					Log.d(TAG, "ze: " + ze);
 					String name = ze.getName().substring(entryName.length());
 					
 					File destFile = new File(destDir, name);
+					if (destFile.exists()){
+						destFile.delete();
+						destFile.createNewFile();
+					}
 					destFile.getParentFile().mkdirs();
 					FileOutputStream fout = new FileOutputStream(destFile);
 					byte[] buffer = new byte[1024];
@@ -146,48 +151,6 @@ public class AndroidUtil {
 			return levelStr;
 		}
 
-		public static void onProcessStartActivityIntent(Intent intent, ClassLoader classLoader, Context realContext) {
-			Log.d(TAG, "processIntent. intent: " + intent);
-			ComponentName com = intent.getComponent();
-			if (null != com) {
-				String c = com.getClassName();
-				if (!TextUtils.isEmpty(c)) {
-					String superClassName = LoadedApk.getActivitySuperClassName(classLoader, c);
-					com = new ComponentName(realContext.getPackageName(), superClassName.replace("Target", "Stub"));
-	                // inject and replace with our component.
-					intent.setComponent(com);
-					ActivityInfoX a = ApkPackageManager.getInstance().getActivityInfo(c);
-					if (a != null) {
-//						ApkLuncherActivity.putExtra(a, intent);
-						intent.putExtra(ACTIVITY_EXTRA_COMPONENT_CLASS_NAME, a.name);
-					}
-				} 
-			} else {
-				Log.w(TAG, "can not handle intent:  "  + intent);
-			}
-		}
-
-		public static void onProcessStartServiceIntent(Intent intent, ClassLoader classLoader, Context realContext) {
-			Log.d(TAG, "processIntent. intent: " + intent);
-			ComponentName com = intent.getComponent();
-			if (null != com) {
-				String c = com.getClassName();
-				if (!TextUtils.isEmpty(c)) {
-					String superClassName = LoadedApk.getServiceSuperClassName(classLoader, c);
-					com = new ComponentName(realContext.getPackageName(), superClassName.replace("Target", "Stub"));
-	                // inject and replace with our component.
-					intent.setComponent(com);
-					ServiceInfoX a = ApkPackageManager.getInstance().getServiceInfo(c);
-					if (a != null) {
-//						intent.putExtra(Stub_Service.EXTRA_COMPONENT, new ComponentName(a.packageName, a.name));
-						intent.putExtra(SERVICE_EXTRA_COMPONENT_CLASS_NAME, a.name);
-					}
-				} 
-			} else {
-				Log.w(TAG, "can not handle intent:  "  + intent);
-			}
-		}
-		
 
 		
 	    public static Context getContextImpl(Context context) {

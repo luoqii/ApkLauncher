@@ -1,5 +1,7 @@
 package org.bbs.apklauncher;
 
+import java.io.NotSerializableException;
+
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -30,7 +32,7 @@ ContextWrapper
 	
 	private static final boolean ENALBE_SERVICE = true;
 	
-	private static String mPackageName;
+	private String mPackageName;
 	private Resources mResource;
 	private ClassLoader mClassLoader;
 	private ClassLoader mMergedClassLoader;
@@ -60,11 +62,13 @@ ContextWrapper
 //		super(base, themeResId);
 //	}
 	
-	public static void bundleReady(TargetContext LazyContext, Bundle bundle, Resources res, String packageName) {
+	public static void bundleReadyX(TargetContext LazyContext, Bundle bundle, Resources res, String packageName) {
 		// trivas build error
 //		LazyContext.mClassLoader = bundle.adapt(BundleWiring.class).getClassLoader();
-		LazyContext.mResource = res;
-		mPackageName = packageName;
+//		LazyContext.mResource = res;
+//		mPackageName = packageName;
+		
+		notSupported();
 	}	
 	
 	public void packageManagerReady(PackageManager pm) {
@@ -129,7 +133,7 @@ ContextWrapper
 		return pName;
 	}	
 	
-	public String doGetPackageName() {
+	private String doGetPackageName() {
 //		new Exception("stack info").printStackTrace();
 		if (!TextUtils.isEmpty(mPackageName)) {
 			return mPackageName;
@@ -188,7 +192,7 @@ ContextWrapper
 		return pm;
 	}	
 	
-	public PackageManager doGetPackageManager() {
+	private PackageManager doGetPackageManager() {
 //		new Exception("stack info").printStackTrace();
 		if (mPackageManager != null) {
 			return mPackageManager;
@@ -216,7 +220,7 @@ ContextWrapper
 	@Override
 	public ComponentName startService(Intent service) {
 		if (ENALBE_SERVICE) {
-			AndroidUtil.onProcessStartServiceIntent(service, mClassLoader, getBaseContext());
+			ApkLauncher.getInstance().onProcessIntent(service, mClassLoader, getBaseContext());
 			return super.startService(service);
 		} else {
 			Log.w(TAG, "startService not implemented.");
@@ -227,7 +231,7 @@ ContextWrapper
 	@Override
 	public boolean bindService(Intent service, ServiceConnection conn, int flags) {
 		if (ENALBE_SERVICE) {
-			AndroidUtil.onProcessStartServiceIntent(service, mClassLoader, getBaseContext());
+			ApkLauncher.getInstance().onProcessIntent(service, mClassLoader, getBaseContext());
 			return super.bindService(service, conn, flags);
 		} else {
 			Log.w(TAG, "bindService not implemented.");
@@ -238,7 +242,7 @@ ContextWrapper
 	@Override
 	public boolean stopService(Intent service) {
 		if (ENALBE_SERVICE) {
-			AndroidUtil.onProcessStartServiceIntent(service, mClassLoader, getBaseContext());
+			ApkLauncher.getInstance().onProcessIntent(service, mClassLoader, getBaseContext());
 			return super.stopService(service);
 		} else {
 			Log.w(TAG, "stopService not implemented.");
@@ -266,6 +270,10 @@ ContextWrapper
 //        }
         return getBaseContext().getSystemService(name);
     }
+	
+	static void notSupported() {
+		throw new RuntimeException("not supported.");
+	}
 
 	class MergedAssetManager 
 //	extends AssetManager 
@@ -274,8 +282,8 @@ ContextWrapper
 	}
 	
 	class MergedClassLoader extends ClassLoader {
-		private ClassLoader mMinor;
 		private ClassLoader mMajor;
+		private ClassLoader mMinor;
 
 		MergedClassLoader(ClassLoader major, ClassLoader minor) {
 			mMajor = major;

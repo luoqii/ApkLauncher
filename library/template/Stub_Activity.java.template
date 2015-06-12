@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.bbs.apklauncher.ReflectUtil.ActivityReflectUtil;
 
+import org.bbs.apklauncher.ApkLauncher;
 import org.bbs.apklauncher.AndroidUtil;
 import org.bbs.apklauncher.ApkPackageManager;
 import org.bbs.apklauncher.PackageManagerProxy;
@@ -44,7 +45,11 @@ implements CallBack {
 	/**
 	 * type {@link String}
 	 */
-	public static final String EXTRA_COMPONENT_CLASS_NAME = AndroidUtil.ACTIVITY_EXTRA_COMPONENT_CLASS_NAME;
+	public static final String EXTRA_HOST_COMPONENT_CLASS_NAME = ApkLauncher.EXTRA_HOST_COMPONENT_CLASS_NAME;
+	/**
+	 * type {@link String}
+	 */
+	public static final String EXTRA_TARGET_COMPONENT_CLASS_NAME = ApkLauncher.EXTRA_TARGET_COMPONENT_CLASS_NAME;
 	
 	private static final String TAG = StubBase_SUPER_CLASS.class.getSimpleName();
 	
@@ -53,8 +58,8 @@ implements CallBack {
 	private ActivityInfoX   mTargetActivityInfo;
 	private ResourcesMerger mTargetResourceMerger;
 	
-	private PackageManager  mRealSysPm;
-	private Context 	    mRealBaseContext;	
+	private PackageManager  mHostSysPm;
+	private Context 	    mHostBaseContext;	
 	
 	private IntentHelper    mIntent;
 
@@ -69,11 +74,11 @@ implements CallBack {
 	
 	@Override
 	protected void attachBaseContext(Context newBase) {
-		mRealBaseContext = newBase;
+		mHostBaseContext = newBase;
 		mTargetContext = new TargetContext(newBase);
 		super.attachBaseContext(mTargetContext);
 		
-		mRealSysPm = getPackageManager();
+		mHostSysPm = getPackageManager();
 	}
 
 	private void onPrepareActivityStub() {
@@ -82,8 +87,9 @@ implements CallBack {
 		// TODO is there a way to update ClassLoader before parse intent?
 		//intent.getExtras().setClassLoader(loader);
 		
+		String hostActivityClassName = intent.getStringExtra(EXTRA_HOST_COMPONENT_CLASS_NAME);
 		// get target activity info
-		String targetActivityClassName = intent.getStringExtra(EXTRA_COMPONENT_CLASS_NAME);
+		String targetActivityClassName = intent.getStringExtra(EXTRA_TARGET_COMPONENT_CLASS_NAME);
 		mTargetActivityInfo = ApkPackageManager.getInstance()
 												.getActivityInfo(targetActivityClassName);
 		String libPath = mTargetActivityInfo.mPackageInfo.mLibPath;
@@ -96,7 +102,8 @@ implements CallBack {
 		}
 		String targetPackageName = mTargetActivityInfo.packageName;
 
-		Log.d(TAG, "host activity              : " + this);
+		Log.d(TAG, "stub activity              :" + this);
+		Log.d(TAG, "host activity              : " + hostActivityClassName);
 		Log.d(TAG, "targetApplicationClassName : " + targetApplicationClassName);
 		Log.d(TAG, "targetPackageName          : " + targetPackageName);
 		Log.d(TAG, "targetActivityClassName    : " + targetActivityClassName);
@@ -106,7 +113,7 @@ implements CallBack {
 		
 		// create target classloader if necessary.
 		mTargetClassLoader = ApkPackageManager.getInstance()
-									.createClassLoader(mRealBaseContext, 
+									.createClassLoader(mHostBaseContext, 
 														apkPath, 
 														libPath, 
 														targetPackageName);
@@ -116,12 +123,12 @@ implements CallBack {
 		Application targetApp = ((Host_Application)getApplication())
 								.onPrepareApplictionStub(mTargetActivityInfo.applicationInfo, 
 														 mTargetClassLoader, 
-														 mRealSysPm);
+														 mHostSysPm);
 		
 		// do activity init
 		InstrumentationWrapper.injectInstrumentation(this, this);
 		try {
-			mTargetResourceMerger = ApkPackageManager.makeTargetResource(apkPath, mRealBaseContext);
+			mTargetResourceMerger = ApkPackageManager.makeTargetResource(apkPath, mHostBaseContext);
 
 			targetThemeId = ReflectUtil.ResourceUtil
 											.selectDefaultTheme(mTargetResourceMerger, 
@@ -133,7 +140,7 @@ implements CallBack {
 			mTargetContext.themeReady(targetThemeId);
 			mTargetContext.resReady(mTargetResourceMerger);
 			mTargetContext.applicationContextReady(ApkPackageManager.getApplication(targetPackageName));
-			mTargetContext.packageManagerReady(new PackageManagerProxy(mRealSysPm));
+			mTargetContext.packageManagerReady(new PackageManagerProxy(mHostSysPm));
 			mTargetContext.packageNameReady(targetPackageName);
 			
 			ReflectUtil.ActivityReflectUtil.setActivityApplication(this, targetApp);
@@ -182,8 +189,8 @@ implements CallBack {
 	}
 
 	@Override
-	public void processIntent(android.content.Intent intent) {
-		 AndroidUtil.onProcessStartActivityIntent(intent, mTargetClassLoader, mRealBaseContext);
+	public void onProcessIntent(android.content.Intent intent) {
+		 ApkLauncher.getInstance().onProcessIntent(intent, mTargetClassLoader, mHostBaseContext);
 	}
 	
 	@Override

@@ -10,8 +10,8 @@ import android.util.Log;
  */
 @ExportApi
 public class ApkLauncherConfig {
-	private static boolean DEBUG;
-	private static int LOG_LEVEL;
+	public static boolean DEBUG;
+	public static int LOG_LEVEL;
 
 	public static void setDebug(boolean debug){
 		DEBUG = debug;
