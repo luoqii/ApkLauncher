@@ -33,7 +33,7 @@ Host_Application
 		ApkLauncherConfig.setDebug(true);
 		ApkLauncher apk = ApkLauncher.getInstance();
 		apk.init(this, "no-exist", true);
-		apk.setT2HMap(ApkLauncher.TKey.LIST_ACTIVITY, "null");
+		apk.setT2HMap(ApkLauncher.TKey.LIST_ACTIVITY, "org.bbs.apklauncher.demo.ListActivity");
 		
 //		ApkPackageManager.getInstance().setClassLoaderFactory(new ClassLoaderFactory() {
 //			

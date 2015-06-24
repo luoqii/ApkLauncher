@@ -1,6 +1,6 @@
 package org.bbs.apklauncher;
 
-import java.io.NotSerializableException;
+import java.io.File;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -210,14 +210,6 @@ ContextWrapper
 	}
 	
 	@Override
-	public SharedPreferences getSharedPreferences(String name, int mode) {
-		SharedPreferences pref =  super.getSharedPreferences(name, mode);
-		
-		Log.d(TAG, "SharedPreferences(). name: " + name + " pref: " + pref);
-		return pref;
-	}
-	
-	@Override
 	public ComponentName startService(Intent service) {
 		if (ENALBE_SERVICE) {
 			ApkLauncher.getInstance().onProcessIntent(service, mClassLoader, getBaseContext());
@@ -273,7 +265,238 @@ ContextWrapper
 	
 	static void notSupported() {
 		throw new RuntimeException("not supported.");
-	}
+	}	
+	
+//	 file-related.	
+//	private static final String[] EMPTY_FILE_LIST = {};
+//	private Object mSync = new Object();
+//	private File mPreferencesDir;
+//	private File mFilesDir;
+//    private File mCacheDir;
+//    private File mCodeCacheDir;
+//    private File mDatabasesDir;
+//	private File getDataDirFile(){
+//		return ApkPackageManager.getInstance().getAppDataDir(mPackageName);
+//	}
+//	
+//	@Override
+//	public SharedPreferences getSharedPreferences(String name, int mode) {
+//		SharedPreferences pref =  super.getSharedPreferences(name, mode);
+//		
+//		Log.d(TAG, "SharedPreferences(). name: " + name + " pref: " + pref);
+//		return pref;
+//	}
+//	
+//    public File getSharedPrefsFile(String name) {
+//        return makeFilename(getPreferencesDir(), name + ".xml");
+//    }
+//
+//    private File makeFilename(File base, String name) {
+//        if (name.indexOf(File.separatorChar) < 0) {
+//            return new File(base, name);
+//        }
+//        throw new IllegalArgumentException(
+//                "File " + name + " contains a path separator");
+//    }
+//
+//    private File getPreferencesDir() {
+//        synchronized (mSync) {
+//            if (mPreferencesDir == null) {
+//                mPreferencesDir = new File(getDataDirFile(), "shared_prefs");
+//            }
+//            return mPreferencesDir;
+//        }
+//    }
+//	
+//    @Override
+//    public File getDir(String name, int mode) {
+//        name = "app_" + name;
+//        File file = makeFilename(getDataDirFile(), name);
+//        if (!file.exists()) {
+//            file.mkdir();
+////            setFilePermissionsFromMode(file.getPath(), mode,
+////                    FileUtils.S_IRWXU|FileUtils.S_IRWXG|FileUtils.S_IXOTH);
+//        }
+//        return file;
+//    }
+//    
+//    @Override
+//    public File getFilesDir() {
+//        synchronized (mSync) {
+//            if (mFilesDir == null) {
+//                mFilesDir = new File(getDataDirFile(), "files");
+//            }
+//            return createFilesDirLocked(mFilesDir);
+//        }
+//    }
+//    // Common-path handling of app data dir creation
+//    private static File createFilesDirLocked(File file) {
+//        if (!file.exists()) {
+//            if (!file.mkdirs()) {
+//                if (file.exists()) {
+//                    // spurious failure; probably racing with another process for this app
+//                    return file;
+//                }
+//                Log.w(TAG, "Unable to create files subdir " + file.getPath());
+//                return null;
+//            }
+////            FileUtils.setPermissions(
+////                    file.getPath(),
+////                    FileUtils.S_IRWXU|FileUtils.S_IRWXG|FileUtils.S_IXOTH,
+////                    -1, -1);
+//        }
+//        return file;
+//    }
+//    
+//    @Override
+//    public File getFileStreamPath(String name) {
+//        return makeFilename(getFilesDir(), name);
+//    }
+//
+//    @Override
+//    public String[] fileList() {
+//        final String[] list = getFilesDir().list();
+//        return (list != null) ? list : EMPTY_FILE_LIST;
+//    }
+//    
+//    @Override
+//    public File getCacheDir() {
+//        synchronized (mSync) {
+//            if (mCacheDir == null) {
+//                mCacheDir = new File(getDataDirFile(), "cache");
+//            }
+//            return createFilesDirLocked(mCacheDir);
+//        }
+//    }
+//
+//    @Override
+//    public File getCodeCacheDir() {
+//        synchronized (mSync) {
+//            if (mCodeCacheDir == null) {
+//                mCodeCacheDir = new File(getDataDirFile(), "code_cache");
+//            }
+//            return createFilesDirLocked(mCodeCacheDir);
+//        }
+//    }
+//    
+//    @Override
+//    public String[] databaseList() {
+//        final String[] list = getDatabasesDir().list();
+//        return (list != null) ? list : EMPTY_FILE_LIST;
+//    }
+//
+//
+//    private File getDatabasesDir() {
+//        synchronized (mSync) {
+//            if (mDatabasesDir == null) {
+//                mDatabasesDir = new File(getDataDirFile(), "databases");
+//            }
+//            if (mDatabasesDir.getPath().equals("databases")) {
+//                mDatabasesDir = new File("/data/system");
+//            }
+//            return mDatabasesDir;
+//        }
+//    }
+//    
+//    private File validateFilePath(String name, boolean createDirectory) {
+//        File dir;
+//        File f;
+//
+//        if (name.charAt(0) == File.separatorChar) {
+//            String dirPath = name.substring(0, name.lastIndexOf(File.separatorChar));
+//            dir = new File(dirPath);
+//            name = name.substring(name.lastIndexOf(File.separatorChar));
+//            f = new File(dir, name);
+//        } else {
+//            dir = getDatabasesDir();
+//            f = makeFilename(dir, name);
+//        }
+//
+//        if (createDirectory && !dir.isDirectory() && dir.mkdir()) {
+////            FileUtils.setPermissions(dir.getPath(),
+////                FileUtils.S_IRWXU|FileUtils.S_IRWXG|FileUtils.S_IXOTH,
+////                -1, -1);
+//        }
+//
+//        return f;
+//    }
+//    
+//    @Override
+//    public SQLiteDatabase openOrCreateDatabase(String name, int mode, CursorFactory factory,
+//            DatabaseErrorHandler errorHandler) {
+//        File f = validateFilePath(name, true);
+//        int flags = SQLiteDatabase.CREATE_IF_NECESSARY;
+//        if ((mode & MODE_ENABLE_WRITE_AHEAD_LOGGING) != 0) {
+//            flags |= SQLiteDatabase.ENABLE_WRITE_AHEAD_LOGGING;
+//        }
+//        SQLiteDatabase db = SQLiteDatabase.openDatabase(f.getPath(), factory, flags, errorHandler);
+//        setFilePermissionsFromMode(f.getPath(), mode, 0);
+//        return db;
+//    }
+//    
+//    static void setFilePermissionsFromMode(String name, int mode,
+//            int extraPermissions) {
+////        int perms = FileUtils.S_IRUSR|FileUtils.S_IWUSR
+////            |FileUtils.S_IRGRP|FileUtils.S_IWGRP
+////            |extraPermissions;
+////        if ((mode&MODE_WORLD_READABLE) != 0) {
+////            perms |= FileUtils.S_IROTH;
+////        }
+////        if ((mode&MODE_WORLD_WRITEABLE) != 0) {
+////            perms |= FileUtils.S_IWOTH;
+////        }
+////        if (DEBUG) {
+////            Log.i(TAG, "File " + name + ": mode=0x" + Integer.toHexString(mode)
+////                  + ", perms=0x" + Integer.toHexString(perms));
+////        }
+////        FileUtils.setPermissions(name, perms, -1, -1);
+//    }
+//
+//    @Override
+//    public boolean deleteDatabase(String name) {
+//        try {
+//            File f = validateFilePath(name, false);
+//            return /*SQLiteDatabase.*/deleteDatabase(f);
+//        } catch (Exception e) {
+//        }
+//        return false;
+//    }
+//    
+//    //SQLiteDatabase
+//    public static boolean deleteDatabase(File file) {
+//        if (file == null) {
+//            throw new IllegalArgumentException("file must not be null");
+//        }
+//
+//        boolean deleted = false;
+//        deleted |= file.delete();
+//        deleted |= new File(file.getPath() + "-journal").delete();
+//        deleted |= new File(file.getPath() + "-shm").delete();
+//        deleted |= new File(file.getPath() + "-wal").delete();
+//
+//        File dir = file.getParentFile();
+//        if (dir != null) {
+//            final String prefix = file.getName() + "-mj";
+//            File[] files = dir.listFiles(new FileFilter() {
+//                @Override
+//                public boolean accept(File candidate) {
+//                    return candidate.getName().startsWith(prefix);
+//                }
+//            });
+//            if (files != null) {
+//                for (File masterJournal : files) {
+//                    deleted |= masterJournal.delete();
+//                }
+//            }
+//        }
+//        return deleted;
+//    }
+//
+//    @Override
+//    public File getDatabasePath(String name) {
+//        return validateFilePath(name, false);
+//    }
+
 
 	class MergedAssetManager 
 //	extends AssetManager 

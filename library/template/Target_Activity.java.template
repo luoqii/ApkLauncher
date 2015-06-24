@@ -1277,7 +1277,8 @@ ContextWrapper
 
 	public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen,
 			Preference preference) {
-		return mHostActivity.onPreferenceTreeClick(preferenceScreen, preference);
+		//return mHostActivity.onPreferenceTreeClick(preferenceScreen, preference);
+		return false;
 	}
 
 	public Preference findPreference(CharSequence key) {

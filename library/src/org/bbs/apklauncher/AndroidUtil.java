@@ -88,8 +88,7 @@ public class AndroidUtil {
 	
 	public static void extractZipEntry(ZipFile zipFile, String entryName, File destDir) {
 		if (zipFile == null || entryName == null || destDir == null) return;
-
-		Log.d(TAG, "zipFile: " + zipFile);
+		Log.d(TAG, "zipFile: " + zipFile + " entryName: " + entryName);
 		
 		destDir.getParentFile().mkdirs();
 		ZipEntry zE = zipFile.getEntry(entryName);
@@ -108,14 +107,14 @@ public class AndroidUtil {
 			try {
 				ZipEntry ze;
 				while ((ze = zIn.getNextEntry()) != null) {
-					Log.d(TAG, "ze: " + ze.getName() );
+//					Log.d(TAG, "ze: " + ze.getName() );
 					String zpath = ze.getName();
 					String zPPath = new File(zpath).getParent();
-					Log.d(TAG, "zPPath: " + zPPath);
+//					Log.d(TAG, "zPPath: " + zPPath);
 					if (!entryName.equals(zPPath) || ze.isDirectory()) {
 						continue;
 					}
-					Log.d(TAG, "ze: " + ze);
+//					Log.d(TAG, "ze: " + ze);
 					String name = ze.getName().substring(entryName.length());
 					
 					File destFile = new File(destDir, name);
@@ -132,6 +131,7 @@ public class AndroidUtil {
 					}
 					fout.flush();
 					fout.close();
+					Log.d(TAG, "extract zipEntry: " + ze.getName() + " to " + destFile.getPath());
 				}
 			} finally {
 				zIn.close();

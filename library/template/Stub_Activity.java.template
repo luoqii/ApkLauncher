@@ -98,11 +98,11 @@ implements CallBack {
 		String apkPath = mTargetActivityInfo.applicationInfo.publicSourceDir;
 		if (TextUtils.isEmpty(targetApplicationClassName)){
 			targetApplicationClassName = Application.class.getCanonicalName();
-			Log.d(TAG, "no packageName, user default.");
+			Log.d(TAG, "no packageName, user default:" + targetApplicationClassName);
 		}
 		String targetPackageName = mTargetActivityInfo.packageName;
 
-		Log.d(TAG, "stub activity              :" + this);
+		Log.d(TAG, "stub activity              : " + Stub_SUPER_CLASS.class.getName());
 		Log.d(TAG, "host activity              : " + hostActivityClassName);
 		Log.d(TAG, "targetApplicationClassName : " + targetApplicationClassName);
 		Log.d(TAG, "targetPackageName          : " + targetPackageName);

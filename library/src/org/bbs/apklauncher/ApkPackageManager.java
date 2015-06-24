@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,7 +38,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.ResolveInfo;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
-import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 import dalvik.system.DexClassLoader;
@@ -353,14 +353,18 @@ public class ApkPackageManager extends BasePackageManager {
 				if (copyFile) {
 					//TODO native lib
 					deleteFile(destLibDir);
-					
+
+					String abi = SystemPropertiesProxy.get(mContext, "ro.product.cpu.abi");
+					String abi2 = SystemPropertiesProxy.get(mContext, "ro.product.cpu.abi2");
+					Log.d(TAG, "abi: " + abi + " abi2: " + abi2);
+					String[] abis = new String[]{abi, abi2};
 //					String[] abis = Build.SUPPORTED_ABIS;
-//					final int L = abis.length;
-//					for (int i = L - 1 ; i >= 0; i--){
-//						AndroidUtil.extractZipEntry(new ZipFile(info.applicationInfo.publicSourceDir), "lib/"+ abis[i], destLibDir);
-//					}
-					
-					AndroidUtil.extractZipEntry(new ZipFile(info.applicationInfo.publicSourceDir), "lib/armeabi", destLibDir);
+					final int L = abis.length;
+					for (int i = L - 1 ; i >= 0; i--){
+						AndroidUtil.extractZipEntry(new ZipFile(info.applicationInfo.publicSourceDir), "lib/"+ abis[i], destLibDir);
+					}
+
+//					AndroidUtil.extractZipEntry(new ZipFile(info.applicationInfo.publicSourceDir), "lib/armeabi", destLibDir);
 //					AndroidUtil.extractZipEntry(new ZipFile(info.applicationInfo.publicSourceDir), "lib/armeabi-v7a", destLibDir);
 				}
 				
@@ -695,6 +699,50 @@ public class ApkPackageManager extends BasePackageManager {
 	    	return (InstallApks) o;
 		}
 		
+	}
+	
+	//http://my.oschina.net/chaselinfo/blog/213393?p=1
+	public static class SystemPropertiesProxy
+	{
+	 
+	    /**
+	     * 根据给定Key获取值.
+	     * @return 如果不存在该key则返回空字符串
+	     * @throws IllegalArgumentException 如果key超过32个字符则抛出该异常
+	     */
+	    public static String get(Context context, String key) throws IllegalArgumentException {
+	 
+	        String ret= "";
+	 
+	        try{
+	 
+	          ClassLoader cl = context.getClassLoader(); 
+	          @SuppressWarnings("rawtypes")
+	          Class SystemProperties = cl.loadClass("android.os.SystemProperties");
+	 
+	          //参数类型
+	          @SuppressWarnings("rawtypes")
+	              Class[] paramTypes= new Class[1];
+	          paramTypes[0]= String.class;
+	 
+	          Method get = SystemProperties.getMethod("get", paramTypes);
+	 
+	          //参数
+	          Object[] params= new Object[1];
+	          params[0]= new String(key);
+	 
+	          ret= (String) get.invoke(SystemProperties, params);
+	 
+	        }catch( IllegalArgumentException iAE ){
+	            throw iAE;
+	        }catch( Exception e ){
+	            ret= "";
+	            //TODO
+	        }
+	 
+	        return ret;
+	 
+	    }
 	}
 	
 	// copied from https://github.com/luoqii/android_common_lib/blob/master/library/src/org/bbs/android/commonlib/Version.java
