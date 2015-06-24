@@ -8,5 +8,6 @@
 	<classpathentry exported="true" kind="lib" path="/ApkLauncher_Sdk/apklauncher_plugin.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="lib" path="/mnt/workbench/ApkLauncher/library/libs/apkmanifestparser_lib.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
