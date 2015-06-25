@@ -113,7 +113,7 @@ public class ApkLauncher {
 			throw new RuntimeException("activity info in null");
 		}
 		
-		ClassLoader cl = ApkPackageManager.getClassLoader(a.applicationInfo.packageName);
+		ClassLoader cl = ApkPackageManager.getInstance().createClassLoader(context, a.mPackageInfo);
 		Intent launcher = new Intent();
 
         // inject and replace with our component.

@@ -1,6 +1,7 @@
 package org.bbs.apklauncher.emb;
 
 import org.bbs.apklauncher.ViewCreater;
+import org.bbs.apklauncher.emb.IntentHelper.PersistentObject;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
@@ -17,6 +18,13 @@ public class Target_Application extends Application
 {
 	private static final String TAG = Target_Application.class.getSimpleName();
 	private LayoutInflater mInflater;
+	
+	@Override
+	public void onCreate() {
+		super.onCreate();
+
+		PersistentObject.getsInstance().init(this, getClassLoader());
+	}
 	
 	@Override
 	public Theme getTheme() {

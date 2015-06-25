@@ -30,7 +30,8 @@ Application
 		String apkPath = appInfo.publicSourceDir;
 		Application app = ApkPackageManager.getApplication(appInfo.packageName);
 		if (null == app) {
-			mPersistent.init(this, classLoader);
+			// init IntentHelper
+			IntentHelper.PersistentObject.getsInstance().init(this, classLoader);
 			
 			String appClassName = appInfo.className;
 			if (!TextUtils.isEmpty(appClassName)) {
@@ -86,7 +87,6 @@ Application
 	public void onCreate() {
 		super.onCreate();
 		
-		mPersistent = PersistentObject.getsInstance();
 	}
 
 	public void onTerminate() {

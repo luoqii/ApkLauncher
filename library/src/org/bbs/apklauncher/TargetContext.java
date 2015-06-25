@@ -30,8 +30,6 @@ ContextWrapper
 
 	private static final String TAG = TargetContext.class.getSimpleName();
 	
-	private static final boolean ENALBE_SERVICE = true;
-	
 	private String mPackageName;
 	private Resources mResource;
 	private ClassLoader mClassLoader;
@@ -211,7 +209,7 @@ ContextWrapper
 	
 	@Override
 	public ComponentName startService(Intent service) {
-		if (ENALBE_SERVICE) {
+		if (ApkLauncherConfig.ENALBE_SERVICE) {
 			ApkLauncher.getInstance().onProcessIntent(service, mClassLoader, getBaseContext());
 			return super.startService(service);
 		} else {
@@ -222,7 +220,7 @@ ContextWrapper
 
 	@Override
 	public boolean bindService(Intent service, ServiceConnection conn, int flags) {
-		if (ENALBE_SERVICE) {
+		if (ApkLauncherConfig.ENALBE_SERVICE) {
 			ApkLauncher.getInstance().onProcessIntent(service, mClassLoader, getBaseContext());
 			return super.bindService(service, conn, flags);
 		} else {
@@ -233,7 +231,7 @@ ContextWrapper
 
 	@Override
 	public boolean stopService(Intent service) {
-		if (ENALBE_SERVICE) {
+		if (ApkLauncherConfig.ENALBE_SERVICE) {
 			ApkLauncher.getInstance().onProcessIntent(service, mClassLoader, getBaseContext());
 			return super.stopService(service);
 		} else {
@@ -244,7 +242,7 @@ ContextWrapper
 
 	@Override
 	public void unbindService(ServiceConnection conn) {
-		if (ENALBE_SERVICE) {
+		if (ApkLauncherConfig.ENALBE_SERVICE) {
 			super.unbindService(conn);
 		} else {
 			Log.w(TAG, "unbindService not implemented.");

@@ -38,6 +38,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.ResolveInfo;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
+import android.support.v4.widget.SlidingPaneLayout.PanelSlideListener;
 import android.text.TextUtils;
 import android.util.Log;
 import dalvik.system.DexClassLoader;
@@ -162,6 +163,11 @@ public class ApkPackageManager extends BasePackageManager {
 		}
 		
 		return resMerger;
+	}
+	
+	public ClassLoader createClassLoader(Context baseContext, PackageInfoX pInfo){
+		return createClassLoader(baseContext, pInfo.applicationInfo.publicSourceDir, 
+				pInfo.mLibPath, pInfo.packageName);
 	}
 
 	public ClassLoader createClassLoader(Context baseContext, String apkPath, String libPath, String targetPackageName) {
@@ -371,11 +377,11 @@ public class ApkPackageManager extends BasePackageManager {
 				info.mLibPath = destLibDir.getPath();
 				
 				// asume there is only one apk.
-				ClassLoader cl = createClassLoader(mContext, 
-						info.applicationInfo.sourceDir, 
-						info.mLibPath, 
-						info.applicationInfo.packageName,
-						true);
+//				ClassLoader cl = createClassLoader(mContext, 
+//						info.applicationInfo.sourceDir, 
+//						info.mLibPath, 
+//						info.applicationInfo.packageName,
+//						true);
 				
 				mInfos.addOrUpdate(info);
 			} catch (IOException e) {

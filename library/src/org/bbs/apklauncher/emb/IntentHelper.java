@@ -32,6 +32,10 @@ import android.util.Log;
 /**
  * < 5.0 Intent.putSerizable() do not support classloader.
  * 
+ * init this by IntentHelper.PersistentObject.getInstance().init()
+ * @see {@link #PersistentObject}
+ * 
+ * <P>
  * Created by bysong
  * 
  */

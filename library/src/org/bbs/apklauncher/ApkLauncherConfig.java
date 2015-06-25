@@ -10,8 +10,10 @@ import android.util.Log;
  */
 @ExportApi
 public class ApkLauncherConfig {
-	public static boolean DEBUG;
-	public static int LOG_LEVEL;
+	static boolean DEBUG;
+	static int LOG_LEVEL;	
+	
+	public static /*final*/ boolean ENALBE_SERVICE = true;
 
 	public static void setDebug(boolean debug){
 		DEBUG = debug;
