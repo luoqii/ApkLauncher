@@ -41,10 +41,11 @@ public class Util {
 		return getTargetActivity(a);
 	}
 	
-	public static Object getTargetActivityFormFrag_V4(android.support.v4.app.Fragment f) {
+	public static Object getTargetActivityFormFrag(android.support.v4.app.Fragment f) {
 		Object o = null;
 		Activity a = f.getActivity();
 		
 		return getTargetActivity(a);
 	}
+	
 }

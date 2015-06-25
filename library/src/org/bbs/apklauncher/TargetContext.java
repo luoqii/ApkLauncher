@@ -265,7 +265,7 @@ ContextWrapper
 		throw new RuntimeException("not supported.");
 	}	
 	
-//	 file-related.	
+//	 file related method.	
 //	private static final String[] EMPTY_FILE_LIST = {};
 //	private Object mSync = new Object();
 //	private File mPreferencesDir;

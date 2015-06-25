@@ -4,6 +4,7 @@ import org.bbs.apklauncher.api.Base_Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import com.example.apklauncher_app_intent_helper.R;
@@ -30,5 +31,6 @@ public class ResultActivity extends Base_Activity {
 		text = "pa: " + pa;
 		text = text + "\nsa: " + sa;
 		((TextView)findViewById(R.id.text1)).setText(text);
+		findViewById(R.id.button).setVisibility(View.INVISIBLE);
 	}
 }

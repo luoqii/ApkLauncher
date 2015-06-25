@@ -14,10 +14,9 @@ for file in `find . -name "*.java"`; do
 echo "file: $file"
 
 # Activity
-for a in Activity TabActivity PreferenceActivity ListActivity	
+for a in FragmentActivity Activity TabActivity PreferenceActivity ListActivity	
 do
-#ExpandableListActivity
-#TabActivity
+echo activity: $a
 cp $file ${file}.bak
 sed  "/^.*extends\s*${a}.*/ s/\(.*extends\s*\)\(${a}\)\(.*\)/\1${PREFIX}\2\3/" ${file}.bak > $file
 rm ${file}.bak

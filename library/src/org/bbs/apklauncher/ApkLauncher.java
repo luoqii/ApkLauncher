@@ -47,6 +47,7 @@ public class ApkLauncher {
 	}	
 	
 	public void init(Application context, String assetsPath, boolean force){
+		Log.i(TAG, "version: " + Version.VERSION);
 		ApkPackageManager.getInstance().init(context, assetsPath, force);
 	}
 	

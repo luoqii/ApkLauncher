@@ -48,7 +48,7 @@ public class ApkPackageManager extends BasePackageManager {
 	
 	private static /*final*/ String PLUGIN_DIR_NAME = "plugin_data";
 	private static final String APK_FILE_SUFFIX = ".apk";
-    private static final String PREF_EXTRACT_APK = "extract_apk";
+    private static final String PREF_EXTRACT_APK = ApkPackageManager.class.getName() + ".preferences";
     private static final String PERF_KEY_APK_HAS_SCANNED = "apk_has_scanned";
     
     private static final boolean DEBUG = ApkLauncherConfig.DEBUG && true;

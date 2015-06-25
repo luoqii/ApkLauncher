@@ -21,16 +21,16 @@ public class ViewCreater {
 			"android.app." };
 
 	public static View onCreateView(String name, Context context,
-			AttributeSet attrs, ClassLoader classLoader, final Object object
+			AttributeSet attrs, ClassLoader hostClassLoader, ClassLoader targetClassLoader, final Object activity
 //			.final Class clazz
 			) {
 
 		View v = null;
 		if (name.contains(".")) {
-			v = createView(name, context, attrs, classLoader);
+			v = createView(name, context, attrs, targetClassLoader);
 		} else {
 			for (String prefix : sClassPrefixList) {
-				v = createView(prefix + name, context, attrs, classLoader);
+				v = createView(prefix + name, context, attrs, hostClassLoader);
 				if (null != v) {
 					break;
 				}
@@ -53,7 +53,7 @@ public class ViewCreater {
 							public void onClick(View v) {
 								if (mHandler == null) {
 									try {
-										mHandler = object
+										mHandler = activity
 												.getClass()
 												.getMethod(handlerName,
 														View.class);
@@ -70,7 +70,7 @@ public class ViewCreater {
 												"Could not find a method "
 														+ handlerName
 														+ "(View) in the activity "
-														+ object
+														+ activity
 														+ " for onClick handler"
 														+ " on view "
 														+ v.getClass() + idText,
@@ -79,7 +79,7 @@ public class ViewCreater {
 								}
 
 								try {
-									mHandler.invoke(object, v);
+									mHandler.invoke(activity, v);
 								} catch (IllegalAccessException e) {
 									throw new IllegalStateException(
 											"Could not execute non "
@@ -111,7 +111,9 @@ public class ViewCreater {
 			return (View) construtor
 					.newInstance(new Object[] { context, attrs });
 		} catch (Exception e) {
-			//e.printStackTrace();
+			// FIXME to fix this error
+			Log.e(TAG, "can NOT createView. view: " + className + " classLoader: " + classLoader);
+//			Log.e(TAG, "createView. view: " + className + " classLoader: " + classLoader, e);
 		}
 
 		return null;

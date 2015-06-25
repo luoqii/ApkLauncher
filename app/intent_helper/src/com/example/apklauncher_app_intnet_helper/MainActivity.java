@@ -27,6 +27,10 @@ public class MainActivity extends Base_Activity {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new org.bbs.apklauncher.emb.IntentHelper(MainActivity.this, ResultActivity.class);
+				
+//				intent = new org.bbs.apklauncher.emb.IntentHelper();
+//				intent.setClass(MainActivity.this, ResultActivity.class);
+				
 				// FIXME we just can put Serializable object to intent.
 				//				intent.putExtra(ResultActivity.EXTRA_PARCEL, new P(1));
 				intent.putExtra(ResultActivity.EXTRA_SERIABLE, new S(1));

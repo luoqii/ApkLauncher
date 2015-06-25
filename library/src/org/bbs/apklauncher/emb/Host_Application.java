@@ -2,7 +2,6 @@ package org.bbs.apklauncher.emb;
 
 import org.bbs.apklauncher.ApkPackageManager;
 import org.bbs.apklauncher.ApkUtil;
-import org.bbs.apklauncher.LoadedApk;
 import org.bbs.apklauncher.PackageManagerProxy;
 import org.bbs.apklauncher.ReflectUtil;
 import org.bbs.apklauncher.ResourcesMerger;
@@ -59,6 +58,7 @@ Application
 					if (!(app instanceof Target_Application)) {
 						throw new RuntimeException("youe application must extends " + Target_Application.class.getName());
 					}
+					((Target_Application)app).attachTargetClassLoader(classLoader);
 					appBaseContext.applicationContextReady(app);
 	
 					attachBundleAplication(app, appBaseContext);

@@ -1,5 +1,6 @@
 package org.bbs.apklauncher.emb;
 
+import org.bbs.apklauncher.AndroidUtil;
 import org.bbs.apklauncher.ViewCreater;
 import org.bbs.apklauncher.emb.IntentHelper.PersistentObject;
 
@@ -18,12 +19,23 @@ public class Target_Application extends Application
 {
 	private static final String TAG = Target_Application.class.getSimpleName();
 	private LayoutInflater mInflater;
+	private ClassLoader mTargetClassLoader;
 	
 	@Override
 	public void onCreate() {
 		super.onCreate();
 
 		PersistentObject.getsInstance().init(this, getClassLoader());
+	}
+	
+	@Override
+	protected void attachBaseContext(Context base) {
+		super.attachBaseContext(base);
+	}
+	
+	@Override
+	public Context getApplicationContext() {
+		return getBaseContext().getApplicationContext();
 	}
 	
 	@Override
@@ -34,6 +46,10 @@ public class Target_Application extends Application
 	public Resources getResources() {
 		return getBaseContext().getResources();
 	}	
+	
+	void attachTargetClassLoader(ClassLoader classLoader){
+		mTargetClassLoader = classLoader;
+	}
 	
 	// can merge with TargetContext ??? 
 	@Override 
@@ -46,7 +62,10 @@ public class Target_Application extends Application
 					
 					@Override
 					public View onCreateView(String name, Context context, AttributeSet attrs) {
-						return ViewCreater.onCreateView(name, context, attrs, getClassLoader(), this);
+						return ViewCreater.onCreateView(name, context, attrs, 
+								AndroidUtil.getContextImpl(Target_Application.this).getClassLoader(),
+								mTargetClassLoader,
+								this);
 					}
 				});
             }
