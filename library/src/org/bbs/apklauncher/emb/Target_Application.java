@@ -20,6 +20,7 @@ public class Target_Application extends Application
 	private static final String TAG = Target_Application.class.getSimpleName();
 	private LayoutInflater mInflater;
 	private ClassLoader mTargetClassLoader;
+	private ClassLoader mHostClassLoader;
 	
 	@Override
 	public void onCreate() {
@@ -31,6 +32,7 @@ public class Target_Application extends Application
 	@Override
 	protected void attachBaseContext(Context base) {
 		super.attachBaseContext(base);
+		mHostClassLoader = AndroidUtil.getContextImpl(this).getClassLoader();
 	}
 	
 	@Override
@@ -63,7 +65,7 @@ public class Target_Application extends Application
 					@Override
 					public View onCreateView(String name, Context context, AttributeSet attrs) {
 						return ViewCreater.onCreateView(name, context, attrs, 
-								AndroidUtil.getContextImpl(Target_Application.this).getClassLoader(),
+								mHostClassLoader,
 								mTargetClassLoader,
 								this);
 					}
