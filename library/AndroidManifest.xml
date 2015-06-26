@@ -44,20 +44,14 @@
     <uses-sdk
         android:minSdkVersion="4"
         android:targetSdkVersion="21" />
-
+    
+    <instrumentation         
+        android:name="android.test.InstrumentationTestRunner" 
+        android:targetPackage="org.bbs.apklauncher"></instrumentation>
+    
     <application >
 
-        <!-- apk laucher -->
-        <activity
-            android:name="org.bbs.apklauncher.StubActivity"
-            android:label="StubActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-
+        <uses-library android:name="android.test.runner"/>
         <!-- stub component: activity -->
         <activity
             android:name="org.bbs.apklauncher.emb.auto_gen.Stub_ListActivity"
