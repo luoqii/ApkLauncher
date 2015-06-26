@@ -1,11 +1,11 @@
 package org.bbs.apklauncher_zeroinstall_shell;
 
-import org.bbs.apklauncher.LauncherActivity;
+import org.bbs.apklauncher.SingleLauncherActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 
-public class MainActivity extends LauncherActivity {
+public class MainActivity extends SingleLauncherActivity {
 	private static final String TAG = MainActivity.class.getSimpleName();
 	
 	@Override
@@ -14,9 +14,5 @@ public class MainActivity extends LauncherActivity {
 		
 		Intent update = new Intent(this, UpdateService.class);
 		startService(update);
-	}
-
-	protected String getTargetActivityClassName() {
-		return "com.example.apklauncher_app.MainActivity";
 	}
 }

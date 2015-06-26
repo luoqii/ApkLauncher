@@ -38,7 +38,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.ResolveInfo;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
-import android.support.v4.widget.SlidingPaneLayout.PanelSlideListener;
 import android.text.TextUtils;
 import android.util.Log;
 import dalvik.system.DexClassLoader;
@@ -353,6 +352,16 @@ public class ApkPackageManager extends BasePackageManager {
 				//==========123456789012345678
 				Log.i(TAG, "apk info   : " + appInfoStr(info));
 				compareInfo(getHostPacageInfoX(), info);
+				String reqSdkV = info.applicationInfo.metaData.getString(ApkLauncher.MANIFEST_META_REQUIRE_MIN_SDK_VERSION);
+				if (TextUtils.isEmpty(reqSdkV)){
+					Log.w(TAG, "no " + ApkLauncher.MANIFEST_META_REQUIRE_MIN_SDK_VERSION + " specified in Manifest.");
+				} else {
+					String reqVersion = org.bbs.apklauncher.Version.extractVersion(reqSdkV);
+					String sdkVersion = org.bbs.apklauncher.Version.extractVersion(org.bbs.apklauncher.Version.VERSION);
+					if (org.bbs.apklauncher.Version.isNewerRaw(reqVersion,sdkVersion)){
+						Log.w(TAG, "plug require a higher sdk version. req version: " + reqVersion + " our version: " + sdkVersion);
+					}
+				}
 				
 				File destLibDir = new File(getAppDataDir(info.packageName), "/lib");
 				

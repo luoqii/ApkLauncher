@@ -1,17 +1,11 @@
 package org.bbs.apklauncher_zeroinstall_shell;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import orb.bbs.apklauncher.zeroinstall.shell.BuildConfig;
 
 import org.bbs.android.commonlib.ExceptionCatcher;
 import org.bbs.android.commonlib.Version;
-import org.bbs.apklauncher.AndroidUtil;
-import org.bbs.apklauncher.ApkPackageManager;
+import org.bbs.apklauncher.ApkLauncher;
 import org.bbs.apklauncher.emb.Host_Application;
-
-import android.content.SharedPreferences;
-import android.content.res.AssetManager;
 
 public class App extends Host_Application {
 	private static final String PREF_EXTRACT_APK = "extract_apk";
@@ -26,40 +20,11 @@ public class App extends Host_Application {
 		Version version = Version.getInstance();
 		version.init(this);
 		
-		ApkPackageManager am = ApkPackageManager.getInstance();
-		am.init(this);
-		if (version.appUpdated() || version.firstUsage() || BuildConfig.DEBUG) {
-			doScanApk(am);
-		} else {
-			reScanApkIfNecessary(am);
-		}
+        ApkLauncher apkLauncher = ApkLauncher.getInstance();
+        apkLauncher.init(this,"plugin",
+                BuildConfig.DEBUG
+//                && false
+                );
 	}
 
-	private void reScanApkIfNecessary(ApkPackageManager am) {
-		SharedPreferences s = getSharedPreferences(PREF_EXTRACT_APK, 0);
-		boolean scanned = s.getBoolean(PERF_KEY_APK_HAS_SCANNED, false);
-		if (!scanned) {
-			doScanApk(am);
-		}
-	}
-
-	private void doScanApk(ApkPackageManager am) {
-		File tempApkDir = getDir("temp_apk", 0);
-		extractApkFromAsset("plugin", tempApkDir.getPath());
-		am.scanApkDir(tempApkDir);		
-
-		SharedPreferences s = getSharedPreferences(PREF_EXTRACT_APK, 0);
-		s.edit().putBoolean(PERF_KEY_APK_HAS_SCANNED, true).commit();
-	}
-
-	private void extractApkFromAsset(String srcDir, String destDir) {
-		AssetManager am = getResources().getAssets();
-		try {
-			for (String fp : am.list(srcDir)) {
-				AndroidUtil.copyStream(am.open(srcDir + "/" + fp), new FileOutputStream(new File(destDir, fp)));
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 }

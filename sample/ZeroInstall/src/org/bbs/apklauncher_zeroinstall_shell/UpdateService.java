@@ -13,6 +13,7 @@ import orb.bbs.apklauncher.zeroinstall.shell.R;
 import org.bbs.android.commonlib.ActivityUtil;
 import org.bbs.apklauncher.AndroidUtil;
 import org.bbs.apklauncher.ApkPackageManager;
+import org.bbs.apklauncher.Version;
 import org.bbs.apkparser.PackageInfoX;
 
 import android.annotation.SuppressLint;
@@ -95,10 +96,13 @@ public class UpdateService extends Service {
 //                        mMonitor.start();
 
         				PackageInfoX pInfo = ApkPackageManager.getInstance().getPackageInfo("com.example.apklauncher_zero_install");
-        				int code = toCode(updateInfo.version);
-        				if (code <= pInfo.versionCode) {
-        					Log.i(TAG, "our versionCode    : " + pInfo.versionCode);
-        					Log.i(TAG, "upgrade versionCode: " + code);
+        				if (null == pInfo ) {
+        					Log.e(TAG, "null packageInfo, return;");
+        				}
+        				if ((Version.isNewer(pInfo.versionName, updateInfo.version)
+        						|| Version.isSame(pInfo.versionName, updateInfo.version))) {
+        					Log.i(TAG, "our versionName    : " + pInfo.versionName);
+        					Log.i(TAG, "upgrade versionName: " + updateInfo.version);
         					Log.i(TAG, "ignore this upgrade.");
         					return ;
         				}
@@ -128,30 +132,18 @@ public class UpdateService extends Service {
         UmengUpdateAgent.update(this);
 //        UmengUpdateAgent.silentUpdate(this);
 	}
-	
-	int toCode(String versionName){
-		int code = -1;
-		String[] ver = versionName.split("\\.");
-		code = Integer.parseInt(ver[0]) * 10000;
-		code += Integer.parseInt(ver[1]) * 100;
-		if (ver.length > 2){
-			code += Integer.parseInt(ver[2]);
-		}
-		return code;
-	}
-	
+
 	class Donwloader extends AsyncTask<UpdateResponse, Integer, File>{
-		
-		
+		private UpdateResponse mUpdateRes;
 
 		@Override
 		protected File doInBackground(UpdateResponse... params) {
 			if (null != params && params.length > 0){
-				UpdateResponse r = params[0];
-				Log.d(TAG, "try download file: " + r.path);
+				mUpdateRes = params[0];
+				Log.d(TAG, "try download file: " + mUpdateRes.path);
 				
 				try {
-					URLConnection u = new URL(r.path).openConnection();
+					URLConnection u = new URL(mUpdateRes.path).openConnection();
 					InputStream in = u.getInputStream();
 					
 					File outF = new File(ApkPackageManager.getInstance().getAutoUpdatePluginDir() + "/lasted.apk.donwload");
@@ -190,12 +182,13 @@ public class UpdateService extends Service {
 			super.onPostExecute(result);
 			
 			if (result != null){
-				ActivityUtil.toast(getApplicationContext(), "app has updated", Toast.LENGTH_LONG);
+				String uStr = "app has upgraded. v" + mUpdateRes.version;
+				ActivityUtil.toast(getApplicationContext(), uStr, Toast.LENGTH_LONG);
 				
 				Notification n = new Notification();
 				Notification.Builder b = new Notification.Builder(getApplicationContext());
 				b.setSmallIcon(R.drawable.ic_launcher);
-				b.setContentText("new app has upgraded.");
+				b.setContentText(uStr);
 				b.setContentTitle("Upgrade");
 //				Intent intent = new Intent(getApplicationContext(), );				
 //				PendingIntent pIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, 0);
@@ -246,6 +239,7 @@ public class UpdateService extends Service {
             if (null != apkFile) {
                 apkFileReady(apkFile);
             } else {
+            	
             	Log.e(TAG, "error on download file: " + apkFile);
             }
         }
