@@ -21,7 +21,8 @@ function genLib(){
 		src=../src/org/bbs/apklauncher/emb/
 		dst=$dir/org/bbs/apklauncher/emb/
 		mkdir `dirname $dst`
-
+                
+                # copy file
 		for f in IntentHelper.java PendingIntentHelper.java ; do
 			mkdir -p $dst
 			cp -f  $src/$f $dst/$f

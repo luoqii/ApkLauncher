@@ -5,6 +5,7 @@ import orb.bbs.apklauncher.zeroinstall.shell.BuildConfig;
 import org.bbs.android.commonlib.ExceptionCatcher;
 import org.bbs.android.commonlib.Version;
 import org.bbs.apklauncher.ApkLauncher;
+import org.bbs.apklauncher.TargetContext;
 import org.bbs.apklauncher.emb.Host_Application;
 
 public class App extends Host_Application {

@@ -56,7 +56,7 @@ Application
 					app = (Application) clazz.newInstance();
 					ApkUtil.dumpClassType((app.getClass()));
 					if (!(app instanceof Target_Application)) {
-						throw new RuntimeException("youe application must extends " + Target_Application.class.getName());
+						throw new RuntimeException("youe application must extends " + "org.bbs.apklauncher.api.Base_Application");
 					}
 					((Target_Application)app).attachTargetClassLoader(classLoader);
 					appBaseContext.applicationContextReady(app);

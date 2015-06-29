@@ -25,6 +25,7 @@ import org.bbs.apkparser.PackageInfoX;
 import org.bbs.apkparser.PackageInfoX.ActivityInfoX;
 import org.bbs.apkparser.PackageInfoX.ApplicationInfoX;
 import org.bbs.apkparser.PackageInfoX.IntentFilterX;
+import org.bbs.apkparser.PackageInfoX.PermissionTreeX;
 import org.bbs.apkparser.PackageInfoX.ServiceInfoX;
 import org.bbs.apkparser.PackageInfoX.UsesPermissionX;
 
@@ -35,6 +36,8 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageItemInfo;
+import android.content.pm.PermissionGroupInfo;
 import android.content.pm.ResolveInfo;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
@@ -217,7 +220,12 @@ public class ApkPackageManager extends BasePackageManager {
 	
 	@ExportApi
 	public File getPluginDir() {
-		return mContext.getDir(PLUGIN_DIR_NAME, 0);
+		File placeHolder = mContext.getDir("placeholder", 0);
+		File dir = new File(placeHolder.getParent(), PLUGIN_DIR_NAME);
+		dir.mkdirs();
+		
+		return dir;
+//		return mContext.getDir(PLUGIN_DIR_NAME, 0);
 	}
 	
 	@ExportApi
@@ -444,7 +452,7 @@ public class ApkPackageManager extends BasePackageManager {
 			//----------1234567890123456789
 			Log.w(TAG, "unused permission:");
 			for (UsesPermissionX p : l){
-				Log.w(TAG, "++" + p.mName);
+				Log.w(TAG, "++" + p.name);
 			}
 		}
 		l = substract(targetL, hostL);
@@ -452,30 +460,78 @@ public class ApkPackageManager extends BasePackageManager {
 			//----------1234567890123456789
 			Log.w(TAG, "need   permission:");
 			for (UsesPermissionX p : l){
-				Log.w(TAG, "--" + p.mName);
+				Log.w(TAG, "--" + p.name);
 			}
 		}
 		
-		// TODO permissionGroup ... 
+		List<PermissionGroupInfo> hostPG = toList(host.mPermissionGroups);
+		List<PermissionGroupInfo> targetPG = toList(info.mPermissionGroups);
+		List<PermissionGroupInfo> pg = substract(hostPG, targetPG);
+		if (pg.size() > 0) {
+			//----------12345678901234567890123
+			Log.w(TAG, "unused permission group:");
+			for (PermissionGroupInfo g : pg){
+				Log.w(TAG, "++" + g.name);
+			}
+		}
+		pg = substract(targetPG, hostPG);
+		if (pg.size() > 0) {
+			//----------12345678901234567890123
+			Log.w(TAG, "need   permission group:");
+			for (PermissionGroupInfo g : pg){
+				Log.w(TAG, "--" + g.name);
+			}
+		}
+
+		List<PermissionTreeX> hostPT = toList(host.mPermissionTrees);
+		List<PermissionTreeX> targetPT = toList(info.mPermissionTrees);
+		List<PermissionTreeX> pt = substract(hostPT, targetPT);
+		if (pt.size() > 0) {
+			//----------12345678901234567890123
+			Log.w(TAG, "unused permission true:");
+			for (PermissionTreeX g : pt){
+				Log.w(TAG, "++" + g.name);
+			}			
+		}
+		pt = substract(targetPT, hostPT);
+		if (pt.size() > 0) {
+			//----------12345678901234567890123
+			Log.w(TAG, "unused permission true:");
+			for (PermissionTreeX g : pt){
+				Log.w(TAG, "--" + g.name);
+			}			
+		}
+		
 	}
 	
-	List<UsesPermissionX> toList(UsesPermissionX[] ps) {
-		List<UsesPermissionX> list = new ArrayList<>();
-		if (ps != null){
-			for (UsesPermissionX p : ps) {
+	private <T> List toList(
+			T[] pgs) {
+		List<T> list = new ArrayList<>();
+		if (pgs != null){
+			for (T p : pgs) {
 				list.add(p);
 			}
 		}
+		
 		return list;
 	}
+
+//	List<UsesPermissionX> toList(UsesPermissionX[] ps) {
+//		List<UsesPermissionX> list = new ArrayList<>();
+//		if (ps != null){
+//			for (UsesPermissionX p : ps) {
+//				list.add(p);
+//			}
+//		}
+//		return list;
+//	}	
 	
-	
-	List<UsesPermissionX> substract(List<UsesPermissionX> left, List<UsesPermissionX> right){
-		List<UsesPermissionX> list = new ArrayList<>();
+	<T extends PackageItemInfo>List substract(List<T> left, List<T> right){
+		List<T> list = new ArrayList<>();
 		for (int i = 0; i < left.size() ; i++) {
 			boolean found = false;
 			for (int j = 0; j < right.size() ; j++) {
-				if (left.get(i).mName.equals(right.get(j).mName)){
+				if (left.get(i).name.equals(right.get(j).name)){
 					found = true;
 					break;
 				}

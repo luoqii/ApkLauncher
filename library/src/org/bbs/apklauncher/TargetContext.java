@@ -281,7 +281,7 @@ ContextWrapper
 //	 file related method.	
 	private static final String[] EMPTY_FILE_LIST = {};
 
-	private static /*final*/ boolean ENBABLE_FILE = ApkLauncherConfig.DEBUG && true;
+	public static /*final*/ boolean ENBABLE_FILE = ApkLauncherConfig.DEBUG && true;
 	private static final boolean DEBUG_FILE = ENBABLE_FILE && true;
 	private Object mSync = new Object();
 	private File mPreferencesDir;
