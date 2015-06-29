@@ -47,7 +47,7 @@ public class ApkPackageManager extends BasePackageManager {
 	
 	private static /*final*/ String PLUGIN_DIR_NAME = "plugin_data";
 	private static final String APK_FILE_SUFFIX = ".apk";
-    private static final String PREF_EXTRACT_APK = ApkPackageManager.class.getName() + ".preferences";
+    private static final String PREF_EXTRACT_APK = ApkPackageManager.class.getName() + "";
     private static final String PERF_KEY_APK_HAS_SCANNED = "apk_has_scanned";
     
     private static final boolean DEBUG = ApkLauncherConfig.DEBUG && true;
@@ -763,7 +763,7 @@ public class ApkPackageManager extends BasePackageManager {
 	// copied from https://github.com/luoqii/android_common_lib/blob/master/library/src/org/bbs/android/commonlib/Version.java
 	static class Version {
 		private static final int INVALID_CODE = -1;
-		private /*static*/ /*final*/ String PREF_NAME = Version.class.getSimpleName() + ".pref";
+		private /*static*/ /*final*/ String PREF_NAME = Version.class.getSimpleName() + "";
 		private static final String KEY_PREVIOUS_V_CODE = "previous_version_code";
 		private static final String KEY_PREVIOUS_V_NAME = "previous_version_name";
 		private static final String TAG = Version.class.getSimpleName();
