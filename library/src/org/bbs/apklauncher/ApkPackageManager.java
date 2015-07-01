@@ -360,7 +360,10 @@ public class ApkPackageManager extends BasePackageManager {
 				//==========123456789012345678
 				Log.i(TAG, "apk info   : " + appInfoStr(info));
 				compareInfo(getHostPacageInfoX(), info);
-				String reqSdkV = info.applicationInfo.metaData.getString(ApkLauncher.MANIFEST_META_REQUIRE_MIN_SDK_VERSION);
+				String reqSdkV = "";
+				if (info.applicationInfo.metaData != null ) {
+					reqSdkV = info.applicationInfo.metaData.getString(ApkLauncher.MANIFEST_META_REQUIRE_MIN_SDK_VERSION);
+				}
 				if (TextUtils.isEmpty(reqSdkV)){
 					Log.w(TAG, "no " + ApkLauncher.MANIFEST_META_REQUIRE_MIN_SDK_VERSION + " specified in Manifest.");
 				} else {

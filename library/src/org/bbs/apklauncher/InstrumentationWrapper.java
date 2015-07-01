@@ -7,6 +7,7 @@ import org.bbs.apklauncher.ReflectUtil.ActivityReflectUtil;
 
 import android.R.array;
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Application;
 import android.app.Fragment;
@@ -14,9 +15,11 @@ import android.app.Instrumentation;
 import android.app.UiAutomation;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -25,232 +28,25 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
+/**
+ * 
+ * inspired by {@link ContextWrapper}
+ * 
+ * @author bysong
+ *
+ */
 public class InstrumentationWrapper extends Instrumentation {
 		private static final String TAG = InstrumentationWrapper.class.getSimpleName();
 		private Instrumentation mBase;
-		private InstrumentationWrapper.CallBack mCallback;
-		private Handler mUiHandler;
 		
-		public static interface CallBack {
-			public void onProcessIntent(Intent intent);
-		}
-
-		static class ReflectUtil {
-			
-						public static ActivityResult execStartActivity(Object receiver, Context who,
-								IBinder contextThread, IBinder token, Activity target,
-								Intent intent, int requestCode, Bundle options) {
-							try {
-		//						EmbeddedActivityAgent.ActivityReflectUtil.dumpMethod(Instrumentation.class, "execStartActivity");
-								Method m = Instrumentation.class.getDeclaredMethod("execStartActivity", 
-										new Class[]{Context.class,
-													IBinder.class, 
-													IBinder.class, 
-													Activity.class,
-													Intent.class, 
-													// int.class VS Integer.class
-													int.class, 
-													Bundle.class});
-								m.setAccessible(true);
-								return (ActivityResult) m.invoke(receiver, new Object[]{who,
-													contextThread, 
-													token, 
-													target,
-													intent,
-													requestCode,
-													options});
-							} catch (Exception e) {
-								ActivityReflectUtil.dumpMethod(Instrumentation.class, "execStartActivity");
-								throw new RuntimeException("error in execStartActivity.", e);
-							}
-						}
-		
-						public static void execStartActivitiesAsUser(Instrumentation receiver, Context who,
-								IBinder contextThread, IBinder token, Activity target,
-								Intent[] intents, Bundle options, int userId) {
-							try {
-		//						EmbeddedActivityAgent.ActivityReflectUtil.dumpMethod(Instrumentation.class, "execStartActivitiesAsUser");
-								Method m = Instrumentation.class.getDeclaredMethod("execStartActivitiesAsUser", 
-										new Class[]{Context.class,
-													IBinder.class, 
-													IBinder.class, 
-													Activity.class,
-													Intent.class,
-													Bundle.class,
-													// int.class VS Integer.class
-													int.class});
-								m.setAccessible(true);
-								m.invoke(receiver, new Object[]{who,
-													contextThread, 
-													token, 
-													target,
-													intents,
-													options, 
-													userId});
-							} catch (Exception e) {
-								ActivityReflectUtil.dumpMethod(Instrumentation.class, "execStartActivitiesAsUser");
-								throw new RuntimeException("error in execStartActivitiesAsUser.", e);
-							}
-						}
-		
-						@SuppressLint("NewApi")
-						public static ActivityResult execStartActivity(
-								Instrumentation receiver, Context who,
-								IBinder contextThread, IBinder token, Fragment target,
-								Intent intent, int requestCode, Bundle options) {
-							try {
-		//						EmbeddedActivityAgent.ActivityReflectUtil.dumpMethod(Instrumentation.class, "execStartActivity");
-								Method m = Instrumentation.class.getDeclaredMethod("execStartActivity", 
-										new Class[]{Context.class,
-													IBinder.class, 
-													IBinder.class, 
-													Fragment.class,
-													// int.class VS Integer.class
-													int.class, 
-													Bundle.class});
-								m.setAccessible(true);
-								return (ActivityResult) m.invoke(receiver, 
-										new Object[]{who,
-													contextThread, 
-													token, 
-													target,
-													intent,
-													requestCode,
-													options});
-							}  catch (Exception e) {
-								ActivityReflectUtil.dumpMethod(Instrumentation.class, "execStartActivity");
-								throw new RuntimeException("error in execStartActivity.", e);
-							}
-						}
-		
-						public static Object execStartActivities(Instrumentation receiver,
-								Context who, IBinder contextThread, IBinder token,
-								Activity target, Intent[] intents, Bundle options,
-								int myUseId) {
-							try {
-			//					EmbeddedActivityAgent.ActivityReflectUtil.dumpMethod(Instrumentation.class, "execStartActivities");
-								Method m = Instrumentation.class.getDeclaredMethod("execStartActivities", 
-										new Class[]{Context.class,
-													IBinder.class, 
-													IBinder.class, 
-													Activity.class,
-													array.class,
-													Bundle.class,
-													// int.class VS Integer.class
-													int.class});
-								m.setAccessible(true);
-								return (ActivityResult) m.invoke(receiver, 
-										new Object[]{who,
-													contextThread, 
-													token, 
-													target,
-													intents,
-													options,
-													myUseId});
-							}  catch (Exception e) {
-								ActivityReflectUtil.dumpMethod(Instrumentation.class, "execStartActivities");
-								throw new RuntimeException("error in execStartActivities.", e);
-							}
-						}
-						
-					}
-
-		public InstrumentationWrapper(Instrumentation base, Handler uiHandler){
+		public InstrumentationWrapper(Instrumentation base){
 			mBase = base;
-			mUiHandler = uiHandler;
 		}
 		
-		public void setCallBack(InstrumentationWrapper.CallBack callback) {
-			mCallback = callback;
+		public Instrumentation getBase(){
+			return mBase;
 		}
-		
-		public void processIntent(Intent intent) {
-			if (null != mCallback) {
-				mCallback.onProcessIntent(intent);
-			}
-		}
-		
-		public static void injectInstrumentation(Object activity, InstrumentationWrapper.CallBack callback) {
-			Instrumentation i = (Instrumentation) ActivityReflectUtil.getFiledValue(Activity.class, activity, "mInstrumentation");
-			Field f = ActivityReflectUtil.getFiled(Activity.class, activity, "mInstrumentation");
-			InstrumentationWrapper wrapper = new InstrumentationWrapper(i, new Handler());
-			wrapper.setCallBack(callback);
-			ActivityReflectUtil.setField(activity, f, wrapper);
-		}
-		
-		public ActivityResult execStartActivity(
-	            Context who, IBinder contextThread, IBinder token, Activity target,
-	            Intent intent, int requestCode, Bundle options) {
-	    	processIntent(intent);
-	    	
-	    	ActivityResult r = ReflectUtil.execStartActivity(mBase, who, contextThread, token, target,
-					intent, requestCode, options);
-	    	
-	    	disableActivityTransition(target);
-	    	// FIXME activity transition
-//			((Activity)who).overridePendingTransition(0, 0);
-			
-			return r;
-		}
-		
-		public void disableActivityTransition(final Activity target) {
-			mUiHandler.post(new Runnable() {
 				
-				@Override
-				public void run() {
-					target.overridePendingTransition(0, 0);
-				}
-			});
-		}
-		
-	    public void execStartActivities(Context who, IBinder contextThread,
-	            IBinder token, Activity target, Intent[] intents, Bundle options) {
-	    	for (Intent intent: intents) {
-	    		processIntent(intent);
-	    	}
-	        
-	    	ReflectUtil.execStartActivities(mBase, who, contextThread, token, target, intents, options, myUseId());
-
-	    	disableActivityTransition(target);
-	    }
-	    
-	    private int myUseId() {
-			int userId = -1;
-			try {
-				Method myUserIdM = Class.forName("android.os.UserHandle").getDeclaredMethod("myUseId", (Class[])null);
-				myUserIdM.setAccessible(true);
-				userId = ((Integer) myUserIdM.invoke(null, (Object[])null));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return userId;
-		}
-
-		public void execStartActivitiesAsUser(Context who, IBinder contextThread,
-	            IBinder token, Activity target, Intent[] intents, Bundle options,
-	            int userId) {
-	    	for (Intent intent: intents) {
-	    		processIntent(intent);
-	    	}
-	    	
-	    	ReflectUtil.execStartActivitiesAsUser(mBase, who, contextThread, token, target,
-	    			intents, options, userId);
-
-	    	disableActivityTransition(target);
-	    }
-	    @SuppressLint("NewApi")
-		public ActivityResult execStartActivity(
-	            Context who, IBinder contextThread, IBinder token, Fragment target,
-	            Intent intent, int requestCode, Bundle options) {
-	    	processIntent(intent);
-	    	ActivityResult result = ReflectUtil.execStartActivity(mBase, who, contextThread, token, target, 
-	    			intent, requestCode, options);
-
-	    	disableActivityTransition(target.getActivity());
-	    	
-	    	return result;
-	    }
-
 		// call base method instead.
 		@Override
 		public void onCreate(Bundle arguments) {
@@ -641,4 +437,6 @@ public class InstrumentationWrapper extends Instrumentation {
 			return mBase.getUiAutomation();
 		}
 		
+
+
 	}

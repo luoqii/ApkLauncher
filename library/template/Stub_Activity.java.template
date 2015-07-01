@@ -16,8 +16,8 @@ import org.bbs.apklauncher.emb.IntentHelper;
 import org.bbs.apklauncher.ViewCreater;
 import org.bbs.apklauncher.emb.auto_gen.Target_Activity;
 import org.bbs.apkparser.PackageInfoX.ActivityInfoX;
-import org.bbs.apklauncher.InstrumentationWrapper;
-import org.bbs.apklauncher.InstrumentationWrapper.CallBack;
+import org.bbs.apklauncher.TargetInstrumentation;
+import org.bbs.apklauncher.TargetInstrumentation.CallBack;
 import org.bbs.apklauncher.ReflectUtil;
 import org.bbs.apklauncher.ResourcesMerger;
 import org.bbs.apklauncher.TargetContext;
@@ -131,7 +131,7 @@ implements CallBack {
 														 mHostSysPm);
 		
 		// do activity init
-		InstrumentationWrapper.injectInstrumentation(this, this);
+		TargetInstrumentation.injectInstrumentation(this, this);
 		try {
 			mTargetResourceMerger = ApkPackageManager.makeTargetResource(apkPath, mHostBaseContext);
 
