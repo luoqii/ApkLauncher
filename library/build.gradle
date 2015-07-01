@@ -3,8 +3,10 @@ apply plugin: 'android-library'
 android {
     signingConfigs {
     }
-    compileSdkVersion 21
-    buildToolsVersion "21.1.2"
+
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
     defaultConfig {
 //        applicationId "com.bombtime.bombtime"
         minSdkVersion 14
