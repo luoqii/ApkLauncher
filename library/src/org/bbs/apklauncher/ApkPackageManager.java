@@ -150,7 +150,7 @@ public class ApkPackageManager extends BasePackageManager {
 		return has;
 	}
 
-	public static ResourcesMerger makeTargetResource(String mTargetApkPath,
+	public static ResourcesMerger getTargetResource(String mTargetApkPath,
 			Context context) {
 		WeakReference<ResourcesMerger> rr = ApkPackageManager.sApk2ResourceMap.get(mTargetApkPath);
 		Resources targetRes;

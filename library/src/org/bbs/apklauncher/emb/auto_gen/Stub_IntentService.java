@@ -23,7 +23,7 @@ public class Stub_IntentService extends StubBase_IntentService {
 	/**
 	 * type {@link String}
 	 */
-	public static final String EXTRA_COMPONENT_CLASS_NAME = ApkLauncher.EXTRA_TARGET_COMPONENT_CLASS_NAME;
+	public static final String EXTRA_TARGET_COMPONENT_CLASS_NAME = ApkLauncher.EXTRA_TARGET_COMPONENT_CLASS_NAME;
 
 	private ResourcesMerger mResourceMerger;
 	private Application mRealApplication;
@@ -56,7 +56,7 @@ public class Stub_IntentService extends StubBase_IntentService {
 	}
 	
 	protected void onPrepareServiceStub(Intent intent) {
-		mTargetServiceClassName = intent.getStringExtra(EXTRA_COMPONENT_CLASS_NAME);
+		mTargetServiceClassName = intent.getStringExtra(EXTRA_TARGET_COMPONENT_CLASS_NAME);
 		ServiceInfoX serviceInfo = ApkPackageManager.getInstance().getServiceInfo(mTargetServiceClassName);
 		
 		String apkPath = serviceInfo.applicationInfo.publicSourceDir;
@@ -82,7 +82,7 @@ public class Stub_IntentService extends StubBase_IntentService {
 																						mTargetClassLoader, mRealSysPm);
 		
 		try {
-			mResourceMerger = ApkPackageManager.makeTargetResource(apkPath, mRealBaseContext);
+			mResourceMerger = ApkPackageManager.getTargetResource(apkPath, mRealBaseContext);
 			
 			mTargetContext.resReady(mResourceMerger);
 //			mTargetContext.packageNameReady(serviceInfo.applicationInfo.packageName);

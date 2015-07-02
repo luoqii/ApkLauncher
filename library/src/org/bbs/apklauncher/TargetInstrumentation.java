@@ -20,9 +20,7 @@ import android.os.IBinder;
 import android.util.Log;
 
 public class TargetInstrumentation extends InstrumentationWrapper {
-	private static final String TAG = TargetInstrumentation.class
-			.getSimpleName();
-	private static final boolean LOG_CALL = ApkLauncherConfig.DEBUG && true;
+	private static final String TAG = TargetInstrumentation.class.getSimpleName();
 	private CallBack mCallback;
 	private Handler mUiHandler;
 
@@ -31,14 +29,6 @@ public class TargetInstrumentation extends InstrumentationWrapper {
 		mUiHandler = uiHandler;
 	}
 	
-	public static void injectInstrumentation(Object activity, CallBack callback) {
-		Instrumentation intr = (Instrumentation) ActivityReflectUtil.getFiledValue(Activity.class, activity, "mInstrumentation");
-		Field f = ActivityReflectUtil.getFiled(Activity.class, activity, "mInstrumentation");
-		TargetInstrumentation wrapper = new TargetInstrumentation(intr, new Handler());
-		wrapper.setCallBack(callback);
-		ActivityReflectUtil.setField(activity, f, wrapper);
-	}
-
 	public void setCallBack(CallBack callback) {
 		mCallback = callback;
 	}
@@ -114,6 +104,14 @@ public class TargetInstrumentation extends InstrumentationWrapper {
     	
     	return result;
     }
+
+	public static void injectInstrumentation(Object activity, CallBack callback) {
+		Instrumentation intr = (Instrumentation) ActivityReflectUtil.getFiledValue(Activity.class, activity, "mInstrumentation");
+		Field f = ActivityReflectUtil.getFiled(Activity.class, activity, "mInstrumentation");
+		TargetInstrumentation wrapper = new TargetInstrumentation(intr, new Handler());
+		wrapper.setCallBack(callback);
+		ActivityReflectUtil.setField(activity, f, wrapper);
+	}
 
 	public static interface CallBack {
 		public void onProcessIntent(Intent intent);

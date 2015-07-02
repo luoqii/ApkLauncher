@@ -133,7 +133,7 @@ implements CallBack {
 		// do activity init
 		TargetInstrumentation.injectInstrumentation(this, this);
 		try {
-			mTargetResourceMerger = ApkPackageManager.makeTargetResource(apkPath, mHostBaseContext);
+			mTargetResourceMerger = ApkPackageManager.getTargetResource(apkPath, mHostBaseContext);
 
 			targetThemeId = ReflectUtil.ResourceUtil
 											.selectDefaultTheme(mTargetResourceMerger, 

@@ -21,11 +21,17 @@ public class Host_Application extends
 Application
 {
 	private static final String TAG = Host_Application.class.getSimpleName();;
+	// TODO to support more apps.
 	Application mTargetAppliction;
 	private PersistentObject mPersistent;
 	
 	public /*static*/ Application onPrepareApplictionStub(ApplicationInfo appInfo, 
-			ClassLoader classLoader, PackageManager pm) {
+			ClassLoader classLoader, PackageManager pm){
+		return onPrepareApplictionStub(appInfo, classLoader, pm, true);
+	}
+			
+	public /*static*/ Application onPrepareApplictionStub(ApplicationInfo appInfo, 
+			ClassLoader classLoader, PackageManager pm, boolean attachTargetClassLoader) {
 		String apkPath = appInfo.publicSourceDir;
 		Application app = ApkPackageManager.getApplication(appInfo.packageName);
 		if (null == app) {
@@ -37,7 +43,7 @@ Application
 				try {
 	
 					TargetContext appBaseContext = new TargetContext(this);
-					Resources appRes = ApkPackageManager.makeTargetResource(apkPath, this);
+					Resources appRes = ApkPackageManager.getTargetResource(apkPath, this);
 					appRes = new ResourcesMerger(appRes, getResources());
 					appBaseContext.resReady(appRes);
 					int appTheme = appInfo.theme;
@@ -55,10 +61,12 @@ Application
 	
 					app = (Application) clazz.newInstance();
 					ApkUtil.dumpClassType((app.getClass()));
-					if (!(app instanceof Target_Application)) {
-						throw new RuntimeException("youe application must extends " + "org.bbs.apklauncher.api.Base_Application");
+					if (attachTargetClassLoader) {
+						if (!(app instanceof Target_Application)) {
+							throw new RuntimeException("youe application must extends " + "org.bbs.apklauncher.api.Base_Application");
+						}
+						((Target_Application)app).attachTargetClassLoader(classLoader);
 					}
-					((Target_Application)app).attachTargetClassLoader(classLoader);
 					appBaseContext.applicationContextReady(app);
 	
 					attachBundleAplication(app, appBaseContext);

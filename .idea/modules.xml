@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file:///mnt/workbench/ApkLauncher/app/samples/android-21/legacy/ApiDemos/ApiDemos.iml" filepath="/mnt/workbench/ApkLauncher/app/samples/android-21/legacy/ApiDemos/ApiDemos.iml" />
+      <module fileurl="file:///mnt/workbench/ApkLauncher/ApkLauncher.iml" filepath="/mnt/workbench/ApkLauncher/ApkLauncher.iml" />
+      <module fileurl="file:///mnt/workbench/ApkLauncher/app/samples/android-21/android-21.iml" filepath="/mnt/workbench/ApkLauncher/app/samples/android-21/android-21.iml" />
+      <module fileurl="file:///mnt/workbench/ApkLauncher/sample/apklauncher/apklauncher.iml" filepath="/mnt/workbench/ApkLauncher/sample/apklauncher/apklauncher.iml" />
+      <module fileurl="file:///mnt/workbench/ApkLauncher/app/app.iml" filepath="/mnt/workbench/ApkLauncher/app/app.iml" />
+      <module fileurl="file:///mnt/workbench/ApkLauncher/app/samples/android-21/legacy/legacy.iml" filepath="/mnt/workbench/ApkLauncher/app/samples/android-21/legacy/legacy.iml" />
+      <module fileurl="file:///mnt/workbench/ApkLauncher/library/library.iml" filepath="/mnt/workbench/ApkLauncher/library/library.iml" />
+      <module fileurl="file:///mnt/workbench/ApkLauncher/sample/sample.iml" filepath="/mnt/workbench/ApkLauncher/sample/sample.iml" />
+      <module fileurl="file:///mnt/workbench/ApkLauncher/app/samples/samples.iml" filepath="/mnt/workbench/ApkLauncher/app/samples/samples.iml" />
+    </modules>
+  </component>
+</project>

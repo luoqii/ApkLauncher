@@ -44,10 +44,7 @@ public class MainActivity extends Activity {
 					@Override
 					public void onClick(View v) {
 						PackageInfoX.ActivityInfoX a = (ActivityInfoX) v.getTag();
-						
-						Log.d(TAG, "onClick. activity: " + a);
-						
-						ApkLauncher.getInstance().startActivity(MainActivity.this, a);
+						onAppClick(a);
 					}
 				});
 				return v ;
@@ -62,14 +59,18 @@ public class MainActivity extends Activity {
 					int position, long id) {
 
 				PackageInfoX.ActivityInfoX a = (ActivityInfoX) view.getTag();
-				
-				Log.d(TAG, "onClick. activity: " + a);
 
-				ApkLauncher.getInstance().startActivity(MainActivity.this, a);
-				
+				onAppClick(a);
 			}
 		});
 		mListView.setEmptyView(findViewById(android.R.id.empty));;
 	}
 	
+	
+	protected void onAppClick(ActivityInfoX info){
+		
+		Log.d(TAG, "onClick. activity: " + info);
+
+		ApkLauncher.getInstance().startActivity(MainActivity.this, info);
+	}
 }
