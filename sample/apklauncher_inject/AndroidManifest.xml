@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.bbs.apklauncher.demo_inject"
+    package="org.bbs.apklauncher.demo_inject"    
+    xmlns:tools="http://schemas.android.com/tools"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -40,6 +41,48 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
+    
+    <uses-permission android:name="android.permission.START_ANY_ACTIVITY"/>
+    
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
+    <uses-permission android:name="com.android.launcher.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="com.android.browser.permission.READ_HISTORY_BOOKMARKS" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIMAX_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIMAX_STATE" />
+
+    <!-- FOR multiscreen BEGIN -->
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    
+    <!-- send sticky intent for Mstar&amlogic -->
+    <uses-permission android:name="android.permission.BROADCAST_STICKY" />
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -167,6 +210,847 @@
         </activity>
 
         <service android:name="org.bbs.apklauncher.emb.auto_gen.Stub_Service" />
+        
+        <!--  youku -->
+ <activity
+            android:name="com.youku.tv.WelcomeActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="tv_app_name"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <!--
+                     keep only this in ONE line, do not delete it, if y don't 
+                     want it, comment out it.                
+                     bysong
+                -->
+<!--                 <category android:name="android.intent.category.HOME" /> -->
+                
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" >
+                </action>
+
+                <category android:name="android.intent.category.DEFAULT" >
+                </category>
+
+                <data android:scheme="com.youku.tv" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" >
+                </action>
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="youkutv" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.youku.tv.ui.activity.HomeActivityWithViewPager"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustNothing" >
+        </activity>
+        <activity
+            android:name="com.youku.tv.ui.activity.UserFavoriteActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustNothing" >
+        </activity>
+        <activity
+            android:name="com.youku.tv.ui.activity.LogcatActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name="com.youku.tv.ui.activity.ChannelActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name="com.youku.tv.ui.activity.AllViedosActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name="com.youku.tv.ui.activity.AllAppsActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name="com.youku.tv.ui.activity.FeedbackActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name="com.youku.tv.ui.activity.HistoryActivityNew"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name="com.youku.tv.ui.activity.SearchInputActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name="com.youku.tv.ui.activity.SearchResultActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name="com.youku.tv.ui.activity.DetailActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:hardwareAccelerated="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name="com.youku.tv.ui.activity.NewSubjectActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name="com.youku.tv.ui.activity.QRCodeLoginActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name="com.youku.tv.ui.activity.HomeSettingActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:hardwareAccelerated="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name="com.youku.tv.ui.activity.MembersActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name="com.youku.tv.ui.activity.MemberDetailActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:hardwareAccelerated="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name="com.youku.tv.ui.activity.TopsActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name="com.youku.tv.ui.activity.PrivateChannelActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name="com.youku.tv.ui.activity.UgcChannelActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+
+        <!-- Player1.1 start -->
+        <activity
+            android:name="com.youku.tv.ui.activity.UserCenterActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <!-- Player1.1 end -->
+
+        <uses-library android:name="android.test.runner" />
+
+        <activity
+            android:name="com.youku.player.activity.YoukuTVPlayerActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
+        </activity>
+
+        <!-- add from 2.1 -->
+        <activity
+            android:name="com.youku.tv.ui.activity.RecommendActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name="com.youku.tv.ui.activity.MyUploadActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <!-- add from 2.1 -->
+        <activity
+            android:name="com.youku.tv.ui.activity.SubscriptActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+
+        <!-- added from 2.4 -->
+        <activity
+            android:name="com.youku.tv.ui.activity.DetailFullDescActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:hardwareAccelerated="false"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+
+        <!-- MultiScreenService -->
+        <service
+            android:name="com.youku.player.MultisreenService"
+            android:process=":multiscreen" />
+        
+        <activity
+            android:name="com.youku.player.AirplayPhotoActivity"
+            android:process=":multiscreen"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+
+        <receiver android:name="com.youku.player.BootBroadcastReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" >
+                </action>
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name="com.youku.tv.ui.activity.MultiScreenActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        
+        <activity
+            android:name="com.youku.tv.settings.SettingsActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:hardwareAccelerated="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+
+        <!-- 接收第三方合作发来的广播 -->
+        <receiver android:name="com.youku.broadcast.CooperationBroadcastReceiver" >
+            <intent-filter>
+                <action android:name="com.youku.tv" />
+            </intent-filter>
+        </receiver>
+
+        <!-- OpenUDID -->
+        <service android:name="org.openudid.OpenUDID_service" >
+            <intent-filter>
+                <action android:name="org.openudid.GETUDID" />
+            </intent-filter>
+            
+        </service>
+        
+        <service android:name="com.youku.tv.settings.service.AreasService" />
+        <service android:name="com.youku.tv.settings.service.WeatherService" />
+        <service android:name="com.youku.tv.settings.service.YoukuUpgradeService" />
+        <receiver android:name="com.youku.tv.settings.receiver.YoukuReceiver" >
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>          
+                
+        <!-- 艾瑞 -->
+<!--         <receiver
+            android:name="com.datac.newspm.broadcast.LauncherBroadcast"
+            android:enabled="true" >
+            <intent-filter android:priority="2147483647" >
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.ACTION_SHUTDOWN" />
+                <action android:name="android.intent.action.REBOOT" />
+                <action android:name="android.intent.action.USER_PRESENT" />
+                <action android:name="android.intent.action.BATTERY_CHANGED" />
+                <action android:name="android.intent.action.DOCK_EVENT" />
+                <action android:name="android.intent.action.ACTION_SCREEN_ON" />
+                <action android:name="android.intent.action.SCREEN_OFF" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.datac.newspm.broadcast.ApplicationBroadcast"
+            android:label="@string/tv_app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name="com.datac.newspm.services.MMS"
+            android:process=":jdh" >
+            <intent-filter android:priority="1000">
+                <action android:name="com.datac.newspm.services.MMS" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+        
+        <service
+            android:name="com.datac.newspm.services.ShareService"
+            android:process=":share" >
+        </service>
+
+        <meta-data
+            android:name="ire_key"
+            android:value="youku_android_jdh" /> -->
+        <!-- 艾瑞 -->
+
+
+        <!--
+        <service android:name="com.youku.multiscreensdk.tvserver.api.MultiScreenServerCoreService"
+            android:label="MultiScreenServerCoreService"
+            android:process=":MultiScreenServerCoreService">
+             <intent-filter>
+                 <action android:name="com.youku.multiscreensdk.remoteservice.MultiScreenServerCoreService"/>
+             </intent-filter>
+        </service>
+        
+        <receiver android:name="com.youku.multiscreensdk.tvserver.receiver.BootCompleteReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" ></action>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </receiver>
+
+
+
+        -->
+        
+        <!-- cibn -->
+
+                <activity
+            android:name="com.cibn.tv.WelcomeActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="string/tv_app_n"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <!--
+                keep only this in one line, do not delete it, if y don't want it
+                comment out it.                
+                bysong
+
+                -->
+                <category android:name="android.intent.category.HOME" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" >
+                </action>
+
+                <category android:name="android.intent.category.DEFAULT" >
+                </category>
+
+                <data android:scheme="com.youku.tv" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" >
+                </action>
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="cykew" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.cibn.tv.ui.activity.HomeActivityWithViewPager"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustNothing" >
+        </activity>
+        <activity
+            android:name="com.cibn.tv.ui.activity.UserFavoriteActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustNothing" >
+        </activity>
+        <activity
+            android:name="com.cibn.tv.ui.activity.LogcatActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name="com.cibn.tv.ui.activity.ChannelActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.cibn.tv.ui.activity.AllViedosActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name="com.cibn.tv.ui.activity.AllAppsActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name="com.cibn.tv.ui.activity.FeedbackActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name="com.cibn.tv.ui.activity.HistoryActivityNew"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name="com.cibn.tv.ui.activity.NewSearchActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name="com.cibn.tv.ui.activity.SearchInputActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name="com.cibn.tv.ui.activity.SearchResultActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name="com.cibn.tv.ui.activity.DetailActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:hardwareAccelerated="false"
+            android:launchMode="standard"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name="com.cibn.tv.ui.activity.NewSubjectActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name="com.cibn.tv.ui.activity.QRCodeLoginActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name="com.cibn.tv.ui.activity.HomeSettingActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:hardwareAccelerated="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+            <intent-filter>
+                <action android:name="com.cibn.tv.HomeSettingActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.cibn.tv.ui.activity.MembersActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name="com.cibn.tv.ui.activity.MemberDetailActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:hardwareAccelerated="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name="com.cibn.tv.ui.activity.TopsActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+
+        <!-- Player1.1 start -->
+        <activity
+            android:name="com.cibn.tv.ui.activity.UserCenterActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <!-- Player1.1 end -->
+
+        <uses-library android:name="android.test.runner" />
+
+<!--         <activity
+            android:name="com.youku.player.activity.YoukuTVPlayerActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="string/tv_app_name"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
+        </activity> -->
+
+        <!-- add from 2.1 -->
+        <activity
+            android:name="com.cibn.tv.ui.activity.RecommendActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name="com.cibn.tv.ui.activity.MyUploadActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <!-- add from 2.1 -->
+        <activity
+            android:name="com.cibn.tv.ui.activity.SubscriptActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+
+        <!-- added from 2.4 -->
+        <activity
+            android:name="com.cibn.tv.ui.activity.DetailFullDescActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:hardwareAccelerated="false"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        
+        <!-- added from cibn1.5 -->
+        <activity
+            android:name="com.cibn.tv.ui.activity.StarPageDetailActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:hardwareAccelerated="false"
+            android:screenOrientation="landscape"
+            android:launchMode="standard"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+            
+        </activity>
+
+        <!-- MultiScreenService -->
+        <service
+            android:name="com.youku.newplayer.multiscreen.MultiscreenService"
+            android:process=":multiscreen" />
+
+        <activity
+            android:name="com.youku.newplayer.multiscreen.AirplayPhotoActivity"
+            android:process=":multiscreen"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        
+        <receiver android:name="com.youku.newplayer.multiscreen.BootBroadcastReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" >
+                </action>
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name="com.cibn.tv.ui.activity.MultiScreenActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+
+        <!-- 接收第三方合作发来的广播 -->
+        <receiver android:name="com.cibn.broadcast.CooperationBroadcastReceiver" >
+            <intent-filter>
+                <action android:name="com.youku.tv" />
+            </intent-filter>
+        </receiver>
+
+        <!-- OpenUDID -->
+        <service android:name="org.openudid.OpenUDID_service" >
+            <intent-filter>
+                <action android:name="org.openudid.GETUDID" />
+            </intent-filter>
+        </service>
+
+        <!-- 监听网络状态的广播 -->
+        <receiver android:name="com.youku.lib.receiver.YoukuReceiver" >
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
+        <!--
+        <service android:name="com.youku.multiscreensdk.tvserver.api.MultiScreenServerCoreService"
+            android:label="MultiScreenServerCoreService"
+            android:process=":MultiScreenServerCoreService">
+             <intent-filter>
+                 <action android:name="com.youku.multiscreensdk.remoteservice.MultiScreenServerCoreService"/>
+             </intent-filter>
+        </service>
+        
+        <receiver android:name="com.youku.multiscreensdk.tvserver.receiver.BootCompleteReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" ></action>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </receiver>
+
+        -->
+
+
+        <!-- 私有播放器SDK -->
+        <!-- P2P加速器Server服务 -->
+        <service
+            android:name="com.youku.service.acc.AcceleraterService"
+            android:enabled="true"
+            android:process=":Service_ACC" >
+            <intent-filter>
+                <action android:name="com.youkutv.sdk.acc" />
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name="com.youku.player.YoukuTVNewPlayerActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
+        </activity>
+        
+<!--         <activity
+            android:name="com.youku.tv.settings.SettingsActivity"
+            tools:replace="android:configChanges"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
+        </activity> -->
+                <!--  <service android:name="com.youku.tv.settings.service.AreasService" /> -->
+        <!-- <service android:name="com.youku.tv.settings.service.WeatherService" /> -->
+        <service android:name="com.youku.tv.settings.service.YoukuUpgradeService" />
+        <receiver android:name="com.youku.tv.settings.receiver.YoukuReceiver" >
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>  
+         <service android:name="com.youku.logger.service.LogPollingService" >
+        </service>
+        <service android:name="com.cibn.service.CIBNUpgradeService" >
+        </service>
+        
+        <!-- push -->
+        
+        <!-- 标示客户端的类型，默认值为优酷主客户端：[1] 优酷 [2] 拍客 [4] 土豆 -->
+        <meta-data
+            android:name="app_type"
+            android:value="10" />
+        
+        <!-- PushService -->
+        <service
+            android:name="com.youku.pushsdk.service.PushService"
+            android:exported="true"
+            android:process="com.push.Youku_PushService" >
+            <intent-filter>
+                <action android:name="com.youku.pushsdk.pushservice.START_PUSH_SERVICE" />
+                <action android:name="com.youku.pushsdk.pushservice.BASE_DATA" />
+                <action android:name="com.youku.pushsdk.pushservice.EVENT_DATA" />
+                <action android:name="com.youku.pushsdk.pushservice.ACTION_PUSH_SWITCH_CHANGE" />
+                <action android:name="com.youku.pushsdk.pushservice.ACTION_NET_CHANGE" />
+                <action android:name="com.youku.pushsdk.pushservice.ACTION_COLLECT_DATA" />
+                <action android:name="com.youku.pushsdk.pushservice.PUSH_STATE" />
+            </intent-filter>
+        </service>
+
+        <!-- 用于接收系统消息以保证PushService正常运行 -->
+        <receiver android:name="com.youku.pushsdk.receiver.YoukuMyPushServiceReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
+        <!-- 监听客户端的动作，如安装、卸载、定时检测service运行状态、定时收集数据等 -->
+ <!--        <receiver android:name="com.youku.pushsdk.receiver.YoukuAppActionReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.youku.pushsdk.pushservice.ALARM_TICK" />
+                <action android:name="com.youku.pushsdk.pushservice.ALARM_DATA_COLLECT" />
+            </intent-filter>
+        </receiver> -->
+        
+        <!-- 该广播接收器所需要的action -->
+        <receiver android:name="com.youku.tv.app.push.PushMsgReceiver" >
+            <intent-filter>
+                <action android:name="com.youku.android.pushsdk.action.MESSAGE" />
+            </intent-filter>
+        </receiver>
+        
+        <service android:name="com.youku.tv.app.push.PushMsgRecvService" >
+        </service>
+        
+        <!-- 点击push消息广播 -->
+        <receiver android:name="com.cibn.tv.push.PushMsgClickRecv" >
+            <intent-filter>
+                <action android:name="com.cibn.tv.push.action.CICLK_DIALOG" />
+            </intent-filter>
+        </receiver>
+        
+        <!-- push -->
+         <service android:name="com.youku.tv.app.packagedownloadcomponent.AppManagementService"
+             android:exported="true"/>
+        <!-- <service android:name="com.cibn.tv.services.AppUpgradeInfoService"/>  -->
     </application>
 
 </manifest>

@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bbs.apklauncher.api.ExportApi;
-import org.bbs.apklauncher.emb.IntentHelper;
-import org.bbs.apklauncher.emb.auto_gen.Stub_Activity;
 import org.bbs.apklauncher.emb.auto_gen.Target_ActionBarActivity;
 import org.bbs.apklauncher.emb.auto_gen.Target_Activity;
 import org.bbs.apklauncher.emb.auto_gen.Target_ActivityGroup;
@@ -18,13 +16,10 @@ import org.bbs.apklauncher.emb.auto_gen.Target_ListActivity;
 import org.bbs.apklauncher.emb.auto_gen.Target_PreferenceActivity;
 import org.bbs.apklauncher.emb.auto_gen.Target_Service;
 import org.bbs.apklauncher.emb.auto_gen.Target_TabActivity;
-import org.bbs.apkparser.PackageInfoX;
 
-import android.annotation.SuppressLint;
-import android.app.Application;
-import android.content.ComponentName;
+import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -41,6 +36,19 @@ public class ApkUtil {
 	static HashMap<String, String> sActivityClassMap = new HashMap<String, String>();
 	static HashMap<String, String> sPreDefinedActivityClassMap = new HashMap<String, String>();
 	static HashMap<String, String> sSuperClassNameMap = new HashMap<String, String>();
+	
+	public static void updateTitle(Activity activity, ActivityInfo info, Resources res) {
+		CharSequence title = "";
+		if (info.labelRes  > 0) {
+			title = res.getString(info.labelRes);
+		}
+		if (TextUtils.isEmpty(title)) {
+			title = info.nonLocalizedLabel;
+		}
+		if (!TextUtils.isEmpty(title)) {
+			activity.setTitle(title);
+		}
+	}
 
 	public static  Resources loadApkResource(String apkFilePath, Context context) {
 		AssetManager assets = null;

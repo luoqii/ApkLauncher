@@ -42,6 +42,14 @@ extends Resources
 		mFirst = first;
 		mSecond = second;
 	}
+	
+	public Resources getFirst() {
+		return mFirst;
+	}
+	
+	public Resources getSecond() {
+		return mSecond;
+	}
 
 	public CharSequence getText(int id) throws NotFoundException {
 		try {

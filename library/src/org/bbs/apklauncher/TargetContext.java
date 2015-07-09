@@ -73,6 +73,8 @@ ContextWrapper
 //		super(base, themeResId);
 //	}
 	
+	
+	// TODO move xxxReade functions to attach(xx1 x, xx2 x2, ...)
 	public static void bundleReadyX(TargetContext LazyContext, Bundle bundle, Resources res, String packageName) {
 		// trivas build error
 //		LazyContext.mClassLoader = bundle.adapt(BundleWiring.class).getClassLoader();

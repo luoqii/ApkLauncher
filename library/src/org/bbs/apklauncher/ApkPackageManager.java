@@ -600,6 +600,11 @@ public class ApkPackageManager extends BasePackageManager {
 	public List<PackageInfoX> getAllApks(){
 		return mInfos;
 	}
+
+	@ExportApi
+	public ActivityInfoX getActivityInfo(Class clazz) {
+		return getActivityInfo(clazz.getName());
+	}
 	
 	@ExportApi
 	public ActivityInfoX getActivityInfo(String className) {
@@ -613,7 +618,7 @@ public class ApkPackageManager extends BasePackageManager {
 				}
 			}
 		}
-		
+
 		return null;
 	}	
 	

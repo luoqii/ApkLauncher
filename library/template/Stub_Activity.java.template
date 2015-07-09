@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.bbs.apklauncher.ReflectUtil.ActivityReflectUtil;
 
+import org.bbs.apklauncher.ApkUtil;
 import org.bbs.apklauncher.ApkLauncher;
 import org.bbs.apklauncher.ApkLauncherConfig;
 import org.bbs.apklauncher.AndroidUtil;
@@ -71,7 +72,7 @@ implements CallBack {
 		
 		super.onCreate(savedInstanceState);
 		
-		updateTitle();
+		ApkUtil.updateTitle(this, mTargetActivityInfo, mTargetResourceMerger);
 	}
 	
 	@Override
@@ -166,19 +167,6 @@ implements CallBack {
 		return mIntent;
 		
 //		return super.getIntent();
-	}
-
-	private void updateTitle() {
-		CharSequence title = "";
-		if (mTargetActivityInfo.labelRes  > 0) {
-			title = mTargetResourceMerger.getString(mTargetActivityInfo.labelRes);
-		}
-		if (TextUtils.isEmpty(title)) {
-			title = mTargetActivityInfo.nonLocalizedLabel;
-		}
-		if (!TextUtils.isEmpty(title)) {
-			setTitle(title);
-		}
 	}
 
 	// XXX are we need this really???
