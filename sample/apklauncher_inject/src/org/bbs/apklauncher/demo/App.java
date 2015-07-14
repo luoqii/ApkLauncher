@@ -38,10 +38,10 @@ public class App extends
 Host_Application 
 {
 
-	private static final String TARGET_PKG_NAME = "com.youku.tv";
-	public static final String TARGET_LAUNCHER_NAME = "com.youku.tv.WelcomeActivity";
-//	private static final String TARGET_PKG_NAME = "com.cibn.tv.debug";
-//	public static final String TARGET_LAUNCHER_NAME = "com.cibn.tv.WelcomeActivity";
+//	private static final String TARGET_PKG_NAME = "com.youku.tv";
+//	public static final String TARGET_LAUNCHER_NAME = "com.youku.tv.WelcomeActivity";
+	private static final String TARGET_PKG_NAME = "com.cibn.tv.debug";
+	public static final String TARGET_LAUNCHER_NAME = "com.cibn.tv.WelcomeActivity";
 //	private static final String TARGET_PKG_NAME = "com.example.apklauncher_app_intent_helper";
 //	public static final String TARGET_LAUNCHER_NAME = "com.example.apklauncher_app_intnet_helper.MainActivity";
 //	private static final String TARGET_PKG_NAME = "com.example.android.apis";
@@ -183,7 +183,9 @@ Host_Application
 		}
 
 		private boolean shouldIgnore(String className) {
-			return ApkInitActivity.class.getName().equals(className);
+			return ApkInitActivity.class.getName().equals(className)
+					||BackUpActivity.class.getName().equals(className)
+					;
 		}
 		
 		@Override

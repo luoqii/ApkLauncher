@@ -63,6 +63,7 @@
             </intent-filter>
         </activity>
         <activity
+            android:process=":private"
             android:name="org.bbs.apklauncher.demo.BackUpActivity"
             android:label="AppBackup" >
             <intent-filter>
@@ -74,7 +75,7 @@
         
         <activity
             android:name="org.bbs.apklauncher.demo.ListActivity"
-            android:label="AppBackup" >
+             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>

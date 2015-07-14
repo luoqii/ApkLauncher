@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.bbs.apklauncher.demo_inject"    
+    package="com.cibn.tv.debug.inject"    
     xmlns:tools="http://schemas.android.com/tools"
     android:versionCode="1"
     android:versionName="1.0" >
@@ -95,41 +95,11 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
 
-        
-          <activity
-            android:name="com.example.apklauncher_app.MainActivity"
-            android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
-        
-                  <activity android:name="com.example.android.apis.ApiDemos">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
-        
-                  <!-- intent helper app -->
-                          <activity
-            android:name="com.example.apklauncher_app_intnet_helper.MainActivity"
-            android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
-                <activity
-            android:name="com.example.apklauncher_app_intnet_helper.ResultActivity"
-            android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
-        
+       
         <!-- apk laucher -->
         <activity
             android:name="org.bbs.apklauncher.demo.ApkInitActivity"
-            android:label="AkpLauncher" >
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -137,6 +107,7 @@
             </intent-filter>
         </activity>
         <activity
+            android:process=":a"
             android:name="org.bbs.apklauncher.demo.BackUpActivity"
             android:label="AppBackup" >
             <intent-filter>
@@ -211,11 +182,42 @@
 
         <service android:name="org.bbs.apklauncher.emb.auto_gen.Stub_Service" />
         
+                
+          <activity
+            android:name="com.example.apklauncher_app.MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        
+                  <activity android:name="com.example.android.apis.ApiDemos">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        
+                  <!-- intent helper app -->
+                          <activity
+            android:name="com.example.apklauncher_app_intnet_helper.MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+                <activity
+            android:name="com.example.apklauncher_app_intnet_helper.ResultActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        
         <!--  youku -->
- <activity
+<activity
             android:name="com.youku.tv.WelcomeActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:label="tv_app_name"
+            android:label="@string/app_name"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
             <intent-filter>
@@ -425,6 +427,7 @@
         <activity
             android:name="com.youku.player.activity.YoukuTVPlayerActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name"
             android:launchMode="singleTask"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
@@ -471,16 +474,6 @@
         <service
             android:name="com.youku.player.MultisreenService"
             android:process=":multiscreen" />
-        
-        <activity
-            android:name="com.youku.player.AirplayPhotoActivity"
-            android:process=":multiscreen"
-            android:configChanges="orientation|keyboardHidden"
-            android:launchMode="singleTask"
-            android:screenOrientation="landscape"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-            android:windowSoftInputMode="adjustPan" >
-        </activity>
 
         <receiver android:name="com.youku.player.BootBroadcastReceiver" >
             <intent-filter>
@@ -509,104 +502,13 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
             android:windowSoftInputMode="adjustPan" >
         </activity>
-
-        <!-- 接收第三方合作发来的广播 -->
-        <receiver android:name="com.youku.broadcast.CooperationBroadcastReceiver" >
-            <intent-filter>
-                <action android:name="com.youku.tv" />
-            </intent-filter>
-        </receiver>
-
-        <!-- OpenUDID -->
-        <service android:name="org.openudid.OpenUDID_service" >
-            <intent-filter>
-                <action android:name="org.openudid.GETUDID" />
-            </intent-filter>
-            
-        </service>
-        
-        <service android:name="com.youku.tv.settings.service.AreasService" />
-        <service android:name="com.youku.tv.settings.service.WeatherService" />
-        <service android:name="com.youku.tv.settings.service.YoukuUpgradeService" />
-        <receiver android:name="com.youku.tv.settings.receiver.YoukuReceiver" >
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>          
-                
-        <!-- 艾瑞 -->
-<!--         <receiver
-            android:name="com.datac.newspm.broadcast.LauncherBroadcast"
-            android:enabled="true" >
-            <intent-filter android:priority="2147483647" >
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.ACTION_SHUTDOWN" />
-                <action android:name="android.intent.action.REBOOT" />
-                <action android:name="android.intent.action.USER_PRESENT" />
-                <action android:name="android.intent.action.BATTERY_CHANGED" />
-                <action android:name="android.intent.action.DOCK_EVENT" />
-                <action android:name="android.intent.action.ACTION_SCREEN_ON" />
-                <action android:name="android.intent.action.SCREEN_OFF" />
-            </intent-filter>
-        </receiver>
-        <receiver
-            android:name="com.datac.newspm.broadcast.ApplicationBroadcast"
-            android:label="@string/tv_app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_ADDED" />
-                <action android:name="android.intent.action.PACKAGE_REMOVED" />
-                <action android:name="android.intent.action.PACKAGE_REPLACED" />
-                <data android:scheme="package" />
-            </intent-filter>
-        </receiver>
-
-        <service
-            android:name="com.datac.newspm.services.MMS"
-            android:process=":jdh" >
-            <intent-filter android:priority="1000">
-                <action android:name="com.datac.newspm.services.MMS" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </service>
-        
-        <service
-            android:name="com.datac.newspm.services.ShareService"
-            android:process=":share" >
-        </service>
-
-        <meta-data
-            android:name="ire_key"
-            android:value="youku_android_jdh" /> -->
-        <!-- 艾瑞 -->
-
-
-        <!--
-        <service android:name="com.youku.multiscreensdk.tvserver.api.MultiScreenServerCoreService"
-            android:label="MultiScreenServerCoreService"
-            android:process=":MultiScreenServerCoreService">
-             <intent-filter>
-                 <action android:name="com.youku.multiscreensdk.remoteservice.MultiScreenServerCoreService"/>
-             </intent-filter>
-        </service>
-        
-        <receiver android:name="com.youku.multiscreensdk.tvserver.receiver.BootCompleteReceiver" >
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" ></action>
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </receiver>
-
-
-
-        -->
         
         <!-- cibn -->
 
-                <activity
+      <activity
             android:name="com.cibn.tv.WelcomeActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:label="string/tv_app_n"
+            android:label="@string/app_name"
             android:launchMode="singleTask"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
@@ -792,6 +694,15 @@
             android:windowSoftInputMode="adjustPan" >
         </activity>
         <activity
+            android:name="com.cibn.tv.ui.activity.PersonalCenterActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:hardwareAccelerated="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
             android:name="com.cibn.tv.ui.activity.TopsActivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="singleTask"
@@ -813,14 +724,6 @@
 
         <uses-library android:name="android.test.runner" />
 
-<!--         <activity
-            android:name="com.youku.player.activity.YoukuTVPlayerActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="string/tv_app_name"
-            android:launchMode="singleTask"
-            android:screenOrientation="landscape"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
-        </activity> -->
 
         <!-- add from 2.1 -->
         <activity
@@ -963,14 +866,7 @@
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
         </activity>
         
-<!--         <activity
-            android:name="com.youku.tv.settings.SettingsActivity"
-            tools:replace="android:configChanges"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:launchMode="singleTask"
-            android:screenOrientation="landscape"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
-        </activity> -->
+
                 <!--  <service android:name="com.youku.tv.settings.service.AreasService" /> -->
         <!-- <service android:name="com.youku.tv.settings.service.WeatherService" /> -->
         <service android:name="com.youku.tv.settings.service.YoukuUpgradeService" />
@@ -984,6 +880,18 @@
         </service>
         <service android:name="com.cibn.service.CIBNUpgradeService" >
         </service>
+        
+<!--         <provider
+            android:exported="true"
+            android:authorities="com.youku.tv"
+            android:readPermission="com.youku.tv.permission.READ_HISTORY"
+            android:writePermission="com.youku.tv.permission.WRITE_HISTORY"
+            android:name="com.cibn.tv.VideoCenterProvider">
+            </provider> -->
+            <service 
+            android:exported="true" android:name="com.cibn.tv.VideoCenterService">
+                <intent-filter ><action android:name="com.cibn.tv.BIND_VC_SERIVCE"/></intent-filter>
+            </service>
         
         <!-- push -->
         
@@ -1017,7 +925,7 @@
         </receiver>
 
         <!-- 监听客户端的动作，如安装、卸载、定时检测service运行状态、定时收集数据等 -->
- <!--        <receiver android:name="com.youku.pushsdk.receiver.YoukuAppActionReceiver" >
+<!--         <receiver android:name="com.youku.pushsdk.receiver.YoukuAppActionReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_ADDED" />
                 <action android:name="android.intent.action.PACKAGE_REMOVED" />

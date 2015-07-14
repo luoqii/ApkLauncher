@@ -404,7 +404,7 @@ ContextWrapper
     @Override
     public File getFilesDir() {
     	if (!ENBABLE_FILE) {
-    		return getFilesDir();
+    		return super.getFilesDir();
     	}
         synchronized (mSync) {
             if (mFilesDir == null) {
@@ -438,7 +438,7 @@ ContextWrapper
     @Override
     public File getFileStreamPath(String name) {
     	if (!ENBABLE_FILE) {
-    		return getFileStreamPath(name);
+    		return super.getFileStreamPath(name);
     	}
         return makeFilename(getFilesDir(), name);
     }
@@ -518,6 +518,10 @@ ContextWrapper
     
     @Override
     public String[] databaseList() {
+    	if (!ENBABLE_FILE) {
+    		return super.databaseList();
+    	}
+    	
         final String[] list = getDatabasesDir().list();
         return (list != null) ? list : EMPTY_FILE_LIST;
     }
@@ -558,9 +562,14 @@ ContextWrapper
         return f;
     }
     
-    @Override
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	@Override
     public SQLiteDatabase openOrCreateDatabase(String name, int mode, CursorFactory factory,
             DatabaseErrorHandler errorHandler) {
+    	if (!ENBABLE_FILE) {
+    		return super.openOrCreateDatabase(name, mode, factory, errorHandler);
+    	}
+    	
         File f = validateFilePath(name, true);
         int flags = SQLiteDatabase.CREATE_IF_NECESSARY;
         if ((mode & MODE_ENABLE_WRITE_AHEAD_LOGGING) != 0) {
@@ -594,6 +603,7 @@ ContextWrapper
     	if (!ENBABLE_FILE) {
     		return super.deleteDatabase(name);
     	}
+    	
         try {
             File f = validateFilePath(name, false);
             return SQLiteDatabaseCompat.deleteDatabase(f);

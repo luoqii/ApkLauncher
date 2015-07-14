@@ -48,7 +48,7 @@ Host_Application
 //				return cl;
 //			}
 //		});
-		ApkPackageManager.getInstance().scanApkDir(apkDir);
+//		ApkPackageManager.getInstance().scanApkDir(apkDir);
 	}
 	
 	

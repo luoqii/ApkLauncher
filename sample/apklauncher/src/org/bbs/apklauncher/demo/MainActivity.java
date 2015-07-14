@@ -1,7 +1,6 @@
 package org.bbs.apklauncher.demo;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.bbs.apklauncher.ApkLauncher;
 import org.bbs.apklauncher.ApkPackageManager;
 import org.bbs.apklauncher.ApkUtil;
@@ -9,9 +8,10 @@ import org.bbs.apklauncher.emb.IntentHelper;
 import org.bbs.apkparser.PackageInfoX;
 import org.bbs.apkparser.PackageInfoX.ActivityInfoX;
 import org.bbs.apkparser.PackageInfoX.IntentFilterX;
-
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -23,6 +23,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+@TargetApi(Build.VERSION_CODES.GINGERBREAD)
 public class MainActivity extends Activity {
 	private static final String TAG = MainActivity.class.getSimpleName();
 	
@@ -63,7 +64,11 @@ public class MainActivity extends Activity {
 				onAppClick(a);
 			}
 		});
-		mListView.setEmptyView(findViewById(android.R.id.empty));;
+		mListView.setEmptyView(findViewById(android.R.id.empty));;		
+
+		String s = getSharedPreferences("TEST", MODE_MULTI_PROCESS).getString("KEY", "no found.");
+		Log.d(TAG, "sp: " + s);
+		getSharedPreferences("TEST", 0).edit().putString("KEY", "hello main").apply();
 	}
 	
 	

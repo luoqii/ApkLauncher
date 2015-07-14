@@ -2,7 +2,6 @@ package org.bbs.apklauncher.demo;
 import java.io.File;
 
 import org.bbs.apklauncher.AndroidUtil;
-import org.bbs.apklauncher.demo_inject.R;
 
 import android.app.Activity;
 import android.content.pm.ApplicationInfo;
@@ -15,6 +14,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.cibn.tv.debug.inject.R;
 
 public class BackUpActivity extends Activity {
 	private static final String TAG = BackUpActivity.class.getSimpleName();
@@ -52,6 +53,8 @@ public class BackUpActivity extends Activity {
 			}
 		};
 		((ListView)findViewById(R.id.apk_container)).setAdapter(adapter);;
+		
+
 	}
 	
 }

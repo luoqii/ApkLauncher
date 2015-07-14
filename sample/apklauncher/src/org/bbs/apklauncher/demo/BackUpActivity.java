@@ -1,10 +1,10 @@
 package org.bbs.apklauncher.demo;
 import java.io.File;
-
 import org.bbs.apklauncher.AndroidUtil;
-
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.pm.ApplicationInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +18,7 @@ import android.widget.Toast;
 public class BackUpActivity extends Activity {
 	private static final String TAG = BackUpActivity.class.getSimpleName();
 	
+	@TargetApi(Build.VERSION_CODES.GINGERBREAD)
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -51,6 +52,13 @@ public class BackUpActivity extends Activity {
 			}
 		};
 		((ListView)findViewById(R.id.apk_container)).setAdapter(adapter);;
+		((ListView)findViewById(R.id.apk_container)).setEmptyView(findViewById(android.R.id.empty));;		
+
+		
+
+		String s = getSharedPreferences("TEST", MODE_MULTI_PROCESS).getString("KEY", "no found.");
+		Log.d(TAG, "sp: " + s);
+		getSharedPreferences("TEST", 0).edit().putString("KEY", "hello backup").apply();
 	}
 	
 }
