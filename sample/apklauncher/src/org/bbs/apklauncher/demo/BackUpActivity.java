@@ -54,8 +54,6 @@ public class BackUpActivity extends Activity {
 		((ListView)findViewById(R.id.apk_container)).setAdapter(adapter);;
 		((ListView)findViewById(R.id.apk_container)).setEmptyView(findViewById(android.R.id.empty));;		
 
-		
-
 		String s = getSharedPreferences("TEST", MODE_MULTI_PROCESS).getString("KEY", "no found.");
 		Log.d(TAG, "sp: " + s);
 		getSharedPreferences("TEST", 0).edit().putString("KEY", "hello backup").apply();

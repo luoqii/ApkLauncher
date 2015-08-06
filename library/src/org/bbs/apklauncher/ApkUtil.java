@@ -16,6 +16,7 @@ import org.bbs.apklauncher.emb.auto_gen.Target_ListActivity;
 import org.bbs.apklauncher.emb.auto_gen.Target_PreferenceActivity;
 import org.bbs.apklauncher.emb.auto_gen.Target_Service;
 import org.bbs.apklauncher.emb.auto_gen.Target_TabActivity;
+import org.bbs.apkparser.PackageInfoX.ActivityInfoX;
 
 import android.app.Activity;
 import android.content.Context;
@@ -48,6 +49,13 @@ public class ApkUtil {
 		if (!TextUtils.isEmpty(title)) {
 			activity.setTitle(title);
 		}
+	}
+	
+	public static void updateTitle(Activity activity){		
+		ApkPackageManager apk = ApkPackageManager.getInstance();
+		ActivityInfoX info = apk.getActivityInfo(activity.getClass());
+		
+		ApkUtil.updateTitle(activity, info, activity.getResources());
 	}
 
 	public static  Resources loadApkResource(String apkFilePath, Context context) {

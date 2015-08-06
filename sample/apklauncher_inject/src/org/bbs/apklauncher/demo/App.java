@@ -48,6 +48,7 @@ Host_Application
 //	public static final String TARGET_LAUNCHER_NAME = "com.example.android.apis.ApiDemos";
 //	private static final String TARGET_PKG_NAME = "com.example.apklauncher_zero_install";
 //	public static final String TARGET_LAUNCHER_NAME = "com.example.apklauncher_app.MainActivity";
+	
 	private static final String TAG = App.class.getSimpleName();
 	public static final String APK_LAUNCHER_DIR = "apklauncher";
 	
@@ -69,12 +70,14 @@ Host_Application
 		apk.init(this, "plugin", true);
 //		ApkPackageManager.getInstance().scanApkDir(apkDir);
 		TargetContext.ENBABLE_FILE = false;
+		ApkLauncherConfig.ENALBE_SERVICE = false;
 		
 		injectInstrumentation(this);
 	}
 	
 	public void injectInstrumentation(final Application app){
 		try {
+			// inject ClassLoader
 			Class contextImplClass = Class.forName("android.app.ContextImpl");
 			Object contextImpl = AndroidUtil.getContextImpl(app);
 			Field packageInfoF = contextImplClass.getDeclaredField("mPackageInfo");
@@ -89,6 +92,7 @@ Host_Application
 //			cl = new LogClassLoader(cl);
 			classloaderF.set(packageInfo, cl);
 			
+			// inject Intrumentation
 			Field activityThreadF = contextImplClass.getDeclaredField("mMainThread");
 			activityThreadF.setAccessible(true);
 			Object activityThreadObject = activityThreadF.get(contextImpl);
@@ -147,7 +151,7 @@ Host_Application
 			
 			ClassLoader targetClassLoader = mLoader;
 			
-			ApkLauncherConfig.ENALBE_SERVICE = false;
+			// try init app first.
 			ApkPackageManager apk = ApkPackageManager.getInstance();
 			ActivityInfoX info = apk.getActivityInfo(className);
 			PackageManager pm = mApp.getPackageManager();
@@ -216,6 +220,7 @@ Host_Application
 				injectContext.applicationContextReady(mTargetApp);
 				baseF.set(object, injectContext);
 
+				// inject application
 				ReflectUtil.ActivityReflectUtil.setActivityApplication(object, mTargetApp);
 			} catch (NoSuchFieldException e) {
 				// TODO Auto-generated catch block
@@ -236,11 +241,7 @@ Host_Application
 			if (shouldIgnore(activity.getClass().getName())) {
 				return;
 			}
-			
-			ApkPackageManager apk = ApkPackageManager.getInstance();
-			ActivityInfoX info = apk.getActivityInfo(activity.getClass());
-			
-			ApkUtil.updateTitle(activity, info, activity.getResources());
+			ApkUtil.updateTitle(activity);
 		}
 		
 	}
