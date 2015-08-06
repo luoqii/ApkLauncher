@@ -27,7 +27,8 @@ Host_Application
 		
 		ExceptionCatcher.attachExceptionHandler(this);
 		
-		File apkDir = getDir(APK_LAUNCHER_DIR, 0);
+		File apkDir = null;
+//		apkDir = getDir(APK_LAUNCHER_DIR, 0);
 		apkDir = new File(Environment.getExternalStorageDirectory(), "apk");
 
 		ApkLauncherConfig.setDebug(true);
@@ -48,7 +49,7 @@ Host_Application
 //				return cl;
 //			}
 //		});
-//		ApkPackageManager.getInstance().scanApkDir(apkDir);
+		ApkPackageManager.getInstance().scanApkDir(apkDir);
 	}
 	
 	

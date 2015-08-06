@@ -62,7 +62,8 @@ public class ApkPackageManager extends BasePackageManager {
 	public static Map<String, WeakReference<ResourcesMerger>> sApk2ResourceMap = new HashMap<String, WeakReference<ResourcesMerger>>();
 
 	private InstallApks mInfos;
-	private Application mContext;
+	private Application mApplication;
+	private Context mFileContext;
 
 	private SerializableUtil mSerUtil;
 	private PackageInfoX mHostPkgInfo;	
@@ -107,13 +108,13 @@ public class ApkPackageManager extends BasePackageManager {
 				Log.w(TAG, "has inited, ignore.");
 				return;
 			}
-			mContext = context;
+			mApplication = context;
 			mInfos = new InstallApks();
 			mSerUtil = new SerializableUtil(context);
 
 			// XXX replace will failed for first time. ???
 			if (!hasUpdateApp()) {
-				Version version = Version.getInstance((Application) mContext.getApplicationContext());
+				Version version = Version.getInstance((Application) mApplication.getApplicationContext());
 				if (version.appUpdated() || version.firstUsage()) {
 					// re-build install apk info.
 					scanApkDir(getApkDir(), false);
@@ -218,16 +219,29 @@ public class ApkPackageManager extends BasePackageManager {
 		sApk2ApplicationtMap.put(packageName, new WeakReference<Application>(app));
 	}
 	
+	/**
+	 * all plug-related dir SHOULD base on this dir.
+	 * @return
+	 */
 	@ExportApi
 	public File getPluginDir() {
-		File placeHolder = mContext.getDir("placeholder", 0);
+		File placeHolder = mApplication.getDir("placeholder", 0);
 		File dir = new File(placeHolder.getParent(), PLUGIN_DIR_NAME);
 		dir.mkdirs();
 		
+		assureDir(dir);
+		
 		return dir;
+		
 //		return mContext.getDir(PLUGIN_DIR_NAME, 0);
 	}
 	
+	private void assureDir(File dir) {
+		if (null == dir || !dir.isDirectory()){
+			throw new RuntimeException("can not creaet dir: " + dir);
+		}
+	}
+
 	@ExportApi
 	public File getAutoUpdatePluginDir() {
 		File dir = new File(getPluginDir(), "auto_update");
@@ -258,9 +272,17 @@ public class ApkPackageManager extends BasePackageManager {
 		
 		return dir;
 	}
+
+	@ExportApi
+	private File getDataDir(String name) {
+		File dir = new File(new File(getPluginDir(), name), "temp_apk");
+		dir.mkdirs();
+		
+		return dir;
+	}
 	
 	public void scanAssetDir(String assetsPath, boolean force){
-        Version version = Version.getInstance((Application) mContext.getApplicationContext());
+        Version version = Version.getInstance((Application) mApplication.getApplicationContext());
         if (version.appUpdated() || version.firstUsage()||force
         		) {
             doScanApk(assetsPath);
@@ -270,18 +292,18 @@ public class ApkPackageManager extends BasePackageManager {
 	}
 
 	private void doScanApk(String assetsPath) {
-		File tempApkDir = mContext.getDir("temp_apk", 0);
+		File tempApkDir = getDataDir("temp_apk");
 		extractApkFromAsset(assetsPath, tempApkDir.getPath());
 		scanApkDir(tempApkDir);
 		deleteFile(tempApkDir);
 		
-		SharedPreferences s = mContext.getSharedPreferences(PREF_EXTRACT_APK, 0);
+		SharedPreferences s = mApplication.getSharedPreferences(PREF_EXTRACT_APK, 0);
 		s.edit().putBoolean(PERF_KEY_APK_HAS_SCANNED, true).commit();		
 	}
 	
     private void extractApkFromAsset(String srcDir, String destDir) {
     	long time = System.currentTimeMillis();
-        AssetManager am = mContext.getResources().getAssets();
+        AssetManager am = mApplication.getResources().getAssets();
         try {
             String[] files = am.list(srcDir);
             if (null == files || files.length == 0){
@@ -302,7 +324,7 @@ public class ApkPackageManager extends BasePackageManager {
     }
 	
 	private void reScanApkIfNecessary(String assetsPath) {
-        SharedPreferences s = mContext.getSharedPreferences(PREF_EXTRACT_APK, 0);
+        SharedPreferences s = mApplication.getSharedPreferences(PREF_EXTRACT_APK, 0);
         boolean scanned = s.getBoolean(PERF_KEY_APK_HAS_SCANNED, false);
         if (!scanned) {
             doScanApk(assetsPath);
@@ -348,14 +370,14 @@ public class ApkPackageManager extends BasePackageManager {
 			Log.d(TAG, "parse file : " + file + " copyFile: " + copyFile);
 		}
 		if (file.exists() && file.getAbsolutePath().endsWith(APK_FILE_SUFFIX)){
-			PackageInfoX info = ApkManifestParser.parseAPk(mContext, file.getAbsolutePath());			
+			PackageInfoX info = ApkManifestParser.parseAPk(mApplication, file.getAbsolutePath());			
 			try {
 				File dest = file;
 				if (copyFile) {
 					dest = new File(getApkDir(), info.packageName + APK_FILE_SUFFIX);
 					deleteFile(dest);
 					AndroidUtil.copyFile(file, dest);
-					info = ApkManifestParser.parseAPk(mContext, dest.getAbsolutePath());
+					info = ApkManifestParser.parseAPk(mApplication, dest.getAbsolutePath());
 				}
 				//==========123456789012345678
 				Log.i(TAG, "apk info   : " + appInfoStr(info));
@@ -380,8 +402,8 @@ public class ApkPackageManager extends BasePackageManager {
 					//TODO native lib
 					deleteFile(destLibDir);
 
-					String abi = SystemPropertiesProxy.get(mContext, "ro.product.cpu.abi");
-					String abi2 = SystemPropertiesProxy.get(mContext, "ro.product.cpu.abi2");
+					String abi = SystemPropertiesProxy.get(mApplication, "ro.product.cpu.abi");
+					String abi2 = SystemPropertiesProxy.get(mApplication, "ro.product.cpu.abi2");
 					Log.d(TAG, "abi: " + abi + " abi2: " + abi2);
 					String[] abis = new String[]{abi, abi2};
 //					String[] abis = Build.SUPPORTED_ABIS;
@@ -550,7 +572,7 @@ public class ApkPackageManager extends BasePackageManager {
 	
 	PackageInfoX getHostPacageInfoX(){;
 		if (mHostPkgInfo == null ) {
-			mHostPkgInfo = ApkManifestParser.parseAPk(mContext, mContext.getApplicationInfo().publicSourceDir);
+			mHostPkgInfo = ApkManifestParser.parseAPk(mApplication, mApplication.getApplicationInfo().publicSourceDir);
 		}
 		return mHostPkgInfo;
 	}
@@ -743,13 +765,13 @@ public class ApkPackageManager extends BasePackageManager {
 		}
 	}
 	
-	static class SerializableUtil {
+	class SerializableUtil {
 		public Context mContext;
 		private File mFile;
 		
 		SerializableUtil(Application context){
 			mContext = context;
-			mFile = new File(context.getDir(PLUGIN_DIR_NAME, 0), "plugins.xml");
+			mFile = new File(getPluginDir(), "plugins.xml");
 		}
 		
 		void put(InstallApks apk) {
