@@ -236,10 +236,16 @@ public class ApkUtil {
 	
 	public static void dumpClassType(List<String> superClassName) {
 		Log.d(TAG, "class hierarchy: ");
-		for (String c : superClassName){
+		final int N = superClassName.size();
+		for (int i = N - 1; i >= 0; i--) {
+			String c = superClassName.get(i);
 			//==========123456789012345678
 			Log.d(TAG, "class : " + c);
 		}
+//		for (String c : superClassName){
+//			//==========123456789012345678
+//			Log.d(TAG, "class : " + c);
+//		}
 	}
 
 

@@ -63,7 +63,7 @@ public class ApkPackageManager extends BasePackageManager {
 
 	private InstallApks mInfos;
 	private Application mApplication;
-	private Context mFileContext;
+	private static Context sFileContext;
 
 	private SerializableUtil mSerUtil;
 	private PackageInfoX mHostPkgInfo;	
@@ -109,6 +109,14 @@ public class ApkPackageManager extends BasePackageManager {
 				return;
 			}
 			mApplication = context;
+
+			sFileContext = new FileContext(context) {
+				
+				@Override
+				public String getTargetPackageName() {
+					return "org.bbs.apklauncher.sdk";
+				}
+			};
 			mInfos = new InstallApks();
 			mSerUtil = new SerializableUtil(context);
 
@@ -297,7 +305,7 @@ public class ApkPackageManager extends BasePackageManager {
 		scanApkDir(tempApkDir);
 		deleteFile(tempApkDir);
 		
-		SharedPreferences s = mApplication.getSharedPreferences(PREF_EXTRACT_APK, 0);
+		SharedPreferences s = sFileContext.getSharedPreferences(PREF_EXTRACT_APK, 0);
 		s.edit().putBoolean(PERF_KEY_APK_HAS_SCANNED, true).commit();		
 	}
 	
@@ -890,11 +898,13 @@ public class ApkPackageManager extends BasePackageManager {
 				return;
 			}
 			try {
+				Log.i(TAG, "sdk version: " + org.bbs.apklauncher.Version.VERSION);
+				
 				PackageInfo pInfo = appContext.getPackageManager().getPackageInfo(appContext.getPackageName(), 0);
 				mCurrentVersionCode = pInfo.versionCode;
 				mCurrentVersionName = pInfo.versionName;
 				
-				SharedPreferences p = appContext.getSharedPreferences(PREF_NAME, 0);
+				SharedPreferences p = sFileContext.getSharedPreferences(PREF_NAME, 0);
 				mPreviousVersionCode = p.getInt(KEY_PREVIOUS_V_CODE, INVALID_CODE);
 				mPreviousVersionName = p.getString(KEY_PREVIOUS_V_NAME, "");
 
