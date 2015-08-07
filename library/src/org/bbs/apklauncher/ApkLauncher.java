@@ -47,8 +47,8 @@ public class ApkLauncher {
 		mT2HMap = new HashMap<String, String>();
 	}	
 	
-	public void init(Application context, String assetsPath, boolean force){
-		ApkPackageManager.getInstance().init(context, assetsPath, force);
+	public void init(Application context, String assetsPath, boolean debugMode){
+		ApkPackageManager.getInstance().init(context, assetsPath, debugMode);
 	}
 	
 	public void initAsync(final Application context, final String assetsPath, final boolean force, final InitCallBack callback){

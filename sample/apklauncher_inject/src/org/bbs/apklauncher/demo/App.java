@@ -68,7 +68,7 @@ Host_Application
 
 		ApkLauncherConfig.setDebug(true);
 		ApkLauncher apk = ApkLauncher.getInstance();
-		apk.init(this, "plugin", true);
+		apk.init(this, "plugin", false);
 //		ApkPackageManager.getInstance().scanApkDir(apkDir);
 		TargetContext.ENBABLE_FILE = false;
 		ApkLauncherConfig.ENALBE_SERVICE = false;

@@ -54,6 +54,7 @@ public class ApkPackageManager extends BasePackageManager {
     private static final String PERF_KEY_APK_HAS_SCANNED = "apk_has_scanned";
     
     private static final boolean DEBUG = ApkLauncherConfig.DEBUG && true;
+    private static final boolean PROFILE = ApkLauncherConfig.DEBUG && true;
 
 	private static ApkPackageManager sInstance;
 	
@@ -102,7 +103,13 @@ public class ApkPackageManager extends BasePackageManager {
 	 * @param apkDir where apk file located.
 	 * 
 	 */	
-	void init(Application context, String assetsPath, boolean force){
+	void init(Application context, String assetsPath, boolean overwrite){
+		long time = 0;
+		if (PROFILE){
+			time = System.currentTimeMillis();
+			Log.d(TAG, "start profile[init].");
+		}
+		
 		synchronized (mInited) {
 			if (mInited.get()) {
 				Log.w(TAG, "has inited, ignore.");
@@ -121,29 +128,36 @@ public class ApkPackageManager extends BasePackageManager {
 			mSerUtil = new SerializableUtil(context);
 
 			// XXX replace will failed for first time. ???
-			if (!hasUpdateApp()) {
+			if (!hasUpdatedPlugin()) {
 				Version version = Version.getInstance((Application) mApplication.getApplicationContext());
 				if (version.appUpdated() || version.firstUsage()) {
 					// re-build install apk info.
 					scanApkDir(getApkDir(), false);
 
 					//			mSerUtil.put(mInfos);
+					
+					// for first time or update force copy new/delete old files.
+					overwrite |= true;
 				} else {
 					scanApkDir(getApkDir(), false);
 					//			mInfos = mSerUtil.get();
 				}
 			} else {
-				Log.i(TAG, "has update app, ignore old app.");
+				Log.i(TAG, "has update plguin, ignore old plguin.");
+
+				File autoUpdateDir = getAutoUpdatePluginDir();
+				scanApkDir(autoUpdateDir, true);
+				deleteFileOrDir(autoUpdateDir);
 			}
-
-			File autoUpdateDir = getAutoUpdatePluginDir();
-			scanApkDir(autoUpdateDir, true);
-			deleteFile(autoUpdateDir);
-
-			scanAssetDir(assetsPath, force);
+			
+			scanAssetDir(assetsPath, overwrite);
 
 			mInited.set(true);
-
+		}
+		
+		if (PROFILE){
+			time = System.currentTimeMillis() - time;
+			Log.d(TAG, "end   profile[init]: " + ( time / 1000.) + "s");
 		}
 	}
 	
@@ -151,7 +165,7 @@ public class ApkPackageManager extends BasePackageManager {
 		return mInited.get();
 	}
 	
-	boolean hasUpdateApp(){
+	boolean hasUpdatedPlugin(){
 		boolean has = false;
 		String[] files = getAutoUpdatePluginDir().list();
 		has = files != null && files.length > 0;
@@ -289,9 +303,9 @@ public class ApkPackageManager extends BasePackageManager {
 		return dir;
 	}
 	
-	public void scanAssetDir(String assetsPath, boolean force){
+	public void scanAssetDir(String assetsPath, boolean overwritee){
         Version version = Version.getInstance((Application) mApplication.getApplicationContext());
-        if (version.appUpdated() || version.firstUsage()||force
+        if (version.appUpdated() || version.firstUsage()||overwritee
         		) {
             doScanApk(assetsPath);
         } else {
@@ -303,14 +317,18 @@ public class ApkPackageManager extends BasePackageManager {
 		File tempApkDir = getDataDir("temp_apk");
 		extractApkFromAsset(assetsPath, tempApkDir.getPath());
 		scanApkDir(tempApkDir);
-		deleteFile(tempApkDir);
+		deleteFileOrDir(tempApkDir);
 		
 		SharedPreferences s = sFileContext.getSharedPreferences(PREF_EXTRACT_APK, 0);
 		s.edit().putBoolean(PERF_KEY_APK_HAS_SCANNED, true).commit();		
 	}
 	
     private void extractApkFromAsset(String srcDir, String destDir) {
-    	long time = System.currentTimeMillis();
+    	long time = 0;
+    	if (PROFILE) {
+    		time = System.currentTimeMillis();
+			Log.d(TAG, "start profile[extractApkFromAsset].");
+    	}
         AssetManager am = mApplication.getResources().getAssets();
         try {
             String[] files = am.list(srcDir);
@@ -327,12 +345,14 @@ public class ApkPackageManager extends BasePackageManager {
             e.printStackTrace();
         }
 
-		time = System.currentTimeMillis() - time;
-		Log.i(TAG, "elapse time[extractApkFromAsset]: " + ((float)time / 1000));
+        if (PROFILE) {
+        	time = System.currentTimeMillis() - time;
+			Log.d(TAG, "end   profile[extractApkFromAsset]: " + ( time / 1000.) + "s");
+        }
     }
 	
 	private void reScanApkIfNecessary(String assetsPath) {
-        SharedPreferences s = mApplication.getSharedPreferences(PREF_EXTRACT_APK, 0);
+        SharedPreferences s = sFileContext.getSharedPreferences(PREF_EXTRACT_APK, 0);
         boolean scanned = s.getBoolean(PERF_KEY_APK_HAS_SCANNED, false);
         if (!scanned) {
             doScanApk(assetsPath);
@@ -346,7 +366,7 @@ public class ApkPackageManager extends BasePackageManager {
 		scanApkDir(apkDir, true);
 	}
 	
-	private void scanApkDir(File apkDir, boolean copyFile) {
+	private void scanApkDir(File apkDir, boolean overwrite) {
 		if (DEBUG){
 			//==========123456789012345678
 			Log.d(TAG, "parse  dir : " + apkDir);
@@ -365,25 +385,30 @@ public class ApkPackageManager extends BasePackageManager {
 		
 		for (String f : files) {
 			File file = new File(apkDir.getAbsolutePath() + "/" + f);
-			parseApkFile(file, copyFile);
+			parseApkFile(file, overwrite);
 		}
 		
 //		mSerUtil.put(mInfos);
 	}
 
-	private void parseApkFile(File file, boolean copyFile) {
-		long time = System.currentTimeMillis();
+	private void parseApkFile(File file, boolean overwrite) {
+		long time = 0;
+		if (PROFILE) {
+			time = System.currentTimeMillis();
+			Log.d(TAG, "start profile[parseApkFile].");
+		}
+		
 		if (DEBUG){
 			//==========123456789012345678
-			Log.d(TAG, "parse file : " + file + " copyFile: " + copyFile);
+			Log.d(TAG, "parse file : " + file + " copyFile: " + overwrite);
 		}
 		if (file.exists() && file.getAbsolutePath().endsWith(APK_FILE_SUFFIX)){
 			PackageInfoX info = ApkManifestParser.parseAPk(mApplication, file.getAbsolutePath());			
 			try {
 				File dest = file;
-				if (copyFile) {
+				if (overwrite) {
 					dest = new File(getApkDir(), info.packageName + APK_FILE_SUFFIX);
-					deleteFile(dest);
+					deleteFileOrDir(dest);
 					AndroidUtil.copyFile(file, dest);
 					info = ApkManifestParser.parseAPk(mApplication, dest.getAbsolutePath());
 				}
@@ -406,9 +431,9 @@ public class ApkPackageManager extends BasePackageManager {
 				
 				File destLibDir = new File(getAppDataDir(info.packageName), "/lib");
 				
-				if (copyFile) {
+				if (overwrite) {
 					//TODO native lib
-					deleteFile(destLibDir);
+					deleteFileOrDir(destLibDir);
 
 					String abi = SystemPropertiesProxy.get(mApplication, "ro.product.cpu.abi");
 					String abi2 = SystemPropertiesProxy.get(mApplication, "ro.product.cpu.abi2");
@@ -443,8 +468,10 @@ public class ApkPackageManager extends BasePackageManager {
 			Log.i(TAG, "ignre file : " + file);
 		}
 		
-		time = System.currentTimeMillis() - time;
-		Log.i(TAG, "elapse time[parseApkFile]: " + ((float)time / 1000));
+		if (PROFILE){
+			time = System.currentTimeMillis() - time;
+			Log.d(TAG, "end   profile[parseApkFile]: " + ( time / 1000.) + "s");
+		}
 	}
 	
 
@@ -452,9 +479,9 @@ public class ApkPackageManager extends BasePackageManager {
 		checkPermission(hostPacageInfoX, info);
 	}
 
-	private boolean deleteFile(File file) {
-		//==========123456789012345678
+	private boolean deleteFileOrDir(File file) {
 		boolean isD = file.isDirectory();
+		//==========123456789012345678
 		Log.d(TAG, "delete file: " + file + (isD ? "[D]" : ""));
 		
 		boolean ret = deleteFile_intenal(file);
@@ -466,8 +493,10 @@ public class ApkPackageManager extends BasePackageManager {
 		if (file.isDirectory()) {
 			String[] children = file.list();
 			for (int i = 0; i < children.length; i++) {
-				boolean success = deleteFile_intenal(new File(file, children[i]));
+				File f = new File(file, children[i]);
+				boolean success = deleteFile_intenal(f);
 				if (!success) {
+					Log.w(TAG, "error in deleting file " + f);
 					return false;
 				}
 			}
@@ -860,7 +889,7 @@ public class ApkPackageManager extends BasePackageManager {
 		private /*static*/ /*final*/ String PREF_NAME = Version.class.getSimpleName() + "";
 		private static final String KEY_PREVIOUS_V_CODE = "previous_version_code";
 		private static final String KEY_PREVIOUS_V_NAME = "previous_version_name";
-		private static final String TAG = Version.class.getSimpleName();
+//		private static final String TAG = Version.class.getSimpleName();
 		private static Map<Reference<Application>, Version>  sInstances = new HashMap<Reference<Application>, Version>();
 		
 		public static Version getInstance(Application appContext){
