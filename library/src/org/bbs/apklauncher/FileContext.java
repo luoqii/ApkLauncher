@@ -338,6 +338,7 @@ ContextWrapper
     
     static void setFilePermissionsFromMode(String name, int mode,
             int extraPermissions) {
+    	Log.w(TAG, "not impl setFilePermissionsFromMode");
 //        int perms = FileUtils.S_IRUSR|FileUtils.S_IWUSR
 //            |FileUtils.S_IRGRP|FileUtils.S_IWGRP
 //            |extraPermissions;
