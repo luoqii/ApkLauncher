@@ -976,4 +976,5 @@ public class ApkPackageManager extends BasePackageManager {
 			return mPreviousVersionCode != mCurrentVersionCode;
 		}
 	}
+	
 }

@@ -1,0 +1,18 @@
+Q: permission
+S: declared in host app for target app(plguin), (as many as possible?)
+	
+Q: resource
+S: inject this
+
+Q: Activity
+S1: inject custom classloader in ActivityThread
+	A1:no need for source code
+	A2:integrate 3rd lib
+	D1:to add Activity dynamically
+	D2:android-m apk validation
+S2: proxy all call to target app(plguin)
+    A1:dynamically add Activity
+    D1:need source code
+    D2:to integrate 3rd lib
+    D3:support different activity's config in AndroidManifest.xml
+    D4:ACTION not support
