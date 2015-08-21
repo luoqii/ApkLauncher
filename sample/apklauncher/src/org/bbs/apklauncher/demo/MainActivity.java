@@ -31,7 +31,16 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		setContentView(R.layout.activity_apk_launcher);
+		setContentView(R.layout.activity_apk_launcher);	
+
+		String s = getSharedPreferences("TEST", MODE_MULTI_PROCESS).getString("KEY", "no found.");
+		Log.d(TAG, "sp: " + s);
+		getSharedPreferences("TEST", 0).edit().putString("KEY", "hello main").apply();
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
 		
 		ApkPackageManager apks = ApkPackageManager.getInstance();
 		ListAdapter adapter = new ArrayAdapter<PackageInfoX.ActivityInfoX>(this, android.R.layout.simple_list_item_1, apks.getLauncherActivityInfo()){
@@ -64,11 +73,7 @@ public class MainActivity extends Activity {
 				onAppClick(a);
 			}
 		});
-		mListView.setEmptyView(findViewById(android.R.id.empty));;		
-
-		String s = getSharedPreferences("TEST", MODE_MULTI_PROCESS).getString("KEY", "no found.");
-		Log.d(TAG, "sp: " + s);
-		getSharedPreferences("TEST", 0).edit().putString("KEY", "hello main").apply();
+		mListView.setEmptyView(findViewById(android.R.id.empty));;	
 	}
 	
 	

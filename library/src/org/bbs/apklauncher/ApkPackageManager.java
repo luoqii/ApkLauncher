@@ -54,7 +54,7 @@ public class ApkPackageManager extends BasePackageManager {
     private static final String PERF_KEY_APK_HAS_SCANNED = "apk_has_scanned";
     
     private static final boolean DEBUG = ApkLauncherConfig.DEBUG && true;
-    private static final boolean PROFILE = ApkLauncherConfig.DEBUG && true;
+    private static final boolean PROFILE = ApkLauncherConfig.PROFILE && true;
 
 	private static ApkPackageManager sInstance;
 	
@@ -107,7 +107,7 @@ public class ApkPackageManager extends BasePackageManager {
 		long time = 0;
 		if (PROFILE){
 			time = System.currentTimeMillis();
-			Log.d(TAG, "start profile[init].");
+			Log.d(TAG, "start profile[init]. assetsPath:" + assetsPath);
 		}
 		
 		synchronized (mInited) {
@@ -323,23 +323,23 @@ public class ApkPackageManager extends BasePackageManager {
 		s.edit().putBoolean(PERF_KEY_APK_HAS_SCANNED, true).commit();		
 	}
 	
-    private void extractApkFromAsset(String srcDir, String destDir) {
+    private void extractApkFromAsset(String assetDir, String destDir) {
     	long time = 0;
     	if (PROFILE) {
     		time = System.currentTimeMillis();
-			Log.d(TAG, "start profile[extractApkFromAsset].");
+			Log.d(TAG, "start profile[extractApkFromAsset]. assetSrc:" + assetDir + " dst:" + destDir);
     	}
         AssetManager am = mApplication.getResources().getAssets();
         try {
-            String[] files = am.list(srcDir);
+            String[] files = am.list(assetDir);
             if (null == files || files.length == 0){
         		//==========123456789012345678
-            	Log.w(TAG, "empty assets dir:" + srcDir);
-            	return;
-            }
-			for (String fp : files) {
-                AndroidUtil.copyStream(am.open(srcDir + "/" + fp), 
-                		new FileOutputStream(new File(destDir, fp)));
+            	Log.w(TAG, "empty assets dir:" + assetDir);
+            } else {
+            	for (String fp : files) {
+            		AndroidUtil.copyStream(am.open(assetDir + "/" + fp), 
+            				new FileOutputStream(new File(destDir, fp)));
+            	}
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -393,79 +393,81 @@ public class ApkPackageManager extends BasePackageManager {
 
 	private void parseApkFile(File file, boolean overwrite) {
 		long time = 0;
-		if (PROFILE) {
-			time = System.currentTimeMillis();
-			Log.d(TAG, "start profile[parseApkFile].");
-		}
 		
 		if (DEBUG){
 			//==========123456789012345678
-			Log.d(TAG, "parse file : " + file + " copyFile: " + overwrite);
+			Log.d(TAG, "parse file : " + file + " overwrite: " + overwrite);
 		}
-		if (file.exists() && file.getAbsolutePath().endsWith(APK_FILE_SUFFIX)){
-			PackageInfoX info = ApkManifestParser.parseAPk(mApplication, file.getAbsolutePath());			
-			try {
-				File dest = file;
-				if (overwrite) {
-					dest = new File(getApkDir(), info.packageName + APK_FILE_SUFFIX);
-					deleteFileOrDir(dest);
-					AndroidUtil.copyFile(file, dest);
-					info = ApkManifestParser.parseAPk(mApplication, dest.getAbsolutePath());
-				}
-				//==========123456789012345678
-				Log.i(TAG, "apk info   : " + appInfoStr(info));
-				compareInfo(getHostPacageInfoX(), info);
-				String reqSdkV = "";
-				if (info.applicationInfo.metaData != null ) {
-					reqSdkV = info.applicationInfo.metaData.getString(ApkLauncher.MANIFEST_META_REQUIRE_MIN_SDK_VERSION);
-				}
-				if (TextUtils.isEmpty(reqSdkV)){
-					Log.w(TAG, "no " + ApkLauncher.MANIFEST_META_REQUIRE_MIN_SDK_VERSION + " specified in Manifest.");
-				} else {
-					String reqVersion = org.bbs.apklauncher.Version.extractVersion(reqSdkV);
-					String sdkVersion = org.bbs.apklauncher.Version.extractVersion(org.bbs.apklauncher.Version.VERSION);
-					if (org.bbs.apklauncher.Version.isNewerRaw(reqVersion,sdkVersion)){
-						Log.w(TAG, "plug require a higher sdk version. req version: " + reqVersion + " our version: " + sdkVersion);
-					}
-				}
-				
-				File destLibDir = new File(getAppDataDir(info.packageName), "/lib");
-				
-				if (overwrite) {
-					//TODO native lib
-					deleteFileOrDir(destLibDir);
-
-					String abi = SystemPropertiesProxy.get(mApplication, "ro.product.cpu.abi");
-					String abi2 = SystemPropertiesProxy.get(mApplication, "ro.product.cpu.abi2");
-					Log.d(TAG, "abi: " + abi + " abi2: " + abi2);
-					String[] abis = new String[]{abi, abi2};
-//					String[] abis = Build.SUPPORTED_ABIS;
-					final int L = abis.length;
-					for (int i = L - 1 ; i >= 0; i--){
-						AndroidUtil.extractZipEntry(new ZipFile(info.applicationInfo.publicSourceDir), "lib/"+ abis[i], destLibDir);
-					}
-
-//					AndroidUtil.extractZipEntry(new ZipFile(info.applicationInfo.publicSourceDir), "lib/armeabi", destLibDir);
-//					AndroidUtil.extractZipEntry(new ZipFile(info.applicationInfo.publicSourceDir), "lib/armeabi-v7a", destLibDir);
-				}
-				
-				info.mLibPath = destLibDir.getPath();
-				
-				// asume there is only one apk.
-//				ClassLoader cl = createClassLoader(mContext, 
-//						info.applicationInfo.sourceDir, 
-//						info.mLibPath, 
-//						info.applicationInfo.packageName,
-//						true);
-				
-				mInfos.addOrUpdate(info);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} else {
+		boolean keepGoing = file.exists() && file.getAbsolutePath().endsWith(APK_FILE_SUFFIX);
+		if (!keepGoing) {
 			//==========123456789012345678
 			Log.i(TAG, "ignre file : " + file);
+			return;
+		}			
+
+		if (PROFILE) {
+			time = System.currentTimeMillis();
+			Log.d(TAG, "start profile[parseApkFile]. apk:" + file + " overwrite:" + overwrite);
+		}
+		PackageInfoX info = ApkManifestParser.parseAPk(mApplication, file.getAbsolutePath());			
+		try {
+			File dest = file;
+			if (overwrite) {
+				dest = new File(getApkDir(), info.packageName + APK_FILE_SUFFIX);
+				deleteFileOrDir(dest);
+				AndroidUtil.copyFile(file, dest);
+				info = ApkManifestParser.parseAPk(mApplication, dest.getAbsolutePath());
+			}
+			//==========123456789012345678
+			Log.i(TAG, "apk info   : " + appInfoStr(info));
+			compareInfo(getHostPacageInfoX(), info);
+			String reqSdkV = "";
+			if (info.applicationInfo.metaData != null ) {
+				reqSdkV = info.applicationInfo.metaData.getString(ApkLauncher.MANIFEST_META_REQUIRE_MIN_SDK_VERSION);
+			}
+			if (TextUtils.isEmpty(reqSdkV)){
+				Log.w(TAG, "no " + ApkLauncher.MANIFEST_META_REQUIRE_MIN_SDK_VERSION + " specified in Manifest.");
+			} else {
+				String reqVersion = org.bbs.apklauncher.Version.extractVersion(reqSdkV);
+				String sdkVersion = org.bbs.apklauncher.Version.extractVersion(org.bbs.apklauncher.Version.VERSION);
+				if (org.bbs.apklauncher.Version.isNewerRaw(reqVersion,sdkVersion)){
+					Log.w(TAG, "plug require a higher sdk version. req version: " + reqVersion + " our version: " + sdkVersion);
+				}
+			}
+
+			File destLibDir = new File(getAppDataDir(info.packageName), "/lib");
+
+			if (overwrite) {
+				//TODO native lib
+				deleteFileOrDir(destLibDir);
+
+				String abi = SystemPropertiesProxy.get(mApplication, "ro.product.cpu.abi");
+				String abi2 = SystemPropertiesProxy.get(mApplication, "ro.product.cpu.abi2");
+				Log.d(TAG, "abi: " + abi + " abi2: " + abi2);
+				String[] abis = new String[]{abi, abi2};
+				//					String[] abis = Build.SUPPORTED_ABIS;
+				final int L = abis.length;
+				for (int i = L - 1 ; i >= 0; i--){
+					AndroidUtil.extractZipEntry(new ZipFile(info.applicationInfo.publicSourceDir), "lib/"+ abis[i], destLibDir);
+				}
+
+				//					AndroidUtil.extractZipEntry(new ZipFile(info.applicationInfo.publicSourceDir), "lib/armeabi", destLibDir);
+				//					AndroidUtil.extractZipEntry(new ZipFile(info.applicationInfo.publicSourceDir), "lib/armeabi-v7a", destLibDir);
+			}
+
+			info.mLibPath = destLibDir.getPath();
+
+			// asume there is only one apk.
+			//				ClassLoader cl = createClassLoader(mContext, 
+			//						info.applicationInfo.sourceDir, 
+			//						info.mLibPath, 
+			//						info.applicationInfo.packageName,
+			//						true);
+
+			mInfos.addOrUpdate(info);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		if (PROFILE){
