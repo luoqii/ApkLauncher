@@ -115,11 +115,7 @@ public class ApkPackageManager extends BasePackageManager {
 	 * @param apkDir where apk file located.
 	 * 
 	 */	
-	void init(Application context, String assetsPath, boolean overwrite, boolean resetFirst){
-		if (resetFirst){
-			reset();
-		}
-		
+	void init(Application context, String assetsPath, boolean overwrite){		
 		long time = 0;
 		if (PROFILE){
 			time = System.currentTimeMillis();

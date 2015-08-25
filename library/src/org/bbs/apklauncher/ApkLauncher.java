@@ -49,16 +49,16 @@ public class ApkLauncher {
 		mT2HMap = new HashMap<String, String>();
 	}	
 		
-	public void init(Application context, String assetsPath, boolean overwrite, boolean reset){
-		ApkPackageManager.getInstance().init(context, assetsPath, overwrite, reset);
+	public void init(Application context, String assetsPath, boolean overwrite){
+		ApkPackageManager.getInstance().init(context, assetsPath, overwrite);
 	}
 	
-	public void initAsync(final Application context, final String assetsPath, final boolean overwrite, final boolean reset, final InitCallBack callback){
+	public void initAsync(final Application context, final String assetsPath, final boolean overwrite, final InitCallBack callback){
 		new AsyncTask<Void, Void, Void>(){
 
 			@Override
 			protected Void doInBackground(Void... params) {
-				init(context, assetsPath, overwrite, reset);
+				init(context, assetsPath, overwrite);
 				return null;
 			}
 			
