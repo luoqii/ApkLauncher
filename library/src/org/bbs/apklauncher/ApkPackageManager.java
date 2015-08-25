@@ -41,14 +41,19 @@ import android.content.pm.PermissionGroupInfo;
 import android.content.pm.ResolveInfo;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
+import android.os.Debug;
 import android.text.TextUtils;
 import android.util.Log;
 import dalvik.system.DexClassLoader;
+import ext.com.android.server.IntentResolver;
 
 public class ApkPackageManager extends BasePackageManager {
+
 	private static final String TAG = ApkPackageManager.class.getSimpleName();
 	
-	private static /*final*/ String PLUGIN_DIR_NAME = "plugin_data";
+	private static final String DIR_PLACEHOLDER = "placeholder";
+	private static /*final*/ String DIR_PLUGIN = "plugin_data";
+	private static final String APK_FILE_REG = ".*\\.apk$";
 	private static final String APK_FILE_SUFFIX = ".apk";
     private static final String PREF_EXTRACT_APK = ApkPackageManager.class.getName() + "";
     private static final String PERF_KEY_APK_HAS_SCANNED = "apk_has_scanned";
@@ -62,7 +67,7 @@ public class ApkPackageManager extends BasePackageManager {
 	public static Map<String, WeakReference<Application>> sApk2ApplicationtMap = new HashMap<String, WeakReference<Application>>();
 	public static Map<String, WeakReference<ResourcesMerger>> sApk2ResourceMap = new HashMap<String, WeakReference<ResourcesMerger>>();
 
-	private InstallApks mInfos;
+	private InstallApks mInstalledApk;
 	private Application mApplication;
 	private static Context sFileContext;
 
@@ -71,12 +76,15 @@ public class ApkPackageManager extends BasePackageManager {
 	private ClassLoaderFactory mClassLoaderFactory;
 	private AtomicBoolean mInited;
 	
+	private ActivityIntentResolver mActResolver;
+	
 	public static void setPluginDataDir(String name){
-		PLUGIN_DIR_NAME = name;
+		DIR_PLUGIN = name;
 	}
 	
 	private ApkPackageManager() {
 		mInited = new AtomicBoolean();
+		mActResolver = new ActivityIntentResolver();
 	}
 		
 	/**
@@ -97,13 +105,21 @@ public class ApkPackageManager extends BasePackageManager {
 	public void setClassLoaderFactory(ClassLoaderFactory f) {
 		mClassLoaderFactory = f;
 	}
+	
+	public void reset(){
+//		deleteFileOrDir(super.get(DIR_PLACEHOLDER).getParentFile());
+	}
 
 	/**
 	 * @param context
 	 * @param apkDir where apk file located.
 	 * 
 	 */	
-	void init(Application context, String assetsPath, boolean overwrite){
+	void init(Application context, String assetsPath, boolean overwrite, boolean resetFirst){
+		if (resetFirst){
+			reset();
+		}
+		
 		long time = 0;
 		if (PROFILE){
 			time = System.currentTimeMillis();
@@ -117,14 +133,8 @@ public class ApkPackageManager extends BasePackageManager {
 			}
 			mApplication = context;
 
-			sFileContext = new FileContext(context) {
-				
-				@Override
-				public String getTargetPackageName() {
-					return "org.bbs.apklauncher.sdk";
-				}
-			};
-			mInfos = new InstallApks();
+			sFileContext = new SdkContext(context);
+			mInstalledApk = new InstallApks();
 			mSerUtil = new SerializableUtil(context);
 
 			// XXX replace will failed for first time. ???
@@ -132,21 +142,21 @@ public class ApkPackageManager extends BasePackageManager {
 				Version version = Version.getInstance((Application) mApplication.getApplicationContext());
 				if (version.appUpdated() || version.firstUsage()) {
 					// re-build install apk info.
-					scanApkDir(getApkDir(), false);
+					scanApkDir(getApkDir(), false, APK_FILE_REG);
 
 					//			mSerUtil.put(mInfos);
 					
 					// for first time or update force copy new/delete old files.
 					overwrite |= true;
 				} else {
-					scanApkDir(getApkDir(), false);
+					scanApkDir(getApkDir(), false, APK_FILE_REG);
 					//			mInfos = mSerUtil.get();
 				}
 			} else {
 				Log.i(TAG, "has update plguin, ignore old plguin.");
 
 				File autoUpdateDir = getAutoUpdatePluginDir();
-				scanApkDir(autoUpdateDir, true);
+				scanApkDir(autoUpdateDir, true, APK_FILE_REG);
 				deleteFileOrDir(autoUpdateDir);
 			}
 			
@@ -247,8 +257,9 @@ public class ApkPackageManager extends BasePackageManager {
 	 */
 	@ExportApi
 	public File getPluginDir() {
-		File placeHolder = mApplication.getDir("placeholder", 0);
-		File dir = new File(placeHolder.getParent(), PLUGIN_DIR_NAME);
+		// can we get data-dir directly?
+		File placeHolder = mApplication.getDir(DIR_PLACEHOLDER, 0);
+		File dir = new File(placeHolder.getParent(), DIR_PLUGIN);
 		dir.mkdirs();
 		
 		assureDir(dir);
@@ -363,10 +374,10 @@ public class ApkPackageManager extends BasePackageManager {
 
 	@ExportApi
 	public void scanApkDir(File apkDir) {
-		scanApkDir(apkDir, true);
+		scanApkDir(apkDir, true, APK_FILE_REG);
 	}
 	
-	private void scanApkDir(File apkDir, boolean overwrite) {
+	public void scanApkDir(File apkDir, boolean overwrite, String reg) {
 		if (DEBUG){
 			//==========123456789012345678
 			Log.d(TAG, "parse  dir : " + apkDir);
@@ -379,29 +390,38 @@ public class ApkPackageManager extends BasePackageManager {
 		String[] files = apkDir.list();
 		if (null == files) {
 			//==========123456789012345678
-			Log.w(TAG, "empyt dir  : " + apkDir);
+			Log.w(TAG, "impty dir  : " + apkDir);
 			return;
 		}
 		
 		for (String f : files) {
 			File file = new File(apkDir.getAbsolutePath() + "/" + f);
-			parseApkFile(file, overwrite);
+			parseApkFile(file, overwrite, reg);
 		}
 		
 //		mSerUtil.put(mInfos);
 	}
+	
+	public void parseApkFile(String file){
+		parseApkFile(new File(file), true, APK_FILE_REG);
+	}
+	
+	public void parseApkFile(File file){
+		parseApkFile(file, true, APK_FILE_REG);
+	}
 
-	private void parseApkFile(File file, boolean overwrite) {
+	private void parseApkFile(File file, boolean overwrite, String reg) {
 		long time = 0;
 		
 		if (DEBUG){
 			//==========123456789012345678
 			Log.d(TAG, "parse file : " + file + " overwrite: " + overwrite);
 		}
-		boolean keepGoing = file.exists() && file.getAbsolutePath().endsWith(APK_FILE_SUFFIX);
+		boolean keepGoing = file.exists() 
+				&& (null == reg || file.getName().matches(reg));
 		if (!keepGoing) {
 			//==========123456789012345678
-			Log.i(TAG, "ignre file : " + file);
+			Log.i(TAG, "ignre file : " + file + " reg: " + reg);
 			return;
 		}			
 
@@ -409,7 +429,7 @@ public class ApkPackageManager extends BasePackageManager {
 			time = System.currentTimeMillis();
 			Log.d(TAG, "start profile[parseApkFile]. apk:" + file + " overwrite:" + overwrite);
 		}
-		PackageInfoX info = ApkManifestParser.parseAPk(mApplication, file.getAbsolutePath());			
+		PackageInfoX info = ApkManifestParser.parseAPk(mApplication, file.getAbsolutePath());
 		try {
 			File dest = file;
 			if (overwrite) {
@@ -464,7 +484,7 @@ public class ApkPackageManager extends BasePackageManager {
 			//						info.applicationInfo.packageName,
 			//						true);
 
-			mInfos.addOrUpdate(info);
+			mInstalledApk.addOrUpdate(info);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -475,7 +495,6 @@ public class ApkPackageManager extends BasePackageManager {
 			Log.d(TAG, "end   profile[parseApkFile]: " + ( time / 1000.) + "s");
 		}
 	}
-	
 
 	private void compareInfo(PackageInfoX hostPacageInfoX, PackageInfoX info) {
 		checkPermission(hostPacageInfoX, info);
@@ -484,7 +503,7 @@ public class ApkPackageManager extends BasePackageManager {
 	private boolean deleteFileOrDir(File file) {
 		boolean isD = file.isDirectory();
 		//==========123456789012345678
-		Log.d(TAG, "delete file: " + file + (isD ? "[D]" : ""));
+		Log.i(TAG, "delete file: " + file + (isD ? "[D]" : ""));
 		
 		boolean ret = deleteFile_intenal(file);
 		
@@ -498,7 +517,7 @@ public class ApkPackageManager extends BasePackageManager {
 				File f = new File(file, children[i]);
 				boolean success = deleteFile_intenal(f);
 				if (!success) {
-					Log.w(TAG, "error in deleting file " + f);
+					Log.w(TAG, "error on deleting file " + f);
 					return false;
 				}
 			}
@@ -617,10 +636,23 @@ public class ApkPackageManager extends BasePackageManager {
 	}
 
 	@ExportApi
+	public List<PackageInfoX> getAllApks(){
+		return mInstalledApk;
+	}
+
+	public void deleteApk(PackageInfoX pInfo){
+		boolean delete = mInstalledApk.remove(pInfo);
+		
+		if (DEBUG){
+			Log.i(TAG, "delete plugin. pInfo: " + pInfo + (delete ? " success" : " failed"));
+		}
+	}
+
+	@ExportApi
 	public ApplicationInfoX getApplicationInfo(String packageName) {
 		ApplicationInfoX a = null;
 		boolean has = false;
-		for (PackageInfoX i : mInfos) {
+		for (PackageInfoX i : mInstalledApk) {
 			if (packageName.equals(i.packageName)) {
 				has = true;
 				a = (ApplicationInfoX) i.applicationInfo;
@@ -634,7 +666,7 @@ public class ApkPackageManager extends BasePackageManager {
 	@ExportApi
 	public PackageInfoX getPackageInfo(String packageName){
 		PackageInfoX p = null;
-		for (PackageInfoX i : mInfos) {
+		for (PackageInfoX i : mInstalledApk) {
 			if (i.packageName.equals(packageName)){
 				p = i;
 				break;
@@ -647,7 +679,7 @@ public class ApkPackageManager extends BasePackageManager {
 	@ExportApi
 	public boolean hasApplicationInfo(String className) {
 		boolean has = false;
-		for (PackageInfoX m : mInfos) {
+		for (PackageInfoX m : mInstalledApk) {
 			if (className.equals(m.applicationInfo.packageName)) {
 				has = true;
 				break;
@@ -658,18 +690,13 @@ public class ApkPackageManager extends BasePackageManager {
 	}
 	
 	@ExportApi
-	public List<PackageInfoX> getAllApks(){
-		return mInfos;
-	}
-
-	@ExportApi
 	public ActivityInfoX getActivityInfo(Class clazz) {
 		return getActivityInfo(clazz.getName());
 	}
 	
 	@ExportApi
 	public ActivityInfoX getActivityInfo(String className) {
-		for (PackageInfoX m : mInfos) {
+		for (PackageInfoX m : mInstalledApk) {
 			if (m.activities != null) {
 				for (ActivityInfo a : m.activities) {
 					ActivityInfoX aX = (ActivityInfoX) a;
@@ -685,7 +712,7 @@ public class ApkPackageManager extends BasePackageManager {
 	
 	public List<ActivityInfoX> getLauncherActivityInfo(){
 		List<ActivityInfoX> result = new ArrayList<>();
-		for (PackageInfoX m : mInfos) {
+		for (PackageInfoX m : mInstalledApk) {
 			if (m.activities != null) {
 				for (ActivityInfo a : m.activities) {
 					ActivityInfoX aX = (ActivityInfoX) a;
@@ -718,7 +745,7 @@ public class ApkPackageManager extends BasePackageManager {
 	
 	@ExportApi
 	public ServiceInfoX getServiceInfo(String className) {
-		for (PackageInfoX m : mInfos) {
+		for (PackageInfoX m : mInstalledApk) {
 				if (m.services != null &&  m.services.length > 0) {
 					final int count = m.services.length;
 					for (int i = 0 ; i < count; i++){
@@ -732,13 +759,19 @@ public class ApkPackageManager extends BasePackageManager {
 		return null;
 	}
 	
+	static String appInfoStr(PackageInfoX info) {
+		return info.packageName + "|" + info.versionCode + "|" + info.versionName;
+	}
+
 	@ExportApi
 	public List<ResolveInfo> queryIntentActivities(Intent intent, int flag) {
-		List<ResolveInfo> result = new ArrayList<>();
-		for (PackageInfoX p : mInfos){
-			queryIntentActivities(p.packageName, intent, flag, result);
-		}
-		return result;
+		
+		return mActResolver.queryIntent(intent, null, true, 0);
+//		List<ResolveInfo> result = new ArrayList<>();
+//		for (PackageInfoX p : mInfos){
+//			queryIntentActivities(p.packageName, intent, flag, result);
+//		}
+//		return result;
 	}
 
 	@ExportApi
@@ -754,7 +787,7 @@ public class ApkPackageManager extends BasePackageManager {
 		
 		String action = intent.getAction();
 		Set<String> categories = intent.getCategories();
-		for (PackageInfoX p : mInfos){
+		for (PackageInfoX p : mInstalledApk){
 			if (packageName.equals(p.packageName)){
 				for (ActivityInfo a : p.activities){
 					ActivityInfoX aX = (ActivityInfoX) a;
@@ -774,21 +807,17 @@ public class ApkPackageManager extends BasePackageManager {
 		}
 	}
 
-	static String appInfoStr(PackageInfoX info) {
-		return info.packageName + "|" + info.versionCode + "|" + info.versionName;
-	}
-	
 	public interface ClassLoaderFactory {
 		ClassLoader createClassLoader(ApkPackageManager apkPackageManager, Context baseContext, String apkPath,
 				String libPath, String targetPackageName);		
 	}
 
-	static class InstallApks extends ArrayList<PackageInfoX> implements Serializable {
+	class InstallApks extends ArrayList<PackageInfoX> implements Serializable {
 		public void addOrUpdate(PackageInfoX info){
 			int index = -1;
 			final int SIZE = size();
 			for (int i = 0 ; i < SIZE ; i++){
-				if (get(i).packageName.equals(info.packageName)){
+				if (isSame(get(i),info)){
 					index = i;
 					break;
 				}
@@ -801,6 +830,47 @@ public class ApkPackageManager extends BasePackageManager {
 				Log.i(TAG, "new app    : "  + appInfoStr(info) );
 			}
 			add(info);
+			addActToResolver(info);
+		}		
+
+		private void addActToResolver(PackageInfoX info) {
+			for (ActivityInfo a: info.activities) {
+				ActivityInfoX aX = (ActivityInfoX) a;
+				mActResolver.addActivity(aX);
+			}		
+		}
+		
+		boolean isSame(PackageInfoX l, PackageInfoX r){
+			return l.packageName.equals(r.packageName);
+		}
+		
+		@Override
+		public PackageInfoX remove(int index) {
+			PackageInfoX old =  super.remove(index);
+			removeActFromResolver(old);
+			return old;
+		}
+		
+		public void removeActFromResolver(PackageInfoX pInfo){
+			if (null != pInfo){
+				if (null != pInfo.activities){
+					for (ActivityInfo a : pInfo.activities){
+						ActivityInfoX aX = (ActivityInfoX) a;
+						mActResolver.removeActivity(aX);
+					}
+				}
+			}
+		}
+		
+		@Override
+		public boolean remove(Object object) {
+			Object oldO = object;
+			boolean remove =  super.remove(object);
+			if (remove){
+				removeActFromResolver((PackageInfoX) oldO);
+			}
+			
+			return remove;
 		}
 	}
 	
@@ -979,4 +1049,79 @@ public class ApkPackageManager extends BasePackageManager {
 		}
 	}
 	
+	
+	public static class SdkContext extends FileContext {
+		public SdkContext(Context base) {
+			super(base);
+		}
+
+		@Override
+		public String getTargetPackageName() {
+			return "org.bbs.apklauncher.sdk";
+		}
+	}
+	
+	// copied from PackageMangerService#ActivityIntentResolver
+    final static class ActivityIntentResolver
+    extends IntentResolver<IntentFilterX, ResolveInfo> {
+    	
+    	public void addActivity(ActivityInfoX act){
+    		if (act.mIntentFilters != null && act.mIntentFilters.length > 0) {
+    			for (IntentFilterX f : act.mIntentFilters){
+    				f.mCookie = act;
+    				addFilter(f);
+    			}
+    		}
+    	}
+    	
+    	public void removeActivity(ActivityInfoX act){
+    		if (act.mIntentFilters != null && act.mIntentFilters.length > 0) {
+    			for (IntentFilterX f : act.mIntentFilters){
+    				removeFilter(f);
+    			}
+    		}
+    	}
+    	
+
+		@Override
+		protected boolean isPackageForFilter(String packageName,
+				IntentFilterX filter) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		protected IntentFilterX[] newArray(int size) {
+			return new IntentFilterX[size];
+		}
+		
+		@Override
+		protected ResolveInfo newResult(IntentFilterX filter, int match,
+				int userId) {
+//			return super.newResult(filter, match, userId);
+			
+			ResolveInfo rInfo = new ResolveInfo();
+			rInfo.activityInfo = (ActivityInfo) filter.mCookie;
+			
+			return rInfo;
+		}
+		
+		@Override
+		protected void sortResults(List<ResolveInfo> results) {
+			// TODO Auto-generated method stub
+//			super.sortResults(results);
+			Log.w(TAG, "sort need impled.");
+		}
+    	
+    }
+    
+    final static class ActivityIntentInfo extends IntentFilterX {
+
+		public ActivityIntentInfo(IntentFilterX f) {
+			super(f);
+		}
+
+//		public ActivityInfoX mActInfo;
+    }
+    
 }

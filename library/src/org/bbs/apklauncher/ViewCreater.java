@@ -111,12 +111,24 @@ public class ViewCreater {
 			return (View) construtor
 					.newInstance(new Object[] { context, attrs });
 		} catch (Exception e) {
-			// FIXME to fix this error
-			Log.e(TAG, "can NOT createView. view: " + className + " classLoader: " + classLoader);
-//			Log.e(TAG, "createView. view: " + className + " classLoader: " + classLoader, e);
+			if (!isFrameworkClass(className)) {
+				// FIXME to fix this error
+				Log.e(TAG, "can NOT createView. view: " + className + " classLoader: " + classLoader);
+			}
 		}
 
 		return null;
+	}
+	
+	public static boolean isFrameworkClass(String className){
+		boolean is = false;
+		for (String prefix : sClassPrefixList) {
+			if (className.startsWith(prefix)){
+				is = true;
+				break;
+			}
+		}
+		return is;
 	}
 
 }

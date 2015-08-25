@@ -1,11 +1,11 @@
 package org.bbs.apklauncher;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.bbs.apklauncher.api.ExportApi;
 import org.bbs.apklauncher.emb.IntentHelper;
-import org.bbs.apklauncher.emb.auto_gen.Stub_Activity;
 import org.bbs.apkparser.PackageInfoX;
 import org.bbs.apkparser.PackageInfoX.ActivityInfoX;
 
@@ -13,6 +13,8 @@ import android.app.Application;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.pm.ResolveInfo;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Log;
@@ -46,17 +48,17 @@ public class ApkLauncher {
 	private ApkLauncher() {
 		mT2HMap = new HashMap<String, String>();
 	}	
-	
-	public void init(Application context, String assetsPath, boolean debugMode){
-		ApkPackageManager.getInstance().init(context, assetsPath, debugMode);
+		
+	public void init(Application context, String assetsPath, boolean overwrite, boolean reset){
+		ApkPackageManager.getInstance().init(context, assetsPath, overwrite, reset);
 	}
 	
-	public void initAsync(final Application context, final String assetsPath, final boolean force, final InitCallBack callback){
+	public void initAsync(final Application context, final String assetsPath, final boolean overwrite, final boolean reset, final InitCallBack callback){
 		new AsyncTask<Void, Void, Void>(){
 
 			@Override
 			protected Void doInBackground(Void... params) {
-				init(context, assetsPath, force);
+				init(context, assetsPath, overwrite, reset);
 				return null;
 			}
 			
@@ -82,7 +84,7 @@ public class ApkLauncher {
 			return;
 		}
 		
-		Log.d(TAG, "processIntent. intent: " + intent);
+		Log.i(TAG, "processIntent. intent: " + intent);
 		ComponentName com = intent.getComponent();
 		if (null != com) {
 			String className = com.getClassName();
@@ -90,7 +92,17 @@ public class ApkLauncher {
 				prepareIntent(intent, targetClassLoader, hostContext, className);
 			}
 		} else {
-			Log.w(TAG, "can not handle intent:  "  + intent);
+			// try within installed plugins.
+			List<ResolveInfo> acts = ApkPackageManager.getInstance().queryIntentActivities(intent, 0);
+			if (acts.size() > 0) {
+				Log.i(TAG, "intent matchs a installed plugin.");
+				ActivityInfo aInfo = acts.get(0).activityInfo;
+				// may be we need a new classloader.
+				targetClassLoader = ApkPackageManager.getInstance().createClassLoader(hostContext, ((ActivityInfoX)aInfo).mPackageInfo);
+				prepareIntent(intent, targetClassLoader, hostContext, aInfo.name);
+			} else {
+				Log.w(TAG, "can not handle intent:  "  + intent);
+			}
 		}
 	}
 

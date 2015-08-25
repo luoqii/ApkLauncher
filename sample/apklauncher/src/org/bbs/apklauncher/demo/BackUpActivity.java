@@ -23,7 +23,7 @@ public class BackUpActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		setContentView(R.layout.activity_apk_launcher);
+		setContentView(R.layout.apklauncher_activity_plugins);
 
 		ListAdapter adapter = new ArrayAdapter<ApplicationInfo>(this, android.R.layout.simple_list_item_1, (getPackageManager().getInstalledApplications(0))){
 			@Override

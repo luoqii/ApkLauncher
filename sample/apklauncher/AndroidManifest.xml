@@ -99,6 +99,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        
+        <!--  stub activity -->
         <activity
             android:name="org.bbs.apklauncher.emb.auto_gen.Stub_ListActivity"
             android:label="StubActivity" >
@@ -135,6 +137,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <!--  stub activity -->
 
         <service android:name="org.bbs.apklauncher.emb.auto_gen.Stub_Service" />
     </application>

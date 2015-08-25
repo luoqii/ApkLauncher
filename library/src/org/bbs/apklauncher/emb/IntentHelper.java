@@ -818,7 +818,7 @@ public class IntentHelper extends android.content.Intent {
 	    		return;
 	    	}
 	    	
-	        mDir = application.getDir("tmp_object", Context.MODE_WORLD_READABLE);
+	        mDir = application.getDir("intent_helper", Context.MODE_WORLD_READABLE);
 	        mClassLoader = classLoader;
 	        // clean last object
 //	        for (File f : mDir.listFiles()){

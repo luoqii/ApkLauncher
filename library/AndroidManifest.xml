@@ -52,6 +52,7 @@
     <application >
 
         <uses-library android:name="android.test.runner"/>
+        
         <!-- stub component: activity -->
         <activity
             android:name="org.bbs.apklauncher.emb.auto_gen.Stub_ListActivity"
