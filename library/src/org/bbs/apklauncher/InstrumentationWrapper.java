@@ -308,7 +308,8 @@ public class InstrumentationWrapper extends Instrumentation {
 		@Override
 		public void callActivityOnCreate(Activity activity, Bundle icicle) {
 			if (LOG_CALL) {
-				Log.d(TAG, "callActivityOnCreate(). activity: " + activity + " icicle: " + icicle);
+				//----------123412341234123412341234123412341234123412341234
+				Log.d(TAG, "callActivityOnCreate().    activity: " + activity + " icicle: " + icicle);
 			}
 			mBase.callActivityOnCreate(activity, icicle);
 		}
@@ -317,7 +318,8 @@ public class InstrumentationWrapper extends Instrumentation {
 		public void callActivityOnCreate(Activity activity, Bundle icicle,
 				PersistableBundle persistentState) {
 			if (LOG_CALL) {
-				Log.d(TAG, "callActivityOnCreate(). activity: " + activity + " icicle: " + icicle
+				//----------123412341234123412341234123412341234123412341234
+				Log.d(TAG, "callActivityOnCreate().    activity: " + activity + " icicle: " + icicle
 					+ " persistentState: " + persistentState);
 			}
 			mBase.callActivityOnCreate(activity, icicle, persistentState);
@@ -326,7 +328,8 @@ public class InstrumentationWrapper extends Instrumentation {
 		@Override
 		public void callActivityOnDestroy(Activity activity) {
 			if (LOG_CALL) {
-				Log.d(TAG, "callActivityOnDestroy(). activity: " + activity);
+				//----------123412341234123412341234123412341234123412341234
+				Log.d(TAG, "callActivityOnDestroy().   activity: " + activity);
 			}
 			mBase.callActivityOnDestroy(activity);
 		}
@@ -335,7 +338,8 @@ public class InstrumentationWrapper extends Instrumentation {
 		public void callActivityOnRestoreInstanceState(Activity activity,
 				Bundle savedInstanceState) {
 			if (LOG_CALL) {
-				Log.d(TAG, "callActivityOnRestoreInstanceState(). activity: " + activity 
+				//----------123412341234123412341234123412341234123412341234
+				Log.d(TAG, "callActivityOnRestoreInstanceState().  activity: " + activity 
 						+ " savedInstanceState: " + savedInstanceState) ;
 			}
 			mBase.callActivityOnRestoreInstanceState(activity, savedInstanceState);
@@ -345,7 +349,8 @@ public class InstrumentationWrapper extends Instrumentation {
 		public void callActivityOnRestoreInstanceState(Activity activity,
 				Bundle savedInstanceState, PersistableBundle persistentState) {
 			if (LOG_CALL) {
-				Log.d(TAG, "callActivityOnRestoreInstanceState(). activity: " + activity 
+				//----------123412341234123412341234123412341234123412341234
+				Log.d(TAG, "callActivityOnRestoreInstanceState().  activity: " + activity 
 						+ " savedInstanceState: " + savedInstanceState
 						+ " persistentState: " + persistentState) ;
 			}
@@ -356,7 +361,8 @@ public class InstrumentationWrapper extends Instrumentation {
 		@Override
 		public void callActivityOnPostCreate(Activity activity, Bundle icicle) {
 			if (LOG_CALL) {
-				Log.d(TAG, "callActivityOnPostCreate(). activity: " + activity + " icicle: " + icicle);
+				//----------12341234123412341234123412341234123412341234
+				Log.d(TAG, "callActivityOnPostCreate().    activity: " + activity + " icicle: " + icicle);
 			}
 			mBase.callActivityOnPostCreate(activity, icicle);
 		}
@@ -365,7 +371,8 @@ public class InstrumentationWrapper extends Instrumentation {
 		public void callActivityOnPostCreate(Activity activity, Bundle icicle,
 				PersistableBundle persistentState) {
 			if (LOG_CALL) {
-				Log.d(TAG, "callActivityOnPostCreate(). activity: " + activity + " icicle: " + icicle
+				//----------12341234123412341234123412341234123412341234
+				Log.d(TAG, "callActivityOnPostCreate().    activity: " + activity + " icicle: " + icicle
 					+ " persistentState: " + persistentState);
 			}
 			mBase.callActivityOnPostCreate(activity, icicle, persistentState);
@@ -374,6 +381,7 @@ public class InstrumentationWrapper extends Instrumentation {
 		@Override
 		public void callActivityOnNewIntent(Activity activity, Intent intent) {
 			if (LOG_CALL) {
+				//----------12341234123412341234123412341234123412341234
 				Log.d(TAG, "callActivityOnNewIntent(). activity: " + activity
 						+ " intent: " + intent);
 			}
@@ -383,6 +391,7 @@ public class InstrumentationWrapper extends Instrumentation {
 		@Override
 		public void callActivityOnStart(Activity activity) {
 			if (LOG_CALL) {
+				//----------12341234123412341234123412341234123412341234
 				Log.d(TAG, "callActivityOnStart(). activity: " + activity);
 			}
 			mBase.callActivityOnStart(activity);
@@ -391,7 +400,8 @@ public class InstrumentationWrapper extends Instrumentation {
 		@Override
 		public void callActivityOnRestart(Activity activity) {
 			if (LOG_CALL) {
-				Log.d(TAG, "callActivityOnRestart(). activity: " + activity);
+				//----------12341234123412341234123412341234123412341234
+				Log.d(TAG, "callActivityOnRestart().   activity: " + activity);
 			}
 			mBase.callActivityOnRestart(activity);
 		}
@@ -399,7 +409,8 @@ public class InstrumentationWrapper extends Instrumentation {
 		@Override
 		public void callActivityOnResume(Activity activity) {
 			if (LOG_CALL) {
-				Log.d(TAG, "callActivityOnResume(). activity: " + activity);
+				//----------12341234123412341234123412341234123412341234
+				Log.d(TAG, "callActivityOnResume().    activity: " + activity);
 			}
 			mBase.callActivityOnResume(activity);
 		}
@@ -407,7 +418,8 @@ public class InstrumentationWrapper extends Instrumentation {
 		@Override
 		public void callActivityOnStop(Activity activity) {
 			if (LOG_CALL) {
-				Log.d(TAG, "callActivityOnStop(). activity: " + activity);
+				//----------12341234123412341234123412341234123412341234
+				Log.d(TAG, "callActivityOnStop().   activity: " + activity);
 			}
 			mBase.callActivityOnStop(activity);
 		}
@@ -416,6 +428,7 @@ public class InstrumentationWrapper extends Instrumentation {
 		public void callActivityOnSaveInstanceState(Activity activity,
 				Bundle outState) {
 			if (LOG_CALL) {
+				//----------12341234123412341234123412341234123412341234
 				Log.d(TAG, "callActivityOnSaveInstanceState(). activity: " + activity
 						+ " outState: " + outState);
 			}
@@ -426,6 +439,7 @@ public class InstrumentationWrapper extends Instrumentation {
 		public void callActivityOnSaveInstanceState(Activity activity,
 				Bundle outState, PersistableBundle outPersistentState) {
 			if (LOG_CALL) {
+				//----------12341234123412341234123412341234123412341234
 				Log.d(TAG, "callActivityOnSaveInstanceState(). activity: " + activity
 						+ " outState: " + outState
 						+ " outPersistentState: " + outPersistentState);
@@ -436,6 +450,7 @@ public class InstrumentationWrapper extends Instrumentation {
 		@Override
 		public void callActivityOnPause(Activity activity) {
 			if (LOG_CALL) {
+				//----------12341234123412341234123412341234123412341234
 				Log.d(TAG, "callActivityOnPause(). activity: " + activity);
 			}
 			mBase.callActivityOnPause(activity);

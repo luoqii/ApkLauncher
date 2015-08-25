@@ -61,6 +61,8 @@ public class ApkPackageManager extends BasePackageManager {
     private static final boolean DEBUG = ApkLauncherConfig.DEBUG && true;
     private static final boolean PROFILE = ApkLauncherConfig.PROFILE && true;
 
+	private static final boolean DEBUG_PARSE = false;
+
 	private static ApkPackageManager sInstance;
 	
 	public static Map<String, Reference<ClassLoader>> sApk2ClassLoaderMap = new HashMap<String, Reference<ClassLoader>>();
@@ -132,31 +134,13 @@ public class ApkPackageManager extends BasePackageManager {
 			sFileContext = new SdkContext(context);
 			mInstalledApk = new InstallApks();
 			mSerUtil = new SerializableUtil(context);
-
-			// XXX replace will failed for first time. ???
-			if (!hasUpdatedPlugin()) {
-				Version version = Version.getInstance((Application) mApplication.getApplicationContext());
-				if (version.appUpdated() || version.firstUsage()) {
-					// re-build install apk info.
-					scanApkDir(getApkDir(), false, APK_FILE_REG);
-
-					//			mSerUtil.put(mInfos);
-					
-					// for first time or update force copy new/delete old files.
-					overwrite |= true;
-				} else {
-					scanApkDir(getApkDir(), false, APK_FILE_REG);
-					//			mInfos = mSerUtil.get();
-				}
-			} else {
-				Log.i(TAG, "has update plguin, ignore old plguin.");
-
-				File autoUpdateDir = getAutoUpdatePluginDir();
-				scanApkDir(autoUpdateDir, true, APK_FILE_REG);
-				deleteFileOrDir(autoUpdateDir);
-			}
 			
-			scanAssetDir(assetsPath, overwrite);
+			Version version = Version.getInstance((Application) mApplication.getApplicationContext());
+			if (!version.appUpdated()) {
+				initOnPluginUpdateOnly(assetsPath, overwrite);
+			} else {
+				initOnAppUdateOnlY(assetsPath, true);
+			}
 
 			mInited.set(true);
 		}
@@ -164,6 +148,64 @@ public class ApkPackageManager extends BasePackageManager {
 		if (PROFILE){
 			time = System.currentTimeMillis() - time;
 			Log.d(TAG, "end   profile[init]: " + ( time / 1000.) + "s");
+		}
+	}
+
+	private void initOnAppUdateOnlY(String assetsPath, boolean overwrite) {
+		if (DEBUG_PARSE) {
+			Log.d(TAG, "initOnAppUdateOnlY. assetsPath: " + assetsPath + " overwrite: " + overwrite);
+		}
+		scanApkDir(getApkDir(), false, APK_FILE_REG);
+		scanAssetDir(assetsPath, overwrite);
+		scanUpdatePlugin();
+	}
+
+	private void initOnPluginUpdateOnly(String assetsPath, boolean overwrite) {
+		if (DEBUG_PARSE) {
+			Log.d(TAG, "initOnPluginUpdateOnly. assetsPath: " + assetsPath + " overwrite: " + overwrite);
+		}
+		// step 1 scan asset dir if need.
+		scanAssetDir(assetsPath, overwrite);
+		
+		// XXX replace will failed for first time. ???
+//			if (!hasUpdatedPlugin()
+//					|| true
+//					) {
+//				Version version = Version.getInstance((Application) mApplication.getApplicationContext());
+//				if (version.appUpdated() || version.firstUsage()) {
+//					Log.i(TAG, "re-build plugin info.");
+//					// re-build install apk info.
+//					scanApkDir(getApkDir(), false, APK_FILE_REG);
+//
+//					//			mSerUtil.put(mInfos);
+//					
+//					// for first time or update force copy new/delete old files.
+//					overwrite |= true;
+//				} else {
+//					Log.i(TAG, "parse installed plugin info. [not impled]");
+//					scanApkDir(getApkDir(), false, APK_FILE_REG);
+//					//			mInfos = mSerUtil.get();
+//				}
+//			} else {
+//
+//			}
+		
+		// step 2 scan plugin dir if need,
+		// TODO can we get plugin info without parsing???
+		scanApkDir(getApkDir(), false, APK_FILE_REG);
+
+		// step 3 scan update plugin if need.
+		scanUpdatePlugin();
+	}
+
+	private void scanUpdatePlugin() {
+		if (hasUpdatedPlugin()) {
+			if (DEBUG_PARSE) {
+				Log.d(TAG, "has update plguin.");
+			}
+			File autoUpdateDir = getAutoUpdatePluginDir();
+			scanApkDir(autoUpdateDir, true, APK_FILE_REG);
+			deleteFileOrDir(autoUpdateDir);
 		}
 	}
 	
@@ -311,6 +353,9 @@ public class ApkPackageManager extends BasePackageManager {
 	}
 	
 	public void scanAssetDir(String assetsPath, boolean overwritee){
+		if (DEBUG_PARSE){
+			Log.d(TAG, "scanAssetDir. assetsPath: " + assetsPath + " overwritee: " + overwritee);
+		}
         Version version = Version.getInstance((Application) mApplication.getApplicationContext());
         if (version.appUpdated() || version.firstUsage()||overwritee
         		) {
@@ -321,7 +366,7 @@ public class ApkPackageManager extends BasePackageManager {
 	}
 
 	private void doScanApk(String assetsPath) {
-		File tempApkDir = getDataDir("temp_apk");
+		File tempApkDir = getDataDir("temp_plguin");
 		extractApkFromAsset(assetsPath, tempApkDir.getPath());
 		scanApkDir(tempApkDir);
 		deleteFileOrDir(tempApkDir);
@@ -364,7 +409,9 @@ public class ApkPackageManager extends BasePackageManager {
         if (!scanned) {
             doScanApk(assetsPath);
         } else {
-        	Log.i(TAG, "assets path has scanned before, ignore. path: " + assetsPath);
+        	if (DEBUG_PARSE) {
+        		Log.i(TAG, "assets path has scanned before, ignore. path: " + assetsPath);
+        	}
         }
 	}
 
@@ -435,7 +482,7 @@ public class ApkPackageManager extends BasePackageManager {
 				info = ApkManifestParser.parseAPk(mApplication, dest.getAbsolutePath());
 			}
 			//==========123456789012345678
-			Log.i(TAG, "apk info   : " + appInfoStr(info));
+			Log.i(TAG, "plugin info   : " + appInfoStr(info));
 			compareInfo(getHostPacageInfoX(), info);
 			String reqSdkV = "";
 			if (info.applicationInfo.metaData != null ) {
@@ -821,9 +868,9 @@ public class ApkPackageManager extends BasePackageManager {
 			if (index >= 0) {
 				PackageInfoX old = remove(index);
 				//==========123456789012345678
-				Log.i(TAG, "app updated:");
-				Log.i(TAG, "old app    : "  + appInfoStr(old) );
-				Log.i(TAG, "new app    : "  + appInfoStr(info) );
+				Log.i(TAG, "plugin updated:");
+				Log.i(TAG, "old plugin    : "  + appInfoStr(old) );
+				Log.i(TAG, "new plugin    : "  + appInfoStr(info) );
 			}
 			add(info);
 			addActToResolver(info);
@@ -1005,10 +1052,10 @@ public class ApkPackageManager extends BasePackageManager {
 				mPreviousVersionCode = p.getInt(KEY_PREVIOUS_V_CODE, INVALID_CODE);
 				mPreviousVersionName = p.getString(KEY_PREVIOUS_V_NAME, "");
 
-				Log.i(TAG, "mCurrentVersionCode  : " + mCurrentVersionCode);
-				Log.i(TAG, "mCurrentVersionName  : " + mCurrentVersionName);
-				Log.i(TAG, "mPreviousVersionCode : " + mPreviousVersionCode);
-				Log.i(TAG, "mPreviousVersionName : " + mPreviousVersionName);
+				Log.i(TAG, "currentVersionCode  : " + mCurrentVersionCode);
+				Log.i(TAG, "currentVersionName  : " + mCurrentVersionName);
+				Log.i(TAG, "previousVersionCode : " + mPreviousVersionCode);
+				Log.i(TAG, "previousVersionName : " + mPreviousVersionName);
 				
 				p.edit()
 					.putInt(KEY_PREVIOUS_V_CODE, mCurrentVersionCode)

@@ -22,7 +22,7 @@ public class App extends Host_Application {
 		version.init(this);
 		
         ApkLauncher apkLauncher = ApkLauncher.getInstance();
-        apkLauncher.init(this,"plugin",
+        apkLauncher.init(this,"plugin",	
                 BuildConfig.DEBUG
 //                && false
                 );

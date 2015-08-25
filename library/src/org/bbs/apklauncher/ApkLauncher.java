@@ -29,7 +29,7 @@ public class ApkLauncher {
 
     public static final String EXTRA_TARGET_COMPONENT_CLASS_NAME = "EXTRA_TARGET_COMPONENT_CLASS_NAME";
     public static final String EXTRA_HOST_COMPONENT_CLASS_NAME = "EXTRA_HOST_COMPONENT_CLASS_NAME";
-    public static final String MANIFEST_META_REQUIRE_MIN_SDK_VERSION = "ApkLauncher.min.sdk.version";
+    public static final String MANIFEST_META_REQUIRE_MIN_SDK_VERSION = "apklauncher.min.sdk.version";
     
     private Map<String, String> mT2HMap;
     
