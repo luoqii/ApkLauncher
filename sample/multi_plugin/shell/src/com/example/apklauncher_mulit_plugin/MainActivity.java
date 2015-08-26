@@ -20,10 +20,19 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.example.apklauncher_multi_plugin.R;
+import com.umeng.update.UmengUpdateAgent;
+import com.umeng.update.UpdateConfig;
 
 @TargetApi(Build.VERSION_CODES.GINGERBREAD)
 public class MainActivity extends PluginsActivity {
 	private static final String TAG = MainActivity.class.getSimpleName();
 	
-	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		
+		UpdateConfig.setDebug(true);
+		UmengUpdateAgent.update(this);
+	}
 }

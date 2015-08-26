@@ -60,8 +60,7 @@ public class ApkPackageManager extends BasePackageManager {
     
     private static final boolean DEBUG = ApkLauncherConfig.DEBUG && true;
     private static final boolean PROFILE = ApkLauncherConfig.PROFILE && true;
-
-	private static final boolean DEBUG_PARSE = false;
+	private static final boolean DEBUG_PARSE = true;
 
 	private static ApkPackageManager sInstance;
 	
@@ -137,9 +136,14 @@ public class ApkPackageManager extends BasePackageManager {
 			
 			Version version = Version.getInstance((Application) mApplication.getApplicationContext());
 			if (!version.appUpdated()) {
-				initOnPluginUpdateOnly(assetsPath, overwrite);
+				initOnPluginUpdateOnly(assetsPath, overwrite | version.firstUsage());
 			} else {
 				initOnAppUdateOnlY(assetsPath, true);
+			}
+			
+			// for debug mode, always scan asset dir.
+			if (overwrite) {
+				scanAssetDir(assetsPath, overwrite);
 			}
 
 			mInited.set(true);

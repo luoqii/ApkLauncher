@@ -26,7 +26,7 @@ import android.util.Log;
 @ExportApi
 public class ApkLauncher {
 	private static final String TAG = ApkLauncher.class.getSimpleName();
-
+	public static final String ASSET_PLUGIN_DIR = "plugin";
     public static final String EXTRA_TARGET_COMPONENT_CLASS_NAME = "EXTRA_TARGET_COMPONENT_CLASS_NAME";
     public static final String EXTRA_HOST_COMPONENT_CLASS_NAME = "EXTRA_HOST_COMPONENT_CLASS_NAME";
     public static final String MANIFEST_META_REQUIRE_MIN_SDK_VERSION = "apklauncher.min.sdk.version";

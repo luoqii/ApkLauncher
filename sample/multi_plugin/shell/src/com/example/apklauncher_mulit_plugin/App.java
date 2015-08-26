@@ -33,7 +33,7 @@ Host_Application
 
 		ApkLauncherConfig.setDebug(true);
 		ApkLauncher apk = ApkLauncher.getInstance();
-		apk.init(this, "no-exist", true);
+		apk.init(this, ApkLauncher.ASSET_PLUGIN_DIR, true);
 //		apk.setT2HMap(ApkLauncher.TKey.LIST_ACTIVITY, "org.bbs.apklauncher.demo.ListActivity");
 		
 //		ApkPackageManager.getInstance().setClassLoaderFactory(new ClassLoaderFactory() {
@@ -49,7 +49,7 @@ Host_Application
 //				return cl;
 //			}
 //		});
-		ApkPackageManager.getInstance().scanApkDir(apkDir, true, ".*_c[a|b]\\.apk");
+//		ApkPackageManager.getInstance().scanApkDir(apkDir, true, ".*_c[a|b]\\.apk");
 	}
 	
 	
