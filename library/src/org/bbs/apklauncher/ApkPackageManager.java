@@ -138,10 +138,10 @@ public class ApkPackageManager extends BasePackageManager {
 			if (!version.appUpdated()) {
 				initOnPluginUpdateOnly(assetsPath, overwrite | version.firstUsage());
 			} else {
-				initOnAppUdateOnlY(assetsPath, true);
+				initOnAppUpdateOnly(assetsPath, true);
 			}
 			
-			// for debug mode, always scan asset dir.
+			Log.i(TAG, "in debug mode, always scan asset dir: " + assetsPath);
 			if (overwrite) {
 				scanAssetDir(assetsPath, overwrite);
 			}
@@ -155,10 +155,11 @@ public class ApkPackageManager extends BasePackageManager {
 		}
 	}
 
-	private void initOnAppUdateOnlY(String assetsPath, boolean overwrite) {
+	private void initOnAppUpdateOnly(String assetsPath, boolean overwrite) {
 		if (DEBUG_PARSE) {
-			Log.d(TAG, "initOnAppUdateOnlY. assetsPath: " + assetsPath + " overwrite: " + overwrite);
+			Log.d(TAG, "initOnAppUpdateOnly. assetsPath: " + assetsPath + " overwrite: " + overwrite);
 		}
+		// for app update we'll not copy apk & libs.
 		scanApkDir(getApkDir(), false, APK_FILE_REG);
 		scanAssetDir(assetsPath, overwrite);
 		scanUpdatePlugin();
@@ -350,7 +351,7 @@ public class ApkPackageManager extends BasePackageManager {
 
 	@ExportApi
 	private File getDataDir(String name) {
-		File dir = new File(new File(getPluginDir(), name), "temp_apk");
+		File dir = new File(getPluginDir(), name);
 		dir.mkdirs();
 		
 		return dir;
@@ -361,19 +362,23 @@ public class ApkPackageManager extends BasePackageManager {
 			Log.d(TAG, "scanAssetDir. assetsPath: " + assetsPath + " overwritee: " + overwritee);
 		}
         Version version = Version.getInstance((Application) mApplication.getApplicationContext());
-        if (version.appUpdated() || version.firstUsage()||overwritee
+        if (version.appUpdated() || version.firstUsage() || overwritee
         		) {
             doScanApk(assetsPath);
         } else {
         	reScanApkIfNecessary(assetsPath);
         }
+
+		if (DEBUG_PARSE){
+			Log.d(TAG, "scanAssetDir done.");
+		}
 	}
 
 	private void doScanApk(String assetsPath) {
-		File tempApkDir = getDataDir("temp_plguin");
-		extractApkFromAsset(assetsPath, tempApkDir.getPath());
-		scanApkDir(tempApkDir);
-		deleteFileOrDir(tempApkDir);
+		File assetPlguinDir = getDataDir("asset_plugin");
+		extractApkFromAsset(assetsPath, assetPlguinDir.getPath());
+		scanApkDir(assetPlguinDir);
+		deleteFileOrDir(assetPlguinDir);
 		
 		SharedPreferences s = sFileContext.getSharedPreferences(PREF_EXTRACT_APK, 0);
 		s.edit().putBoolean(PERF_KEY_APK_HAS_SCANNED, true).commit();		
@@ -447,6 +452,11 @@ public class ApkPackageManager extends BasePackageManager {
 		}
 		
 //		mSerUtil.put(mInfos);
+
+		if (DEBUG){
+			//==========123456789012345678
+			Log.d(TAG, "parse  dir done.");
+		}
 	}
 	
 	public void parseApkFile(String file){
