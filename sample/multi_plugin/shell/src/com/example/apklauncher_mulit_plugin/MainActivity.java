@@ -1,25 +1,12 @@
 package com.example.apklauncher_mulit_plugin;
 
-import org.bbs.apklauncher.ApkLauncher;
-import org.bbs.apklauncher.ApkPackageManager;
 import org.bbs.apklauncher.PluginsActivity;
-import org.bbs.apkparser.PackageInfoX;
-import org.bbs.apkparser.PackageInfoX.ActivityInfoX;
 
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 
-import com.example.apklauncher_multi_plugin.R;
+import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
 import com.umeng.update.UpdateConfig;
 
@@ -34,5 +21,15 @@ public class MainActivity extends PluginsActivity {
 		
 		UpdateConfig.setDebug(true);
 		UmengUpdateAgent.update(this);
+	}
+	
+	public void onResume() {
+		super.onResume();
+		MobclickAgent.onResume(this);
+	}
+	
+	public void onPause() {
+		super.onPause();
+		MobclickAgent.onPause(this);
 	}
 }
