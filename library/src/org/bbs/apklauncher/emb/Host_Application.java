@@ -36,7 +36,7 @@ Application
 		Application app = ApkPackageManager.getApplication(appInfo.packageName);
 		if (null == app) {
 			// init IntentHelper
-			IntentHelper.PersistentObject.getsInstance().init(this, classLoader);
+			IntentHelper.PersistentObject.getsInstance().init(ApkPackageManager.sFileContext, classLoader);
 			
 			String appClassName = appInfo.className;
 			if (!TextUtils.isEmpty(appClassName)) {

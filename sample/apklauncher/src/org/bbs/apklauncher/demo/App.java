@@ -15,7 +15,6 @@ public class App extends
 Host_Application 
 {
 	private static final String TAG = App.class.getSimpleName();
-	public static final String APK_LAUNCHER_DIR = "apklauncher";
 	
 	public App(){
 		super();
@@ -28,12 +27,11 @@ Host_Application
 		ExceptionCatcher.attachExceptionHandler(this);
 		
 		File apkDir = null;
-//		apkDir = getDir(APK_LAUNCHER_DIR, 0);
 		apkDir = new File(Environment.getExternalStorageDirectory(), "apk");
 
 		ApkLauncherConfig.setDebug(true);
 		ApkLauncher apk = ApkLauncher.getInstance();
-		apk.init(this, "no-exist", true);
+		apk.init(this, ApkLauncher.ASSET_PLUGIN_DIR, true);
 		apk.setT2HMap(ApkLauncher.TKey.LIST_ACTIVITY, "org.bbs.apklauncher.demo.ListActivity");
 		
 //		ApkPackageManager.getInstance().setClassLoaderFactory(new ClassLoaderFactory() {

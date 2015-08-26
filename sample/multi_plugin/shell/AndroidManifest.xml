@@ -16,14 +16,14 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
         
-                <!-- bysong asdfghjkl -->
+        <!-- bysong asdfghjkl -->
         <meta-data android:value="55dd242d67e58e4623004e9e" android:name="UMENG_APPKEY"/>
         <!-- 
         channel_multi_plugin_upgrade_1_plugin_upgrade
         channel_multi_plugin_upgrade_0_plugin_upgrade
         channel_multi_plugin_upgrade_0_plugin
          -->
-		<meta-data android:value="channel_upgrade" android:name="UMENG_CHANNEL"/>
+		<meta-data android:value="channel_multi_plugin_upgrade_1_plugin_upgrade" android:name="UMENG_CHANNEL"/>
 		
         <activity
             android:name="com.example.apklauncher_mulit_plugin.MainActivity"

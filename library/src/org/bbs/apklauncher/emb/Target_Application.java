@@ -1,6 +1,7 @@
 package org.bbs.apklauncher.emb;
 
 import org.bbs.apklauncher.AndroidUtil;
+import org.bbs.apklauncher.ApkPackageManager;
 import org.bbs.apklauncher.ViewCreater;
 import org.bbs.apklauncher.emb.IntentHelper.PersistentObject;
 
@@ -26,7 +27,7 @@ public class Target_Application extends Application
 	public void onCreate() {
 		super.onCreate();
 
-		PersistentObject.getsInstance().init(this, getClassLoader());
+		PersistentObject.getsInstance().init(ApkPackageManager.sFileContext, getClassLoader());
 	}
 	
 	@Override

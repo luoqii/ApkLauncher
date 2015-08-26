@@ -70,7 +70,7 @@ public class ApkPackageManager extends BasePackageManager {
 
 	private InstallApks mInstalledApk;
 	private Application mApplication;
-	private static Context sFileContext;
+	public static Context sFileContext;
 
 	private SerializableUtil mSerUtil;
 	private PackageInfoX mHostPkgInfo;	
