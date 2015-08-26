@@ -2,6 +2,7 @@ package org.bbs.apklauncher;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -11,6 +12,8 @@ import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Method;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,7 +44,6 @@ import android.content.pm.PermissionGroupInfo;
 import android.content.pm.ResolveInfo;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
-import android.os.Debug;
 import android.text.TextUtils;
 import android.util.Log;
 import dalvik.system.DexClassLoader;
@@ -480,7 +482,7 @@ public class ApkPackageManager extends BasePackageManager {
 			//==========123456789012345678
 			Log.i(TAG, "ignre file : " + file + " reg: " + reg);
 			return;
-		}			
+		}
 
 		if (PROFILE) {
 			time = System.currentTimeMillis();
@@ -493,7 +495,7 @@ public class ApkPackageManager extends BasePackageManager {
 				dest = new File(getApkDir(), info.packageName + APK_FILE_SUFFIX);
 				deleteFileOrDir(dest);
 				AndroidUtil.copyFile(file, dest);
-				info = ApkManifestParser.parseAPk(mApplication, dest.getAbsolutePath());
+				info = ApkManifestParser.parseAPk(mApplication, dest.getAbsolutePath());				
 			}
 			//==========123456789012345678
 			Log.i(TAG, "plugin info   : " + appInfoStr(info));
@@ -883,12 +885,39 @@ public class ApkPackageManager extends BasePackageManager {
 				PackageInfoX old = remove(index);
 				//==========123456789012345678
 				Log.i(TAG, "plugin updated:");
-				Log.i(TAG, "old plugin    : "  + appInfoStr(old) );
-				Log.i(TAG, "new plugin    : "  + appInfoStr(info) );
+				Log.i(TAG, "old plugin    :"  + appInfoStr(old) + " md5:" + fileDigest(old.applicationInfo.publicSourceDir));
+				Log.i(TAG, "new plugin    :"  + appInfoStr(info) + " md5:" + fileDigest(info.applicationInfo.publicSourceDir));
 			}
 			add(info);
 			addActToResolver(info);
 		}		
+
+		private String fileDigest(String apk) {
+			try {
+				MessageDigest digester;
+				digester = MessageDigest.getInstance("MD5");
+				  byte[] bytes = new byte[8192];
+				  int byteCount;
+				  FileInputStream in = new FileInputStream(new File(apk));
+				  while ((byteCount = in.read(bytes)) > 0) {
+				    digester.update(bytes, 0, byteCount);
+				  }
+				  byte[] digest = digester.digest();
+				  
+				  return new String(digest);
+			} catch (NoSuchAlgorithmException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			return "";
+		}
 
 		private void addActToResolver(PackageInfoX info) {
 			for (ActivityInfo a: info.activities) {
