@@ -378,7 +378,8 @@ public class ApkPackageManager extends BasePackageManager {
 
 	private void doScanApk(String assetsPath) {
 		File assetPlguinDir = getDataDir("asset_plugin");
-		extractApkFromAsset(assetsPath, assetPlguinDir.getPath());
+        AssetManager am = mApplication.getResources().getAssets();
+		extractApkFromAsset(am, assetsPath, new File(assetPlguinDir.getPath()));
 		scanApkDir(assetPlguinDir);
 		deleteFileOrDir(assetPlguinDir);
 		
@@ -386,13 +387,12 @@ public class ApkPackageManager extends BasePackageManager {
 		s.edit().putBoolean(PERF_KEY_APK_HAS_SCANNED, true).commit();		
 	}
 	
-    private void extractApkFromAsset(String assetDir, String destDir) {
+    public void extractApkFromAsset(AssetManager am, String assetDir, File destDir) {
     	long time = 0;
     	if (PROFILE) {
     		time = System.currentTimeMillis();
 			Log.d(TAG, "start profile[extractApkFromAsset]. assetSrc:" + assetDir + " dst:" + destDir);
     	}
-        AssetManager am = mApplication.getResources().getAssets();
         try {
             String[] files = am.list(assetDir);
             if (null == files || files.length == 0){

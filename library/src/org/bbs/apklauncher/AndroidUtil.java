@@ -144,21 +144,21 @@ public class AndroidUtil {
 	}
 	
 	// TODO
-		public static final String toMemoryLevel(int level) {
-			String levelStr = "";
-			levelStr = level + "";
-			
-			return levelStr;
+	public static final String toMemoryLevel(int level) {
+		String levelStr = "";
+		levelStr = level + "";
+
+		return levelStr;
+	}
+
+
+
+	public static Context getContextImpl(Context context) {
+		Context nextContext;
+		while ((context instanceof ContextWrapper) &&
+				(nextContext=((ContextWrapper)context).getBaseContext()) != null) {
+			context = nextContext;
 		}
-
-
-		
-	    public static Context getContextImpl(Context context) {
-	        Context nextContext;
-	        while ((context instanceof ContextWrapper) &&
-	                (nextContext=((ContextWrapper)context).getBaseContext()) != null) {
-	            context = nextContext;
-	        }
-	        return (Context)context;
-	    }
+		return (Context)context;
+	}
 }

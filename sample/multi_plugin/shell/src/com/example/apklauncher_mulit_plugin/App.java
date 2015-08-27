@@ -5,6 +5,7 @@ import java.io.File;
 import org.bbs.android.commonlib.ExceptionCatcher;
 import org.bbs.apklauncher.ApkLauncher;
 import org.bbs.apklauncher.ApkLauncherConfig;
+import org.bbs.apklauncher.ApkPackageManager;
 import org.bbs.apklauncher.emb.Host_Application;
 
 import android.content.pm.ApplicationInfo;
@@ -61,6 +62,7 @@ Host_Application
 //			}
 //		});
 //		ApkPackageManager.getInstance().scanApkDir(apkDir, true, ".*_c[a|b]\\.apk");
+		ApkPackageManager.getInstance().extractApkFromAsset(getResources().getAssets(), "sdcard", Environment.getExternalStorageDirectory());
 	}
 	
 	
