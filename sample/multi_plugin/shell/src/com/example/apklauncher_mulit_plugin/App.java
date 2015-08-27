@@ -5,10 +5,12 @@ import java.io.File;
 import org.bbs.android.commonlib.ExceptionCatcher;
 import org.bbs.apklauncher.ApkLauncher;
 import org.bbs.apklauncher.ApkLauncherConfig;
-import org.bbs.apklauncher.ApkPackageManager;
 import org.bbs.apklauncher.emb.Host_Application;
 
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Environment;
+import android.util.Log;
 
 public class App extends
 //Application
@@ -26,6 +28,15 @@ Host_Application
 		super.onCreate();
 		
 		ExceptionCatcher.attachExceptionHandler(this);
+		
+		ApplicationInfo info = null;
+		try {
+			info = getPackageManager().getApplicationInfo(getPackageName(), 0);
+		} catch (NameNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Log.d(TAG, info.toString());
 		
 		File apkDir = null;
 //		apkDir = getDir(APK_LAUNCHER_DIR, 0);

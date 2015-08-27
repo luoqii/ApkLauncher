@@ -246,8 +246,8 @@ public class ApkPackageManager extends BasePackageManager {
 	}
 	
 	public ClassLoader createClassLoader(Context baseContext, PackageInfoX pInfo){
-		return createClassLoader(baseContext, pInfo.applicationInfo.publicSourceDir, 
-				pInfo.mLibPath, pInfo.packageName);
+		return createClassLoader(baseContext, pInfo.applicationInfo.publicSourceDir,
+				pInfo.applicationInfo.nativeLibraryDir, pInfo.packageName);
 	}
 
 	public ClassLoader createClassLoader(Context baseContext, String apkPath, String libPath, String targetPackageName) {
@@ -534,7 +534,7 @@ public class ApkPackageManager extends BasePackageManager {
 				//					AndroidUtil.extractZipEntry(new ZipFile(info.applicationInfo.publicSourceDir), "lib/armeabi-v7a", destLibDir);
 			}
 
-			info.mLibPath = destLibDir.getPath();
+			info.applicationInfo.nativeLibraryDir = destLibDir.getPath();			 
 
 			// asume there is only one apk.
 			//				ClassLoader cl = createClassLoader(mContext, 
@@ -559,6 +559,9 @@ public class ApkPackageManager extends BasePackageManager {
 		checkPermission(hostPacageInfoX, info);
 	}
 
+	private boolean deleteFileOrDir(String file) {
+		return deleteFileOrDir(new File(file));
+	}
 	private boolean deleteFileOrDir(File file) {
 		boolean isD = file.isDirectory();
 		//==========123456789012345678
@@ -701,6 +704,14 @@ public class ApkPackageManager extends BasePackageManager {
 
 	public void deleteApk(PackageInfoX pInfo){
 		boolean delete = mInstalledApk.remove(pInfo);
+
+		deleteFileOrDir(pInfo.applicationInfo.publicSourceDir);
+		// XXX FileContext.ENBABLE_FILE is false, how can we do this?
+		File dataDir =  getAppDataDir(pInfo.packageName);
+//		String dataDir = pInfo.applicationInfo.dataDir;
+		deleteFileOrDir(dataDir);
+		// TODO if delete dataDir is fixed, comment this
+		deleteFileOrDir(pInfo.applicationInfo.nativeLibraryDir);
 		
 		if (DEBUG){
 			Log.i(TAG, "delete plugin. pInfo: " + pInfo + (delete ? " success" : " failed"));

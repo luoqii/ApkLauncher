@@ -96,7 +96,7 @@ implements CallBack {
 		String targetActivityClassName = intent.getStringExtra(EXTRA_TARGET_COMPONENT_CLASS_NAME);
 		mTargetActivityInfo = ApkPackageManager.getInstance()
 												.getActivityInfo(targetActivityClassName);
-		String libPath = mTargetActivityInfo.mPackageInfo.mLibPath;
+		String libPath = mTargetActivityInfo.mPackageInfo.applicationInfo.nativeLibraryDir;
 		String targetApplicationClassName = mTargetActivityInfo.applicationInfo.className;
 		int targetThemeId = mTargetActivityInfo.theme;
 		String apkPath = mTargetActivityInfo.applicationInfo.publicSourceDir;

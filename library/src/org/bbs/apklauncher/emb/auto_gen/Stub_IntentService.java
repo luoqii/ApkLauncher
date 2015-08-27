@@ -60,7 +60,7 @@ public class Stub_IntentService extends StubBase_IntentService {
 		ServiceInfoX serviceInfo = ApkPackageManager.getInstance().getServiceInfo(mTargetServiceClassName);
 		
 		String apkPath = serviceInfo.applicationInfo.publicSourceDir;
-		String libPath = serviceInfo.mPackageInfo.mLibPath;
+		String libPath = serviceInfo.mPackageInfo.applicationInfo.nativeLibraryDir;
 		
 		Log.d(TAG, "host service               : " + this);
 		Log.d(TAG, "targetApplicationClassName : " + serviceInfo.applicationInfo.className);

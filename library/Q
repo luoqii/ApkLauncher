@@ -15,4 +15,4 @@ S2: proxy all call to target app(plguin)
     D1:need source code
     D2:to integrate 3rd lib
     D3:support different activity's config in AndroidManifest.xml
-    D4:ACTION not support
+    D4:ACTION not support(support now)

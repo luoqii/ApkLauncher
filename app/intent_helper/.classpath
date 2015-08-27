@@ -4,9 +4,9 @@
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry kind="lib" path="/ApkLauncher_Sdk/bin/apklauncher_sdk.jar"/>
-	<classpathentry kind="lib" path="/ApkLauncher_Sdk/apklauncher_plugin.jar"/>
+	<classpathentry exported="true" kind="lib" path="/ApkLauncher_Sdk/apklauncher_plugin.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
-	<classpathentry exported="true" kind="lib" path="/mnt/workbench/ott.0install/appshell/library/apklauncher_app.jar"/>
+	<classpathentry kind="lib" path="/mnt/workbench/ott.0install/appshell/library/apklauncher_app.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
