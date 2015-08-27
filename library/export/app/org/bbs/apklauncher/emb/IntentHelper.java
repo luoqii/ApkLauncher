@@ -32,6 +32,10 @@ import android.util.Log;
 /**
  * < 5.0 Intent.putSerizable() do not support classloader.
  * 
+ * init this by IntentHelper.PersistentObject.getInstance().init()
+ * @see {@link #PersistentObject}
+ * 
+ * <P>
  * Created by bysong
  * 
  */
@@ -808,13 +812,13 @@ public class IntentHelper extends android.content.Intent {
 	    	
 	    }
 
-	    public void init(Application application, ClassLoader classLoader){
+	    public void init(Context context, ClassLoader classLoader){
 	    	if (mHasInit) {
 	    		Log.i(TAG, "has inited, ignore.");
 	    		return;
 	    	}
 	    	
-	        mDir = application.getDir("tmp_object", Context.MODE_WORLD_READABLE);
+	        mDir = context.getDir("intent_helper", Context.MODE_WORLD_READABLE);
 	        mClassLoader = classLoader;
 	        // clean last object
 //	        for (File f : mDir.listFiles()){
