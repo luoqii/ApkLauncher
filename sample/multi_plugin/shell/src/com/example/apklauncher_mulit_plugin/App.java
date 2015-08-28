@@ -10,6 +10,7 @@ import org.bbs.apklauncher.ApkPackageManager;
 import org.bbs.apklauncher.emb.Host_Application;
 
 import android.app.DownloadManager;
+import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Environment;
@@ -66,15 +67,6 @@ Host_Application
 //			}
 //		});
 //		ApkPackageManager.getInstance().scanApkDir(apkDir, true, ".*_c[a|b]\\.apk");
-		List<File> files = ApkPackageManager.getInstance().extractApkFromAsset(getResources().getAssets(), 
-				"sdcard/Download", 
-				new File(Environment.getExternalStorageDirectory(), "Download"));
-		
-		// make Downloads app happy
-		DownloadManager dl = (DownloadManager)getSystemService(DOWNLOAD_SERVICE);
-		for (File f : files){
-			dl.addCompletedDownload(f.getName(), f.getName(), true, "application/X-apk", f.getPath(), f.length(), false);
-		}
 	}
 	
 	

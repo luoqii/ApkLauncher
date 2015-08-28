@@ -158,6 +158,7 @@ public class PluginsActivity extends Activity {
 		if (item.getItemId() == R.id.pick) {
 			Intent pick = new Intent(Intent.ACTION_GET_CONTENT);
 			pick.setType("*/*");
+//			Intent pick = new Intent(Intent.ACTION_PICK);			
 			startActivityForResult(pick, 0);
 			return true;
 		}

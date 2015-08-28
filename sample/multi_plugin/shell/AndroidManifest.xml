@@ -3,30 +3,33 @@
     package="com.example.apklauncher_multi_plugin"
     android:versionCode="1"
     android:versionName="1.0" >
-    
-    <uses-permission
-        android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="21" />
 
     <application
-        android:allowBackup="true"
         android:name="com.example.apklauncher_mulit_plugin.App"
+        android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
-        
+
         <!-- bysong asdfghjkl -->
-        <meta-data android:value="55dd242d67e58e4623004e9e" android:name="UMENG_APPKEY"/>
-        <!-- 
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="55dd242d67e58e4623004e9e" />
+        <!--
         channel_multi_plugin_upgrade_1_plugin_upgrade
         channel_multi_plugin_upgrade_0_plugin_upgrade
         channel_multi_plugin_upgrade_0_plugin
-         -->
-		<meta-data android:value="channel_multi_plugin_upgrade_1_plugin_upgrade" android:name="UMENG_CHANNEL"/>
-		
+        -->
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="channel_multi_plugin_upgrade_1_plugin_upgrade" />
+
         <activity
             android:name="com.example.apklauncher_mulit_plugin.MainActivity"
             android:label="@string/app_name" >
@@ -36,8 +39,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
-        <!--  stub activity -->
+
+        <!-- stub activity -->
         <activity
             android:name="org.bbs.apklauncher.emb.auto_gen.Stub_ListActivity"
             android:label="StubActivity" >
@@ -74,9 +77,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <!--  stub activity -->
-        
-        
+        <!-- stub activity -->
+
+
         <!-- umeng -->
         <service
             android:name="com.umeng.update.net.DownloadingService"
@@ -87,9 +90,12 @@
             android:name="com.umeng.update.UpdateDialogActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
-        
+        <activity
+            android:name=".TinyFilePickerActivity"
+            android:label="@string/title_activity_file_picker" >
+        </activity>
     </application>
-    
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" >
     </uses-permission>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" >
