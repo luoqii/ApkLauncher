@@ -1,6 +1,7 @@
 package com.example.apklauncher_mulit_plugin;
 
 import java.io.File;
+import java.util.List;
 
 import org.bbs.android.commonlib.ExceptionCatcher;
 import org.bbs.apklauncher.ApkLauncher;
@@ -8,10 +9,13 @@ import org.bbs.apklauncher.ApkLauncherConfig;
 import org.bbs.apklauncher.ApkPackageManager;
 import org.bbs.apklauncher.emb.Host_Application;
 
+import android.app.DownloadManager;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Environment;
 import android.util.Log;
+
+import com.umeng.update.net.DownloadingService;
 
 public class App extends
 //Application
@@ -62,7 +66,15 @@ Host_Application
 //			}
 //		});
 //		ApkPackageManager.getInstance().scanApkDir(apkDir, true, ".*_c[a|b]\\.apk");
-		ApkPackageManager.getInstance().extractApkFromAsset(getResources().getAssets(), "sdcard", Environment.getExternalStorageDirectory());
+		List<File> files = ApkPackageManager.getInstance().extractApkFromAsset(getResources().getAssets(), 
+				"sdcard/Download", 
+				new File(Environment.getExternalStorageDirectory(), "Download"));
+		
+		// make Downloads app happy
+		DownloadManager dl = (DownloadManager)getSystemService(DOWNLOAD_SERVICE);
+		for (File f : files){
+			dl.addCompletedDownload(f.getName(), f.getName(), true, "application/X-apk", f.getPath(), f.length(), false);
+		}
 	}
 	
 	

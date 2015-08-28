@@ -387,12 +387,13 @@ public class ApkPackageManager extends BasePackageManager {
 		s.edit().putBoolean(PERF_KEY_APK_HAS_SCANNED, true).commit();		
 	}
 	
-    public void extractApkFromAsset(AssetManager am, String assetDir, File destDir) {
+    public List<File> extractApkFromAsset(AssetManager am, String assetDir, File destDir) {
     	long time = 0;
     	if (PROFILE) {
     		time = System.currentTimeMillis();
 			Log.d(TAG, "start profile[extractApkFromAsset]. assetSrc:" + assetDir + " dst:" + destDir);
     	}
+    	ArrayList<File> copiedFiles = new ArrayList<File>();
         try {
             String[] files = am.list(assetDir);
             if (null == files || files.length == 0){
@@ -400,8 +401,10 @@ public class ApkPackageManager extends BasePackageManager {
             	Log.w(TAG, "empty assets dir:" + assetDir);
             } else {
             	for (String fp : files) {
+            		File destF = new File(destDir, fp);
             		AndroidUtil.copyStream(am.open(assetDir + "/" + fp), 
-            				new FileOutputStream(new File(destDir, fp)));
+            				new FileOutputStream(destF));
+            		copiedFiles.add(destF);
             	}
             }
         } catch (IOException e) {
@@ -412,6 +415,8 @@ public class ApkPackageManager extends BasePackageManager {
         	time = System.currentTimeMillis() - time;
 			Log.d(TAG, "end   profile[extractApkFromAsset]: " + ( time / 1000.) + "s");
         }
+        
+        return copiedFiles;
     }
 	
 	private void reScanApkIfNecessary(String assetsPath) {
