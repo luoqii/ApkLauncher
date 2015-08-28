@@ -28,7 +28,7 @@
         -->
         <meta-data
             android:name="UMENG_CHANNEL"
-            android:value="channel_multi_plugin_upgrade_1_plugin_upgrade" />
+            android:value="channel_multi_plugin_upgrade_0_plugin_upgrade" />
 
         <activity
             android:name="com.example.apklauncher_mulit_plugin.MainActivity"
@@ -92,7 +92,14 @@
         </activity>
         <activity
             android:name=".TinyFilePickerActivity"
-            android:label="@string/title_activity_file_picker" >
+            android:exported="true"
+            android:label="TinyFilePicker" >
+            <intent-filter >
+                <action android:name="android.intent.action.GET_CONTENT"/>
+				<category android:name="android.intent.category.DEFAULT"/>
+				<category android:name="android.intent.category.OPENABLE"/>
+				<data android:mimeType="*/*"/>
+            </intent-filter>
         </activity>
     </application>
 

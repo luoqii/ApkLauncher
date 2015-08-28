@@ -14,7 +14,7 @@ public class ApkLauncherConfig {
 	static boolean DEBUG;
 	static int LOG_LEVEL;
 	
-	public static /*final*/ boolean ENALBE_SERVICE = true;
+	public static /*final*/ boolean ENALBE_SERVICE = false;
 
 	public static void setDebug(boolean debug){
 		DEBUG = debug;

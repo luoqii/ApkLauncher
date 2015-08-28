@@ -48,7 +48,8 @@ public class MainActivity extends PluginsActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == R.id.pick) {
-			Intent pick = new Intent(this, TinyFilePickerActivity.class);
+			Intent pick = new Intent(Intent.ACTION_GET_CONTENT);
+			pick.setType("*/*");
 			pick.putExtra(TinyFilePickerActivity.EXTRA_DIR, mDestDir.getPath());
 			startActivityForResult(pick, 0);
 			return true;

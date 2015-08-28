@@ -6,6 +6,7 @@ import org.bbs.android.commonlib.ExceptionCatcher;
 import org.bbs.apklauncher.ApkLauncher;
 import org.bbs.apklauncher.ApkLauncherConfig;
 import org.bbs.apklauncher.ApkPackageManager;
+import org.bbs.apklauncher.TargetContext;
 import org.bbs.apklauncher.emb.Host_Application;
 
 import android.os.Environment;
@@ -29,6 +30,7 @@ Host_Application
 		File apkDir = null;
 		apkDir = new File(Environment.getExternalStorageDirectory(), "apk");
 
+		ApkLauncherConfig.ENALBE_SERVICE = false;
 		ApkLauncherConfig.setDebug(true);
 		ApkLauncher apk = ApkLauncher.getInstance();
 		apk.init(this, ApkLauncher.ASSET_PLUGIN_DIR, true);

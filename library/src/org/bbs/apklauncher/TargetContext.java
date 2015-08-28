@@ -42,7 +42,6 @@ public class TargetContext extends
 FileContext 
 //ContextThemeWrapper
 {
-
 	private static final String TAG = TargetContext.class.getSimpleName();
 	
 	private String mPackageName;
