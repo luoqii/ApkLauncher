@@ -31,6 +31,7 @@ public class MainActivity extends PluginsActivity {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		
+		UpdateConfig.setDeltaUpdate(false);
 		UpdateConfig.setDebug(true);
 		UmengUpdateAgent.update(this);
 		
