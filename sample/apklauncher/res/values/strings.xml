@@ -2,8 +2,8 @@
 <resources>
 
     <string name="app_name">ApkLauncher</string>
-    <string name="action_install">Install</string>
+    <string name="hello_world">Hello world! \nApkLauncher.</string>
     <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_file_picker">FilePickerActivity</string>
 
 </resources>
