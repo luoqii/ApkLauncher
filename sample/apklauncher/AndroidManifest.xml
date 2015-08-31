@@ -126,7 +126,7 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
-            android:name=".TinyFilePickerActivity"
+            android:name="org.bbs.apklauncher.TinyFilePickerActivity"
             android:exported="true"
             android:label="TinyFilePicker" >
             <intent-filter >

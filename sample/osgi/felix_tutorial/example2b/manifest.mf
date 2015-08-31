@@ -1,0 +1,7 @@
+Bundle-Name: French dictionary
+Bundle-Description: A bundle that registers a French dictionary service
+Bundle-Vendor: Apache Felix
+Bundle-Version: 1.0.0
+Bundle-Activator: tutorial.example2b.Activator
+Import-Package: org.osgi.framework,
+ tutorial.example2.service

@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -21,6 +22,7 @@ import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.AssetManager;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -86,6 +88,32 @@ public class AndroidUtil {
 		}
 	}
 	
+	public static ArrayList<File> extractAssetFile(AssetManager am, String assetDir,
+			File destDir) {
+		ArrayList<File> copiedFiles = new ArrayList<File>();
+	    try {
+	    	destDir.mkdirs();
+	        String[] files = am.list(assetDir);
+	        if (null == files || files.length == 0){
+	    		//==========123456789012345678
+	        	Log.w(TAG, "empty assets dir:" + assetDir);
+	        } else {
+	        	for (String fp : files) {
+	        		File destF = new File(destDir, fp);
+	        		destF.delete();
+	        		destF.createNewFile();
+	        		AndroidUtil.copyStream(am.open(assetDir + "/" + fp), 
+	        				new FileOutputStream(destF));
+	        		copiedFiles.add(destF);
+	        	}
+	        }
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
+	    
+	    return copiedFiles;
+	}
+
 	public static void extractZipEntry(ZipFile zipFile, String entryName, File destDir) {
 		if (zipFile == null || entryName == null || destDir == null) return;
 		Log.d(TAG, "zipFile: " + zipFile + " entryName: " + entryName);

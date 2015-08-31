@@ -1,4 +1,4 @@
-package com.example.apklauncher;
+package org.bbs.apklauncher;
 
 import java.io.File;
 

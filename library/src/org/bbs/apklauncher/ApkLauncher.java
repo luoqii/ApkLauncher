@@ -71,8 +71,8 @@ public class ApkLauncher {
 		}.execute();
 	}
 	
-	public void setT2HMap(TKey key, String hostComClassName){
-		mT2HMap.put(key.key(), hostComClassName);
+	public void setT2HMap(TKey key, String hostStubClassName){
+		mT2HMap.put(key.key(), hostStubClassName);
 	}
 	
 	public void setOnProcessIntentCallback(OnProcessIntent listener){
@@ -110,7 +110,7 @@ public class ApkLauncher {
 			Context hostContext, String className) {
 		ComponentName com;
 		String superClassName = ApkUtil.getSuperClassName(targetClassLoader, className);
-		String hostClassName = toHostStubClassName(superClassName);
+		String hostClassName = targetStubtoHostStubClassName(superClassName);
 		com = new ComponentName(hostContext.getPackageName(), hostClassName);
 		// inject and replace with our component.
 		intent.setComponent(com);
@@ -141,12 +141,12 @@ public class ApkLauncher {
 		context.startActivity(launcher);
 	}
 
-	private String toHostStubClassName(String superClassName) {
-		if (mT2HMap.containsKey(superClassName)){
-			return mT2HMap.get(superClassName);
+	private String targetStubtoHostStubClassName(String targetStubClass) {
+		if (mT2HMap.containsKey(targetStubClass)){
+			return mT2HMap.get(targetStubClass);
 		}
 		
-		return superClassName.replace("Target", "Stub");
+		return targetStubClass.replace("Target", "Stub");
 	}
 	
 	public static interface OnProcessIntent {

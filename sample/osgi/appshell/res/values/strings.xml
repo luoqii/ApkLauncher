@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">apk osgi</string>
+    <string name="hello_world">Hello world! \napklauncher osgi.</string>
+    <string name="action_settings">Settings</string>
+
+</resources>

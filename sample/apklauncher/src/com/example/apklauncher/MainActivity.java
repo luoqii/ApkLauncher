@@ -5,6 +5,7 @@ import java.io.File;
 import org.bbs.apklauncher.ApkLauncher;
 import org.bbs.apklauncher.ApkPackageManager;
 import org.bbs.apklauncher.PluginsActivity;
+import org.bbs.apklauncher.TinyFilePickerActivity;
 
 import android.annotation.TargetApi;
 import android.content.Context;

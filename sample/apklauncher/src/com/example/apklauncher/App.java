@@ -5,6 +5,7 @@ import java.io.File;
 import org.bbs.android.commonlib.ExceptionCatcher;
 import org.bbs.apklauncher.ApkLauncher;
 import org.bbs.apklauncher.ApkLauncherConfig;
+import org.bbs.apklauncher.ApkPackageManager;
 import org.bbs.apklauncher.emb.Host_Application;
 
 import android.content.pm.ApplicationInfo;
@@ -44,7 +45,8 @@ Host_Application
 
 		ApkLauncherConfig.setDebug(true);
 		ApkLauncher apk = ApkLauncher.getInstance();
-		apk.init(this, ApkLauncher.ASSET_PLUGIN_DIR, true);
+//		apk.init(this, ApkLauncher.ASSET_PLUGIN_DIR, true);
+		apk.init(this, "null", true);
 //		apk.setT2HMap(ApkLauncher.TKey.LIST_ACTIVITY, "org.bbs.apklauncher.demo.ListActivity");
 		
 //		ApkPackageManager.getInstance().setClassLoaderFactory(new ClassLoaderFactory() {
@@ -60,7 +62,7 @@ Host_Application
 //				return cl;
 //			}
 //		});
-//		ApkPackageManager.getInstance().scanApkDir(apkDir, true, ".*_c[a|b]\\.apk");
+		ApkPackageManager.getInstance().scanApkDir(apkDir, true, ".*\\.apk");
 	}
 	
 	

@@ -55,7 +55,7 @@ public class ApkPackageManager extends BasePackageManager {
 	
 	private static final String DIR_PLACEHOLDER = "placeholder";
 	private static /*final*/ String DIR_PLUGIN = "plugin_data";
-	private static final String APK_FILE_REG = ".*\\.apk$";
+	private static final String APK_FILE_REG = ".*\\.apk";
 	private static final String APK_FILE_SUFFIX = ".apk";
     private static final String PREF_EXTRACT_APK = ApkPackageManager.class.getName() + "";
     private static final String PERF_KEY_APK_HAS_SCANNED = "apk_has_scanned";
@@ -118,7 +118,7 @@ public class ApkPackageManager extends BasePackageManager {
 	 * @param apkDir where apk file located.
 	 * 
 	 */	
-	void init(Application context, String assetsPath, boolean overwrite){		
+	public void init(Application context, String assetsPath, boolean overwrite){		
 		long time = 0;
 		if (PROFILE){
 			time = System.currentTimeMillis();
@@ -387,29 +387,13 @@ public class ApkPackageManager extends BasePackageManager {
 		s.edit().putBoolean(PERF_KEY_APK_HAS_SCANNED, true).commit();		
 	}
 	
-    public List<File> extractApkFromAsset(AssetManager am, String assetDir, File destDir) {
+    public static List<File> extractApkFromAsset(AssetManager am, String assetDir, File destDir) {
     	long time = 0;
     	if (PROFILE) {
     		time = System.currentTimeMillis();
 			Log.d(TAG, "start profile[extractApkFromAsset]. assetSrc:" + assetDir + " dst:" + destDir);
     	}
-    	ArrayList<File> copiedFiles = new ArrayList<File>();
-        try {
-            String[] files = am.list(assetDir);
-            if (null == files || files.length == 0){
-        		//==========123456789012345678
-            	Log.w(TAG, "empty assets dir:" + assetDir);
-            } else {
-            	for (String fp : files) {
-            		File destF = new File(destDir, fp);
-            		AndroidUtil.copyStream(am.open(assetDir + "/" + fp), 
-            				new FileOutputStream(destF));
-            		copiedFiles.add(destF);
-            	}
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    	ArrayList<File> copiedFiles = AndroidUtil.extractAssetFile(am, assetDir, destDir);
 
         if (PROFILE) {
         	time = System.currentTimeMillis() - time;
@@ -466,34 +450,41 @@ public class ApkPackageManager extends BasePackageManager {
 		}
 	}
 	
-	public void parseApkFile(String file){
-		parseApkFile(new File(file), true, APK_FILE_REG);
+	public PackageInfoX parseApkFile(String file){
+		return parseApkFile(new File(file), true, APK_FILE_REG);
 	}
 	
-	public void parseApkFile(File file){
-		parseApkFile(file, true, APK_FILE_REG);
+	public PackageInfoX parseApkFile(File file){
+		return parseApkFile(file, true, APK_FILE_REG);
 	}
 
-	private void parseApkFile(File file, boolean overwrite, String reg) {
+	private PackageInfoX parseApkFile(File file, boolean overwrite, String reg) {
 		long time = 0;
+		PackageInfoX info = null;
 		
 		if (DEBUG){
 			//==========123456789012345678
 			Log.d(TAG, "parse file : " + file + " overwrite: " + overwrite);
 		}
-		boolean keepGoing = file.exists() 
-				&& (null == reg || file.getName().matches(reg));
+		String fileName = file.getName();
+		boolean keepGoing = file.exists()
+				&& (null == reg || fileName.matches(reg));
 		if (!keepGoing) {
-			//==========123456789012345678
-			Log.i(TAG, "ignre file : " + file + " reg: " + reg);
-			return;
+			if (file.exists()){
+				//==========123456789012345678
+				Log.w(TAG, "ignre file : " + file + " reg: " + reg);
+			} else {
+				//==========123456789012345678
+				Log.w(TAG, "ignre file : " + file + " not exist.");
+			}
+			return info;
 		}
 
 		if (PROFILE) {
 			time = System.currentTimeMillis();
 			Log.d(TAG, "start profile[parseApkFile]. apk:" + file + " overwrite:" + overwrite);
 		}
-		PackageInfoX info = ApkManifestParser.parseAPk(mApplication, file.getAbsolutePath());
+		info = ApkManifestParser.parseAPk(mApplication, file.getAbsolutePath());
 		try {
 			File dest = file;
 			if (overwrite) {
@@ -558,6 +549,8 @@ public class ApkPackageManager extends BasePackageManager {
 			time = System.currentTimeMillis() - time;
 			Log.d(TAG, "end   profile[parseApkFile]: " + ( time / 1000.) + "s");
 		}
+		
+		return info;
 	}
 
 	private void compareInfo(PackageInfoX hostPacageInfoX, PackageInfoX info) {
