@@ -2,6 +2,8 @@ package com.example.apklauncher_plugin_a;
 
 import org.bbs.apklauncher.api.Base_Activity;
 
+import com.example.apklauncher.lib.Common;
+
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -19,6 +21,8 @@ public class MainActivity extends Base_Activity {
 		setContentView(R.layout.activity_main);
 		
 		((TextView)findViewById(R.id.text1)).append(getVersion());
+		
+		Common.doSth();
 	}
 	
 	private CharSequence getVersion() {
