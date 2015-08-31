@@ -6,4 +6,5 @@ Bundle-Version: 1.0.0
 Bundle-Activator: com.example.apklauncher_app_osgi_felix_t_3.Activator
 Import-Package: org.osgi.framework,
  tutorial.example2.service,
- android.content.Context,android.content.ContextWrapper
+ org.bbs.apklauncher.emb.auto_gen,
+ org.bbs.apklauncher.emb

@@ -20,6 +20,12 @@ public class MyStub extends Stub_Activity {
 	private static final String TAG = MyStub.class.getSimpleName();
 	// XXX 
 	public static long mBundleId = 0;
+	
+	@Override
+	protected void onCreate(android.os.Bundle savedInstanceState) {
+		Log.d(TAG, "classLoader: " + getClass().getClassLoader());
+		super.onCreate(savedInstanceState);
+	}
 
 	@Override
 	protected void onPrepareActivityStub() {
@@ -57,7 +63,11 @@ public class MyStub extends Stub_Activity {
 		Bundle targetBundle = FrameworkHelper.getInstance(null).getFramework().getBundleContext().getBundle(mBundleId);
 		try {
 			Object o = targetBundle.loadClass("com.example.apklauncher_app_osgi_felix_t_3.TestA").newInstance();
-			Log.d(TAG, " cl: " + o.getClass().getClassLoader());
+			o = targetBundle.loadClass("com.example.apklauncher_app_osgi_felix_t_3.TestActivity").newInstance();
+//			o = targetBundle.loadClass("com.example.apklauncher_app_osgi_felix_t_3.DictionaryActivity").newInstance();
+//			o = targetBundle.loadClass("com.example.apklauncher_app_osgi_felix_t_3.TestActivity").newInstance();
+			Log.d(TAG, "classloader: " + o.getClass().getClassLoader());
+			
 			mTargetActivity = (Target_Activity)(targetBundle.loadClass(targetActivityClassName).newInstance());
 			mTargetClassLoader = mTargetActivity.getClass().getClassLoader();
 			Log.d(TAG, "mTargetClassLoader: " + mTargetClassLoader);

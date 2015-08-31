@@ -1,0 +1,5 @@
+			// export package NOT classes
+			// application
+			+ "org.bbs.apklauncher.emb,"
+			// activity
+			+ "org.bbs.apklauncher.emb.auto_gen,"

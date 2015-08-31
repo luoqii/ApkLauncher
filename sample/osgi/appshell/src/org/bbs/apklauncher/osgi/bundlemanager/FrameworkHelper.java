@@ -2,6 +2,7 @@ package org.bbs.apklauncher.osgi.bundlemanager;
 
 import java.util.HashMap;
 
+import org.knopflerfish.framework.Debug;
 import org.knopflerfish.framework.FrameworkFactoryImpl;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
@@ -44,6 +45,7 @@ public class FrameworkHelper {
 		// configMap.put(FelixConstants.LOG_LEVEL_PROP, 4 + "");
 
 //		mFramework = new FrameworkFactory().newFramework(configMap);
+		configMap.put(Debug.CLASSLOADER_PROP, "true");
 		mFramework = new org.knopflerfish.framework.FrameworkFactoryImpl().newFramework(configMap);
 
 		Log.d(TAG, "init & start osgi.");
@@ -173,9 +175,10 @@ public class FrameworkHelper {
 			// android
 			"android, "
 			+ "android.app,"
+//			+ "android.app.Application,"
 			+ "android.content,"
-			+ "android.content.Context,"
-			+ "android.content.ContextWrapper,"
+//			+ "android.content.Context,"
+//			+ "android.content.ContextWrapper,"
 			+ "android.content.res,"
 			+ "android.content.pm,"
 			+ "android.database,"
@@ -253,8 +256,17 @@ public class FrameworkHelper {
 			+ "org.json; "
 			+ "org.w3c.dom; "
 			+ "org.xml.sax; "
-			+ "org.xml.sax.ext; " + "org.xml.sax.helpers; " +
+			+ "org.xml.sax.ext; " + "org.xml.sax.helpers; "
+			
+			// apklauncher sdk
+			// copied form ApkLauncher_Sdk
+			// export package NOT classes
+			// application
+			+ "org.bbs.apklauncher.emb,"
+			// activity
+			+ "org.bbs.apklauncher.emb.auto_gen,"
 
 			// this no ';' or ',' , shit.
-			"net.neosum.android.view";
+			+ "net.neosum.android.view";
+
 }

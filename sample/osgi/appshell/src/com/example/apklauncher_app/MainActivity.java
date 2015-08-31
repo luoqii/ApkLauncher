@@ -55,6 +55,7 @@ public class MainActivity extends Activity {
 					apkPath = apkPath.substring("file://".length());
 				}
 				PackageInfoX info = pm.parseApkFile(apkPath);
+
 				List<ActivityInfoX> aInfo = pm.getLauncherActivityInfo(info.packageName);
 				ApkLauncher.getInstance().startActivity(MainActivity.this, aInfo.get(0));
 				MyStub.mBundleId = b.getBundleId();
