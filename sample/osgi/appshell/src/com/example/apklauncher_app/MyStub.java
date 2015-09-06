@@ -1,7 +1,10 @@
 package com.example.apklauncher_app;
 
+import java.util.Dictionary;
+
 import org.bbs.apklauncher.ApkLauncherConfig;
 import org.bbs.apklauncher.ApkPackageManager;
+import org.bbs.apklauncher.ClassLoaderCreator;
 import org.bbs.apklauncher.PackageManagerProxy;
 import org.bbs.apklauncher.ReflectUtil;
 import org.bbs.apklauncher.TargetInstrumentation;
@@ -12,6 +15,7 @@ import org.bbs.apklauncher.osgi.bundlemanager.FrameworkHelper;
 import org.osgi.framework.Bundle;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
@@ -26,9 +30,23 @@ public class MyStub extends Stub_Activity {
 		Log.d(TAG, "classLoader: " + getClass().getClassLoader());
 		super.onCreate(savedInstanceState);
 	}
+	
+	protected ClassLoader createTargetClassLoader(Context hostBaseContext, Intent intent) {
+		Bundle targetBundle = FrameworkHelper.getInstance(null).getFramework().getBundleContext().getBundle(mBundleId);
+		String activator = targetBundle.getHeaders().get(org.osgi.framework.Constants.BUNDLE_ACTIVATOR);
+		Log.d(TAG, "activator: " + activator);
+		
+		try {
+			return targetBundle.loadClass(activator).getClassLoader();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
 
-	@Override
-	protected void onPrepareActivityStub() {
+	/*protected void onPrepareActivityStubX() {
 		Intent intent = getIntent();
 		// TODO is there a way to update ClassLoader before parse intent?
 		//intent.getExtras().setClassLoader(loader);
@@ -61,11 +79,16 @@ public class MyStub extends Stub_Activity {
 		}
 		
 		Bundle targetBundle = FrameworkHelper.getInstance(null).getFramework().getBundleContext().getBundle(mBundleId);
+		String activator = targetBundle.getHeaders().get(org.osgi.framework.Constants.BUNDLE_ACTIVATOR);
+		Log.d(TAG, "activator: " + activator);
+		
+		ClassLoader bClassloader = targetBundle.getClass().getClassLoader();
 		try {
 			Object o = targetBundle.loadClass("com.example.apklauncher_app_osgi_felix_t_3.TestA").newInstance();
 			o = targetBundle.loadClass("com.example.apklauncher_app_osgi_felix_t_3.TestActivity").newInstance();
 //			o = targetBundle.loadClass("com.example.apklauncher_app_osgi_felix_t_3.DictionaryActivity").newInstance();
 //			o = targetBundle.loadClass("com.example.apklauncher_app_osgi_felix_t_3.TestActivity").newInstance();
+			Log.d(TAG, "classloader: " + bClassloader);
 			Log.d(TAG, "classloader: " + o.getClass().getClassLoader());
 			
 			mTargetActivity = (Target_Activity)(targetBundle.loadClass(targetActivityClassName).newInstance());
@@ -109,5 +132,5 @@ public class MyStub extends Stub_Activity {
 			e.printStackTrace();
 		}
 		
-	}
+	}*/
 }

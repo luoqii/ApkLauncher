@@ -111,7 +111,7 @@ public class ViewCreater {
 			return (View) construtor
 					.newInstance(new Object[] { context, attrs });
 		} catch (Exception e) {
-			if (!isFrameworkClass(className)) {
+			if (!isAndroidFrameworkClass(className)) {
 				// FIXME to fix this error
 				Log.e(TAG, "can NOT createView. view: " + className + " classLoader: " + classLoader);
 			}
@@ -120,7 +120,7 @@ public class ViewCreater {
 		return null;
 	}
 	
-	public static boolean isFrameworkClass(String className){
+	public static boolean isAndroidFrameworkClass(String className){
 		boolean is = false;
 		for (String prefix : sClassPrefixList) {
 			if (className.startsWith(prefix)){

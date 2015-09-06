@@ -66,8 +66,8 @@ public class DictionaryActivity extends Base_Activity {
 //				.getBundleContext();
         try {
 			mRefs = mBundleContext.getServiceReferences(
-//                DictionaryService.class.getName(),
-			        "tutorial.example2.service.DictionaryService",
+                DictionaryService.class.getName(),
+//			        "tutorial.example2.service.DictionaryService",
 			        "(Language=*)");
 			if (mRefs != null && mRefs.length > 0){
 				mCheck.setEnabled(true);
