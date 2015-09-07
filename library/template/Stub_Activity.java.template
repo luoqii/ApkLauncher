@@ -102,10 +102,6 @@ implements CallBack {
 		String targetApplicationClassName = mTargetActivityInfo.applicationInfo.className;
 		int targetThemeId = mTargetActivityInfo.theme;
 		String apkPath = mTargetActivityInfo.applicationInfo.publicSourceDir;
-		if (TextUtils.isEmpty(targetApplicationClassName)){
-			targetApplicationClassName = Application.class.getCanonicalName();
-			Log.i(TAG, "no packageName, user default:" + targetApplicationClassName);
-		}
 		String targetPackageName = mTargetActivityInfo.packageName;
 
 		if (ApkLauncherConfig.debug()) {

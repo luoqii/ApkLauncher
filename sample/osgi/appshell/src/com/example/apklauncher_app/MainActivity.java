@@ -23,6 +23,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.apklauncher_osgi.R;
 
@@ -46,6 +47,10 @@ public class MainActivity extends Activity {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				org.osgi.framework.Bundle b = (org.osgi.framework.Bundle) parent.getAdapter().getItem(position);
+				if (b.getState()  != org.osgi.framework.Bundle.ACTIVE) {
+					Toast.makeText(getApplicationContext(), "plugin is not ready", Toast.LENGTH_LONG).show();
+					return;
+				}
 				String apkPath = b.getLocation();
 				Log.d(TAG, "classloader: " + b.getClass().getClassLoader());
 				ApkPackageManager pm = ApkPackageManager.getInstance();
@@ -63,6 +68,15 @@ public class MainActivity extends Activity {
 		});
 		
 		mFm = FrameworkHelper.getInstance(null).getFramework();
+		
+		try {
+			Log.d(TAG, "classloader for Activity: " 
+					+ Class.forName(Activity.class.getName()).newInstance().getClass().getClassLoader());
+		} catch (InstantiationException | IllegalAccessException
+				| ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	@Override

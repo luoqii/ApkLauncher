@@ -6,11 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 
 public class TargetClassLoaderCreator {
-	private static Callback sCallback;
+	private static Callback sFactory;
 
 	public static ClassLoader createTargetClassLoader(Context hostBaseContext, Intent intent) {
-		if (null != sCallback){
-			return sCallback.onCreateTargetClassLoader(hostBaseContext, intent);
+		if (null != sFactory){
+			return sFactory.onCreateTargetClassLoader(hostBaseContext, intent);
 		}
 
 		String targetActivityClassName = intent.getStringExtra(ApkLauncher.EXTRA_TARGET_COMPONENT_CLASS_NAME);
@@ -24,7 +24,7 @@ public class TargetClassLoaderCreator {
 	}
 	
 	public static void setCallBack(Callback callback) {
-		sCallback = callback;
+		sFactory = callback;
 	}
 	
 	public static interface Callback {

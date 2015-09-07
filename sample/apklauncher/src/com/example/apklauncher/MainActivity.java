@@ -31,7 +31,7 @@ public class MainActivity extends PluginsActivity {
 		
 		UpdateConfig.setDeltaUpdate(false);
 		UpdateConfig.setDebug(true);
-		UmengUpdateAgent.update(this);
+//		UmengUpdateAgent.update(this);
 		
 		mDestDir = new File(Environment.getExternalStorageDirectory(), "Download");
 		mDestDir = getDir("sdcard", Context.MODE_WORLD_READABLE);

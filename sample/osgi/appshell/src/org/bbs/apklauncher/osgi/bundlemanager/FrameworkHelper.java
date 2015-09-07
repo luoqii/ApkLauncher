@@ -77,6 +77,7 @@ public class FrameworkHelper {
 					"b: " + b.getBundleId() + " "
 							+ OsgiUtil.bundleState2Str(b.getState()));
 		}
+//		mFramework.getBundleContext().getb
 	}
 
 	public Framework getFramework() {

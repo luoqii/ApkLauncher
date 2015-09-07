@@ -1,0 +1,11 @@
+X-contribute-android-component: true
+Bundle-Name: Dictionary client
+Bundle-Description: A bundle that uses the dictionary service if it finds it at startup
+Bundle-Vendor: Apache Felix
+Bundle-Version: 1.0.0
+Bundle-Activator: com.example.apklauncher_app_osgi_felix_t_4.Activator
+Import-Package: org.osgi.framework,
+ tutorial.example2.service,
+ org.bbs.apklauncher.emb.auto_gen,
+ org.bbs.apklauncher.emb,
+ com.example.apklauncher_app_osgi_felix_t_3
