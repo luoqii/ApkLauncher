@@ -13,6 +13,8 @@
         android:id="@+id/list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
+    <tag android:id="@+id/a"
+        android:value="333"/>
     
     <TextView
         android:id="@+id/empty"

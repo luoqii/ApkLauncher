@@ -2,7 +2,6 @@ package com.example.apklauncher_plugin_a;
 
 import org.bbs.apklauncher.api.Base_Activity;
 
-import com.example.apklauncher.lib.Common;
 
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -22,7 +21,7 @@ public class MainActivity extends Base_Activity {
 		
 		((TextView)findViewById(R.id.text1)).append(getVersion());
 		
-		Common.doSth();
+		com.example.apklauncher.lib.Common.doSth();
 	}
 	
 	private CharSequence getVersion() {

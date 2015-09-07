@@ -1,23 +1,11 @@
 package com.example.apklauncher_app;
 
-import java.util.Dictionary;
-
-import org.bbs.apklauncher.ApkLauncherConfig;
-import org.bbs.apklauncher.ApkPackageManager;
-import org.bbs.apklauncher.ClassLoaderCreator;
-import org.bbs.apklauncher.PackageManagerProxy;
-import org.bbs.apklauncher.ReflectUtil;
-import org.bbs.apklauncher.TargetInstrumentation;
-import org.bbs.apklauncher.emb.Host_Application;
 import org.bbs.apklauncher.emb.auto_gen.Stub_Activity;
-import org.bbs.apklauncher.emb.auto_gen.Target_Activity;
 import org.bbs.apklauncher.osgi.bundlemanager.FrameworkHelper;
 import org.osgi.framework.Bundle;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
-import android.text.TextUtils;
 import android.util.Log;
 
 public class MyStub extends Stub_Activity {

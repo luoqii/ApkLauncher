@@ -54,7 +54,7 @@ public class MainActivity extends Activity {
 				if (apkPath.startsWith("file://")) {
 					apkPath = apkPath.substring("file://".length());
 				}
-				PackageInfoX info = pm.parseApkFile(apkPath);
+				PackageInfoX info = pm.parseApkFile(new File(apkPath), false, ApkPackageManager.APK_FILE_REG);
 
 				List<ActivityInfoX> aInfo = pm.getLauncherActivityInfo(info.packageName);
 				ApkLauncher.getInstance().startActivity(MainActivity.this, aInfo.get(0));

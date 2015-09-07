@@ -55,7 +55,7 @@ public class ApkPackageManager extends BasePackageManager {
 	
 	private static final String DIR_PLACEHOLDER = "placeholder";
 	private static /*final*/ String DIR_PLUGIN = "plugin_data";
-	private static final String APK_FILE_REG = ".*\\.apk";
+	public static final String APK_FILE_REG = ".*\\.apk";
 	private static final String APK_FILE_SUFFIX = ".apk";
     private static final String PREF_EXTRACT_APK = ApkPackageManager.class.getName() + "";
     private static final String PERF_KEY_APK_HAS_SCANNED = "apk_has_scanned";
@@ -72,6 +72,7 @@ public class ApkPackageManager extends BasePackageManager {
 
 	private InstallApks mInstalledApk;
 	private Application mApplication;
+	// TODO remove public 
 	public static Context sFileContext;
 
 	private SerializableUtil mSerUtil;
@@ -458,7 +459,7 @@ public class ApkPackageManager extends BasePackageManager {
 		return parseApkFile(file, true, APK_FILE_REG);
 	}
 
-	private PackageInfoX parseApkFile(File file, boolean overwrite, String reg) {
+	public PackageInfoX parseApkFile(File file, boolean overwrite, String reg) {
 		long time = 0;
 		PackageInfoX info = null;
 		

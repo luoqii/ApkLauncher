@@ -97,6 +97,7 @@ ContextWrapper
 	
 	protected StubBase_Activity mHostActivity;
 	
+	
 	public Target_Activity() {
 		this(null);
 	}

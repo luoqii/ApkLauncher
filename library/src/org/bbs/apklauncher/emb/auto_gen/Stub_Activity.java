@@ -172,7 +172,7 @@ implements CallBack {
 	}	
 		
 	protected ClassLoader createTargetClassLoader(Context hostBaseContext, Intent intent) {
-		return ClassLoaderCreator.createTargetClassLoader(hostBaseContext, intent);
+		return TargetClassLoaderCreator.createTargetClassLoader(hostBaseContext, intent);
 	}
 	
 	@Override
