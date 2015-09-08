@@ -5,7 +5,10 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.osgi.framework.Bundle;
+
 import android.text.TextUtils;
+import android.util.Log;
 
 public class OsgiUtil {
     static Map<Integer, String> sStateMap = new HashMap<Integer, String>();
@@ -72,5 +75,17 @@ public class OsgiUtil {
 		}
 		
 		return str;
+	}
+	
+	public static ClassLoader getBundleClassLoader(Bundle bundle) {
+		String activator = bundle.getHeaders().get(org.osgi.framework.Constants.BUNDLE_ACTIVATOR);		
+		try {
+			return bundle.loadClass(activator).getClassLoader();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 }

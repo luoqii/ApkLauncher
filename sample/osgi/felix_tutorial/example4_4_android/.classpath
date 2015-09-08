@@ -9,5 +9,6 @@
 	<classpathentry kind="lib" path="/ApkLauncher_osgi/assets/auto_install_bundle/example2.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="lib" path="/ApkLauncher_osgi_felix_t_3/bin/apklauncher_osgi_felix_t_3.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

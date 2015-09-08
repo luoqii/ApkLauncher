@@ -62,7 +62,7 @@ public class MainActivity extends Activity {
 				PackageInfoX info = pm.parseApkFile(new File(apkPath), false, ApkPackageManager.APK_FILE_REG);
 
 				List<ActivityInfoX> aInfo = pm.getLauncherActivityInfo(info.packageName);
-				ApkLauncher.getInstance().startActivity(MainActivity.this, aInfo.get(0));
+				ApkLauncher.getInstance().startActivity(MainActivity.this, OsgiUtil.getBundleClassLoader(b), aInfo.get(0));
 				MyStub.mBundleId = b.getBundleId();
 			}
 		});

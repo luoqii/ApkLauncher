@@ -121,12 +121,15 @@ public class ApkLauncher {
 		}
 	}	
 
-	public void startActivity(Context context, PackageInfoX.ActivityInfoX a) {
+	public void startActivity(Context context, PackageInfoX.ActivityInfoX a) {		
+		ClassLoader cl = ApkPackageManager.getInstance().createClassLoader(context, a.mPackageInfo);
+		startActivity(context, cl, a);
+	}
+	
+	public void startActivity(Context context, ClassLoader classloader, PackageInfoX.ActivityInfoX a) {
 		if (null == a) {
 			throw new RuntimeException("activity info in null");
 		}
-		
-		ClassLoader cl = ApkPackageManager.getInstance().createClassLoader(context, a.mPackageInfo);
 		Intent launcher = new Intent();
 
         // inject and replace with our component.
@@ -135,7 +138,7 @@ public class ApkLauncher {
 //		ComponentName com= new ComponentName(context.getPackageName(), comClassName);
 //		launcher.setComponent(com);
 //		launcher.putExtra(Stub_Activity.EXTRA_TARGET_COMPONENT_CLASS_NAME, a.name);
-		prepareIntent(launcher, cl, context, a.name);
+		prepareIntent(launcher, classloader, context, a.name);
 		
 		launcher.putExtra(IntentHelper.EXTRA_INJECT, false);
 		context.startActivity(launcher);

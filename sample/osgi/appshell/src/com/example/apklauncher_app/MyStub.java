@@ -2,6 +2,7 @@ package com.example.apklauncher_app;
 
 import org.bbs.apklauncher.emb.auto_gen.Stub_Activity;
 import org.bbs.apklauncher.osgi.bundlemanager.FrameworkHelper;
+import org.bbs.apklauncher.osgi.bundlemanager.OsgiUtil;
 import org.osgi.framework.Bundle;
 
 import android.content.Context;
@@ -21,17 +22,7 @@ public class MyStub extends Stub_Activity {
 	
 	protected ClassLoader createTargetClassLoader(Context hostBaseContext, Intent intent) {
 		Bundle targetBundle = FrameworkHelper.getInstance(null).getFramework().getBundleContext().getBundle(mBundleId);
-		String activator = targetBundle.getHeaders().get(org.osgi.framework.Constants.BUNDLE_ACTIVATOR);
-		Log.d(TAG, "activator: " + activator);
-		
-		try {
-			return targetBundle.loadClass(activator).getClassLoader();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return null;
+		return OsgiUtil.getBundleClassLoader(targetBundle);
 	}
 
 	/*protected void onPrepareActivityStubX() {
