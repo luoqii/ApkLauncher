@@ -106,7 +106,7 @@ public class ApkLauncher {
 		}
 	}
 
-	private void prepareIntent(Intent intent, ClassLoader targetClassLoader,
+	public void prepareIntent(Intent intent, ClassLoader targetClassLoader,
 			Context hostContext, String className) {
 		ComponentName com;
 		String superClassName = ApkUtil.getSuperClassName(targetClassLoader, className);

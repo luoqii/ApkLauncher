@@ -46,6 +46,7 @@ public class FrameworkHelper {
 
 //		mFramework = new FrameworkFactory().newFramework(configMap);
 		configMap.put(Debug.CLASSLOADER_PROP, "true");
+		configMap.put(Debug.RESOLVER_PROP, "true");
 		mFramework = new org.knopflerfish.framework.FrameworkFactoryImpl().newFramework(configMap);
 
 		Log.d(TAG, "init & start osgi.");

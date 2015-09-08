@@ -16,7 +16,6 @@ public class MyStub extends Stub_Activity {
 	
 	@Override
 	protected void onCreate(android.os.Bundle savedInstanceState) {
-		Log.d(TAG, "classLoader: " + getClass().getClassLoader());
 		super.onCreate(savedInstanceState);
 	}
 	
