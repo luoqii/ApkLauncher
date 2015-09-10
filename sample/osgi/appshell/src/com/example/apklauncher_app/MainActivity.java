@@ -28,7 +28,6 @@ import android.widget.Toast;
 import com.example.apklauncher_osgi.R;
 
 public class MainActivity extends Activity {
-	private static final String HEADER_CONTRIBUTE_ANDROID_COMPONENT = "X-contribute-android-component";
 	protected static final String TAG = MainActivity.class.getSimpleName();
 	private ListView mList;
 	private Framework mFm;
@@ -63,7 +62,6 @@ public class MainActivity extends Activity {
 
 				List<ActivityInfoX> aInfo = pm.getLauncherActivityInfo(info.packageName);
 				ApkLauncher.getInstance().startActivity(MainActivity.this, OsgiUtil.getBundleClassLoader(b), aInfo.get(0));
-				MyStub.mBundleId = b.getBundleId();
 			}
 		});
 		
@@ -92,7 +90,7 @@ public class MainActivity extends Activity {
 		for (org.osgi.framework.Bundle b : bundles){
 			Dictionary<String, String> h = b.getHeaders();
 			if (h != null 
-					&& h.get(HEADER_CONTRIBUTE_ANDROID_COMPONENT) != null
+					&& h.get(FrameworkHelper.HEADER_CONTRIBUTE_ANDROID_COMPONENT) != null
 					) {
 				bList.add(b);
 			}

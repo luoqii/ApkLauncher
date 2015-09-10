@@ -6,12 +6,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
 
 import android.text.TextUtils;
 import android.util.Log;
 
 public class OsgiUtil {
-    static Map<Integer, String> sStateMap = new HashMap<Integer, String>();
+    private static final String TAG = OsgiUtil.class.getSimpleName();
+	static Map<Integer, String> sStateMap = new HashMap<Integer, String>();
     static {
         sStateMap.put(org.osgi.framework.Bundle.ACTIVE,      "ACTIVE");
         sStateMap.put(org.osgi.framework.Bundle.INSTALLED,   "INSTALLED");
@@ -26,6 +29,16 @@ public class OsgiUtil {
             str = sStateMap.get(state);
         }
         return str;
+    }
+    
+    public static Bundle getBundleBySymblicName(BundleContext context, String name){
+    	for (Bundle b : context.getBundles()){
+    		if (name.equals(b.getHeaders().get(Constants.BUNDLE_SYMBOLICNAME))) {
+    			return b;
+    		}
+    	}
+    	
+    	return null;
     }
     
     public static String getName(org.osgi.framework.Bundle b) {
@@ -87,5 +100,21 @@ public class OsgiUtil {
 		}
 		
 		return null;
+	}
+	
+	public static void dumpProperties(BundleContext context){
+		Log.d(TAG, Constants.FRAMEWORK_VERSION + " " + context.getProperty(Constants.FRAMEWORK_VERSION));
+		Log.d(TAG, Constants.FRAMEWORK_VENDOR + " " + context.getProperty(Constants.FRAMEWORK_VENDOR));
+		Log.d(TAG, Constants.FRAMEWORK_LANGUAGE + " " + context.getProperty(Constants.FRAMEWORK_LANGUAGE));
+		Log.d(TAG, Constants.FRAMEWORK_EXECUTIONENVIRONMENT + " " + context.getProperty(Constants.FRAMEWORK_EXECUTIONENVIRONMENT));
+		Log.d(TAG, Constants.FRAMEWORK_PROCESSOR + " " + context.getProperty(Constants.FRAMEWORK_PROCESSOR));
+		Log.d(TAG, Constants.FRAMEWORK_OS_NAME + " " + context.getProperty(Constants.FRAMEWORK_OS_NAME));
+		Log.d(TAG, Constants.FRAMEWORK_OS_VERSION + " " + context.getProperty(Constants.FRAMEWORK_OS_VERSION));
+		// optional
+		Log.d(TAG, Constants.SUPPORTS_BOOTCLASSPATH_EXTENSION + " " + context.getProperty(Constants.SUPPORTS_BOOTCLASSPATH_EXTENSION));
+		Log.d(TAG, Constants.SUPPORTS_FRAMEWORK_EXTENSION + " " + context.getProperty(Constants.SUPPORTS_FRAMEWORK_EXTENSION));
+		Log.d(TAG, Constants.SUPPORTS_FRAMEWORK_FRAGMENT + " " + context.getProperty(Constants.SUPPORTS_FRAMEWORK_FRAGMENT));
+		Log.d(TAG, Constants.SUPPORTS_FRAMEWORK_REQUIREBUNDLE + " " + context.getProperty(Constants.SUPPORTS_FRAMEWORK_REQUIREBUNDLE));
+//		Log.d(TAG, Constants.FR + " " + context.getProperty(Constants.SUPPORTS_BOOTCLASSPATH_EXTENSION));
 	}
 }

@@ -33,6 +33,7 @@ import org.bbs.apkparser.PackageInfoX.ServiceInfoX;
 import org.bbs.apkparser.PackageInfoX.UsesPermissionX;
 
 import android.app.Application;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -769,7 +770,7 @@ public class ApkPackageManager extends BasePackageManager {
 			if (m.activities != null) {
 				for (ActivityInfo a : m.activities) {
 					ActivityInfoX aX = (ActivityInfoX) a;
-					if (className.equals(a.name)) {
+					if (a.name.equals(className)) {
 						return aX;
 					}
 				}
@@ -834,7 +835,28 @@ public class ApkPackageManager extends BasePackageManager {
 
 	@ExportApi
 	public List<ResolveInfo> queryIntentActivities(Intent intent, int flag) {
-		
+		ComponentName comn = intent.getComponent();
+		if (null != comn){
+			List<ResolveInfo> res = new ArrayList<>();
+			boolean found = false;
+			for (PackageInfoX p : mInstalledApk){
+				if ((p.packageName).equals(comn.getPackageName())){
+					for (ActivityInfo a : p.activities){
+						if (a.name.equals(comn.getClassName())){
+							ResolveInfo r = new ResolveInfo();
+							r.activityInfo = a;
+							res.add(r);
+							found = true;
+						}
+					}
+					
+				}
+			}
+			
+			if (found){
+				return res;
+			}
+		}
 		return mActResolver.queryIntent(intent, null, true, 0);
 //		List<ResolveInfo> result = new ArrayList<>();
 //		for (PackageInfoX p : mInfos){

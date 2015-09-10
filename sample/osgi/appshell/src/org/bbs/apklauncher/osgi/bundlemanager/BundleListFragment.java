@@ -59,6 +59,7 @@ public class BundleListFragment extends Fragment {
 						+ b.getBundleId() + " "
 						+ OsgiUtil.bundleState2Str(b.getState());
 				v.setText(text);
+				
 				return v;
 			}
 		};

@@ -14,6 +14,7 @@ public class Activator implements BundleActivator {
 	public void start(BundleContext arg0) throws Exception {
 		sContext = arg0;
 		Log.d(TAG, "classloader: " + getClass().getClassLoader());
+		
 	}
 
 	@Override

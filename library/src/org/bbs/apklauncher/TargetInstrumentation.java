@@ -33,10 +33,12 @@ public class TargetInstrumentation extends InstrumentationWrapper {
 		mCallback = callback;
 	}
 	
-	public void processIntent(Intent intent) {
+	public boolean processIntent(Intent intent) {
 		if (null != mCallback) {
-			mCallback.onProcessIntent(intent);
+			return mCallback.onProcessIntent(intent);
 		}
+		
+		return true;
 	}
 	
 	@TargetApi(Build.VERSION_CODES.ECLAIR)
@@ -114,7 +116,7 @@ public class TargetInstrumentation extends InstrumentationWrapper {
 	}
 
 	public static interface CallBack {
-		public void onProcessIntent(Intent intent);
+		public boolean onProcessIntent(Intent intent);
 	}
 
 	static class ReflectUtil {

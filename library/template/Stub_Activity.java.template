@@ -60,7 +60,7 @@ implements CallBack {
 	protected ClassLoader     mTargetClassLoader;
 	protected TargetContext   mTargetContext;
 	protected ActivityInfoX   mTargetActivityInfo;
-	protected ResourcesMerger mTargetResourceMerger;
+	protected Resources       mTargetResource;
 	
 	protected PackageManager  mHostSysPm;
 	protected Context 	    mHostBaseContext;	
@@ -74,7 +74,7 @@ implements CallBack {
 		
 		super.onCreate(savedInstanceState);
 		
-		ApkUtil.updateTitle(this, mTargetActivityInfo, mTargetResourceMerger);
+		ApkUtil.updateTitle(this, mTargetActivityInfo, mTargetResource);
 	}
 	
 	@Override
@@ -133,17 +133,18 @@ implements CallBack {
 		// do activity init
 		TargetInstrumentation.injectInstrumentation(this, this);
 		try {
-			mTargetResourceMerger = ApkPackageManager.getTargetResource(apkPath, mHostBaseContext);
-
+			//mTargetResource = ApkPackageManager.getTargetResource(apkPath, mHostBaseContext);
+			mTargetResource = createTargetResource(mHostBaseContext, intent);
+			
 			targetThemeId = ReflectUtil.ResourceUtil
-											.selectDefaultTheme(mTargetResourceMerger, 
+											.selectDefaultTheme(mTargetResource, 
 																targetThemeId, 
 															 	mTargetActivityInfo.applicationInfo.targetSdkVersion);
 
 			Log.d(TAG, "resolved activity theme: " + targetThemeId);
 			mTargetContext.setTheme(targetThemeId);
 			mTargetContext.themeReady(targetThemeId);
-			mTargetContext.resReady(mTargetResourceMerger);
+			mTargetContext.resReady(mTargetResource);
 			mTargetContext.applicationContextReady(ApkPackageManager.getApplication(targetPackageName));
 			mTargetContext.packageManagerReady(new PackageManagerProxy(mHostSysPm));
 			mTargetContext.packageNameReady(targetPackageName);
@@ -158,6 +159,11 @@ implements CallBack {
 		}		
 	}	
 		
+	protected Resources createTargetResource(Context hostBaseContext,
+			Intent intent) {
+		return TargetClassLoaderCreator.createTargetResources(hostBaseContext, intent);
+	}
+
 	protected ClassLoader createTargetClassLoader(Context hostBaseContext, Intent intent) {
 		return TargetClassLoaderCreator.createTargetClassLoader(hostBaseContext, intent);
 	}
@@ -185,8 +191,8 @@ implements CallBack {
 	}
 
 	@Override
-	public void onProcessIntent(android.content.Intent intent) {
-		 ApkLauncher.getInstance().onProcessIntent(intent, mTargetClassLoader, mHostBaseContext);
+	public boolean onProcessIntent(android.content.Intent intent) {
+		 return ApkLauncher.getInstance().onProcessIntent(intent, mTargetClassLoader, mHostBaseContext);
 	}
 	
 	@Override

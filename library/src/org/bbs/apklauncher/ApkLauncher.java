@@ -79,42 +79,38 @@ public class ApkLauncher {
 		mListener = listener;
 	}
 	
-	public void onProcessIntent(Intent intent, ClassLoader targetClassLoader, Context hostContext) {
+	public boolean onProcessIntent(Intent intent, ClassLoader targetClassLoader, Context hostContext) {
 		if (mListener != null && mListener.onProcessStartActivityIntent(intent, targetClassLoader, hostContext)) {
-			return;
+			return true;
 		}
 		
 		Log.i(TAG, "processIntent. intent: " + intent);
-		ComponentName com = intent.getComponent();
-		if (null != com) {
-			String className = com.getClassName();
-			if (!TextUtils.isEmpty(className)) {
-				prepareIntent(intent, targetClassLoader, hostContext, className);
-			}
+		List<ResolveInfo> acts = ApkPackageManager.getInstance().queryIntentActivities(intent, 0);
+		if (acts.size() > 0) {
+			Log.i(TAG, "intent matchs a installed plugin.");
+			ActivityInfo aInfo = acts.get(0).activityInfo;
+			// may be we need a new classloader.
+			targetClassLoader = ApkPackageManager.getInstance().createClassLoader(hostContext, ((ActivityInfoX)aInfo).mPackageInfo);
+			prepareIntent(intent, targetClassLoader, hostContext, aInfo.name);
+
+			return true;
 		} else {
-			// try within installed plugins.
-			List<ResolveInfo> acts = ApkPackageManager.getInstance().queryIntentActivities(intent, 0);
-			if (acts.size() > 0) {
-				Log.i(TAG, "intent matchs a installed plugin.");
-				ActivityInfo aInfo = acts.get(0).activityInfo;
-				// may be we need a new classloader.
-				targetClassLoader = ApkPackageManager.getInstance().createClassLoader(hostContext, ((ActivityInfoX)aInfo).mPackageInfo);
-				prepareIntent(intent, targetClassLoader, hostContext, aInfo.name);
-			} else {
-				Log.w(TAG, "can not handle intent:  "  + intent);
-			}
+			Log.w(TAG, "can not handle intent:  "  + intent);
+
+			return false;
 		}
 	}
 
+	// inject new stub class name
 	public void prepareIntent(Intent intent, ClassLoader targetClassLoader,
-			Context hostContext, String className) {
+			Context hostContext, String targetClassName) {
 		ComponentName com;
-		String superClassName = ApkUtil.getSuperClassName(targetClassLoader, className);
+		String superClassName = ApkUtil.getSuperClassName(targetClassLoader, targetClassName);
 		String hostClassName = targetStubtoHostStubClassName(superClassName);
 		com = new ComponentName(hostContext.getPackageName(), hostClassName);
 		// inject and replace with our component.
 		intent.setComponent(com);
-		ActivityInfoX a = ApkPackageManager.getInstance().getActivityInfo(className);
+		ActivityInfoX a = ApkPackageManager.getInstance().getActivityInfo(targetClassName);
 		if (a != null) {
 			intent.putExtra(EXTRA_TARGET_COMPONENT_CLASS_NAME, a.name);
 			intent.putExtra(EXTRA_HOST_COMPONENT_CLASS_NAME, hostClassName);
@@ -131,14 +127,9 @@ public class ApkLauncher {
 			throw new RuntimeException("activity info in null");
 		}
 		Intent launcher = new Intent();
+		launcher.setComponent(new ComponentName(a.packageName, a.name));
 
-        // inject and replace with our component.
-//		String superClassName = ApkUtil.getSuperClassName(cl, a.name);
-//		String comClassName = superClassName.replace("Target", "Stub");
-//		ComponentName com= new ComponentName(context.getPackageName(), comClassName);
-//		launcher.setComponent(com);
-//		launcher.putExtra(Stub_Activity.EXTRA_TARGET_COMPONENT_CLASS_NAME, a.name);
-		prepareIntent(launcher, classloader, context, a.name);
+		onProcessIntent(launcher, classloader, context);
 		
 		launcher.putExtra(IntentHelper.EXTRA_INJECT, false);
 		context.startActivity(launcher);
