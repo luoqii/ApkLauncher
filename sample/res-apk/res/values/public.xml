@@ -1,0 +1,37 @@
+<resources>
+    
+    <!-- 
+    0xAABBCCCC
+    AA :  01 non-app
+    	  02 norma ano-app
+    	  07 app 
+    BB :  01 attr
+          02 drawable
+          03 layout
+          04 string
+    
+     -->
+    <!-- <private-symbols package="org.bbs.apklauncher.res"/> -->
+    <attr name="fixed_id_attr" format="reference"/>    
+    <!-- TODO need comment -->
+    <public type="attr" name="fixed_id_attr"   id="0x07015678"/>
+    
+    <!-- TODO need comment -->
+    <public type="layout" name="fixed_id_layout"   id="0x07035678"/>    
+    <!-- TODO need comment -->
+    <public type="drawable" name="fixed_id_drawable" id="0702567834"/>  
+    <!-- TODO need comment -->
+    <item type="id" name="fixed_id_id"/>
+    <!-- TODO need comment -->
+    <public type="id" name="fixed_id_id" id="0703567834"/>
+    <!-- TODO need comment -->
+    <public type="string" name="fixed_id_app_name" id="0704567834"/>
+    <!-- TODO need comment -->
+    <public type="string" name="fixed_id_hello_world" id="0704567835"/>
+    <!-- TODO need comment -->
+    <public type="string" name="fixed_id_action_settings" id="0704567836"/>
+    <!-- TODO need comment -->
+    <public type="dimen" name="fixed_id_activity_vertical_margin" id="07055834"/>
+    <!-- TODO need comment -->
+    <public type="dimen" name="fixed_id_alt_dimen" id="07057835"/>
+</resources>
