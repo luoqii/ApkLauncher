@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="android_common_lib">
-    <CLASSES>
-      <root url="jar:///mnt/workbench/ApkLauncher/sample/apklauncher/libs/android_common_lib.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

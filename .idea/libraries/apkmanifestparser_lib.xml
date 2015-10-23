@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="apkmanifestparser_lib">
-    <CLASSES>
-      <root url="jar:///mnt/workbench/ApkLauncher/library/libs/apkmanifestparser_lib.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
