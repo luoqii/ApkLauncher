@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/luoqii/ApkLauncher.svg)](https://travis-ci.org/luoqii/ApkLauncher)
+
 # ApkLauncher
 
 add function dynamically.
