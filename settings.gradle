@@ -6,6 +6,6 @@ include ':library'
 include ":sample:apklauncher"
 
 // plguin app
-include 'app:samples:android-21:legacy:ApiDemos'
+//include 'app:samples:android-21:legacy:ApiDemos'
 
 

@@ -1,21 +1,29 @@
 package com.example.apklauncher_app_osgi_felix_t_4;
 
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
 
 import tutorial.example2.service.DictionaryService;
+import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 
 import com.example.apklauncher_app_osgi_felix_t_3.BaseDictionaryActivity;
+import com.example.apklauncher_osgi_felix_t_4.R;
 
 public class DictionaryActivity extends BaseDictionaryActivity implements ServiceListener {
 	
 		private ServiceReference m_ref;
 		private DictionaryService m_dictionary;
+		
+		@Override
+		protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+			super.onCreate(savedInstanceState);
+			setContentView(com.example.apklauncher_app_osgi_felix_t_4.R.layout.fixed_id_layout);
+		}
 
 		@Override
 		protected void onResume() {

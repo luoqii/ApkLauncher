@@ -1,0 +1,16 @@
+<resources>
+    
+    <!-- <private-symbols package="org.bbs.apklauncher.res"/> -->
+    <attr name="fixed_id_attr" format="reference"/>    
+    <!-- TODO need comment -->
+    <public type="attr" name="fixed_id_attr"   id="0x07015678"/>
+    
+    <!-- TODO need comment -->
+    <public type="layout" name="fixed_id_layout"   id="0x07035678"/>    
+    <!-- TODO need comment -->
+    <public type="drawable" name="fixed_id_drawable" id="0704567834"/>  
+    <!-- TODO need comment -->
+    <item type="id" name="fixed_id_id"/>
+    <!-- TODO need comment -->
+    <public type="id" name="fixed_id_id" id="0703567834"/>
+</resources>

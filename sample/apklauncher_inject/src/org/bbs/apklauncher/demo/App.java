@@ -105,12 +105,14 @@ Host_Application
 			((TargetInstrumentation)ins).setCallBack(new CallBack() {
 				
 				@Override
-				public void onProcessIntent(Intent intent) {
+				public boolean onProcessIntent(Intent intent) {
 					ComponentName com = intent.getComponent();
 					if (null != com) {
 						String pkgName = app.getPackageName();
 						intent.setComponent(new ComponentName(pkgName, com.getClassName()));
 					}
+					
+					return true;
 				}
 			});
 			instruF.set(activityThreadObject, ins);

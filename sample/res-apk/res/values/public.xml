@@ -2,13 +2,17 @@
     
     <!-- 
     0xAABBCCCC
+    package type
     AA :  01 non-app
     	  02 norma ano-app
-    	  07 app 
+    	  7f app 
+    	  
+   	res type
     BB :  01 attr
           02 drawable
           03 layout
           04 string
+          09 dimen
     
      -->
     <!-- <private-symbols package="org.bbs.apklauncher.res"/> -->
@@ -31,7 +35,7 @@
     <!-- TODO need comment -->
     <public type="string" name="fixed_id_action_settings" id="0704567836"/>
     <!-- TODO need comment -->
-    <public type="dimen" name="fixed_id_activity_vertical_margin" id="07055834"/>
+    <public type="dimen" name="fixed_id_activity_vertical_margin" id="07095834"/>
     <!-- TODO need comment -->
-    <public type="dimen" name="fixed_id_alt_dimen" id="07057835"/>
+    <public type="dimen" name="fixed_id_alt_dimen" id="07097835"/>
 </resources>
