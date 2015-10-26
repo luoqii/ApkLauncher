@@ -28,4 +28,5 @@ install:
 before_script:
 
 script:
+  - touch local.properties
   - ./gradlew assembleDebug
