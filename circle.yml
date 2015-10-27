@@ -1,0 +1,8 @@
+#https://circleci.com/docs/android
+dependencies:
+  pre:
+    - echo y | android update sdk --no-ui --all --filter "build-tools-21.1.1"
+    
+test:
+  override:
+    - ./gradlew assembleDebug
