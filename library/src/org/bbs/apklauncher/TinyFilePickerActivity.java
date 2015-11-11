@@ -18,11 +18,12 @@ import android.widget.ListView;
  * <pre>
  * keep this class as simple as possible.
  * and do not depends other res/code to make that
- * everyone can only  copy this class and 
+ * everyone can only  COPY this class and 
  * it worked perfectly.
  * 
  * after user pick one file, resultIntent.getData().getPath() 
- * contain absolute picked file path, e.g:
+ * contain absolute picked file path.
+ * e.g.:
  * file:///path/to/file
  * 
  * @author bysong

@@ -56,6 +56,9 @@ public class BundleListActivity extends FragmentActivity {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Log.d(TAG, "onActivityResult. requestCode: " + requestCode + " resultCode: " + resultCode + " data: " + data);
+		if (null == data) {
+			return;
+		}
 		Uri uri = data.getData();
 		if (null == uri) {
 			return;

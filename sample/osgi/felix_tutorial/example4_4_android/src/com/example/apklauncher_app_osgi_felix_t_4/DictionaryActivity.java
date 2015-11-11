@@ -19,13 +19,6 @@ public class DictionaryActivity extends BaseDictionaryActivity implements Servic
 		private DictionaryService m_dictionary;
 		
 		@Override
-		protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-			super.onCreate(savedInstanceState);
-			setContentView(com.example.apklauncher_app_osgi_felix_t_4.R.layout.fixed_id_layout);
-		}
-
-		@Override
 		protected void onResume() {
 		super.onResume();
 		

@@ -110,8 +110,6 @@ Host_Application  {
 	
 	void setStartLevel (){
 		StartLevel sl = (StartLevel) mFrameWork.getBundleContext().getService(mFrameWork.getBundleContext().getServiceReference(StartLevel.class));
-		sl.setBundleStartLevel(mFrameWork.getBundleContext().getBundle("file:///data/data/com.example.apklauncher_osgi/app_bundle/Youku_TV.apk"), 10);
-		sl.setBundleStartLevel(mFrameWork.getBundleContext().getBundle("file:///data/data/com.example.apklauncher_osgi/app_bundle/Youku_TV_serach_plguin.apk"), 10 + 1);
 		sl.setStartLevel(100);
 	}
 }

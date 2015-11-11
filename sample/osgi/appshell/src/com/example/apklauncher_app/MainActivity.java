@@ -16,6 +16,7 @@ import org.osgi.framework.launch.Framework;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -105,6 +106,9 @@ public class MainActivity extends Activity {
 						+ b.getBundleId() + " "
 						+ OsgiUtil.bundleState2Str(b.getState());
 				t.setText(text);
+				t.setGravity(Gravity.CENTER);
+				t.setMinHeight(getResources().getDimensionPixelSize(android.R.dimen.app_icon_size));
+				
 				return t;
 //				return super.getView(position, convertView, parent);
 			}

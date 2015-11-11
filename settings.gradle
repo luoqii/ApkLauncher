@@ -1,9 +1,7 @@
 // sdk lib
-include ':library'
 //project(':library').name = "apklauncher_sdk"
 
 // sample app use sdk.
-include ":sample:apklauncher"
 
 // plguin app
 //include 'app:samples:android-21:legacy:ApiDemos'

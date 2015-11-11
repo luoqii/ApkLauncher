@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -59,6 +60,8 @@ public class BundleListFragment extends Fragment {
 						+ b.getBundleId() + " "
 						+ OsgiUtil.bundleState2Str(b.getState());
 				v.setText(text);
+				v.setGravity(Gravity.CENTER);
+				v.setMinHeight(getResources().getDimensionPixelSize(android.R.dimen.app_icon_size));
 				
 				return v;
 			}
