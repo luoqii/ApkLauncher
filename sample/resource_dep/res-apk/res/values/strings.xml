@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="fixed_id_app_name">please give a new app name</string>
+    <string name="fixed_id_hello_world">Hello world! \nplease replace thies with a new greeting word.</string>
+    <string name="fixed_id_action_settings">Settings</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+</resources>

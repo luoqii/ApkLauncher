@@ -1,0 +1,13 @@
+X-contribute-android-component: true
+Bundle-Name: res apk
+Bundle-Description: A bundle that use other bundle's res
+Bundle-Vendor: bbs
+Bundle-Version: 1.0.0
+Bundle-Activator: ext.android.support.v7.appcompat.Activator
+Import-Package: org.osgi.framework,
+ org.bbs.apklauncher.emb.auto_gen,
+ org.bbs.apklauncher.emb,
+ android.support.v7.widget,android.support.v7.util,
+ android.support.v7.view,
+ android.support.v7.app,
+ android.support.v7.graphics.drawable

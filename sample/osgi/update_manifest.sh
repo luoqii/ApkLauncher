@@ -6,22 +6,22 @@ function update(){
 	destApkName=`basename $apk`	
 	destApk=./$destApkName
 	cp -f $apk $destApk 
-	tmpD=tmp
-	mkdir $tmpD
 	unzip $destApk assets/META-INF/MANIFEST.MF -d $tmpD
 
-	manifest=$tmpD/assets/META-INF/MANIFEST.MF
+
+#	manifest=$tmpD/assets/META-INF/MANIFEST.MF
+	manifest=./assets/META-INF/MANIFEST.MF
 
 	update_with_manifest $apk $manifest
 }
 
 function update_with_manifest(){
-        set -x
+#        set -x
 
         apk=$1
 	manifest=$2
-	echo apk: $apk 
-	echo manifest: $manifest
+	echo "apk     : $apk"
+	echo "manifest: $manifest"
 
         #keystore=~/w/repo.tv/ott_tv/Youku_TV/youku_android_key.keystore
         #keystoreAlias=youku_android_key.keystore
@@ -33,7 +33,7 @@ function update_with_manifest(){
         destApkName=`basename $apk`
         destApk=./$destApkName
         cp -f $apk $destApk
-        tmpD=tmp
+        tmpD=tmp-updatemanifest
         mkdir -p $tmpD/assets/META-INF
 	cp -f $manifest $tmpD/assets/META-INF
         metainfoD=META-INF

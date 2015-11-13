@@ -60,7 +60,7 @@ public class BundleListFragment extends Fragment {
 						+ b.getBundleId() + " "
 						+ OsgiUtil.bundleState2Str(b.getState());
 				v.setText(text);
-				v.setGravity(Gravity.CENTER);
+				v.setGravity(Gravity.CENTER|Gravity.LEFT);
 				v.setMinHeight(getResources().getDimensionPixelSize(android.R.dimen.app_icon_size));
 				
 				return v;

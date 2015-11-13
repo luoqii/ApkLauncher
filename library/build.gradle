@@ -45,11 +45,15 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    provided files('library/android-support-v4.jar','library/android-support-v7-appcompat.jar')
     //    compile 'com.android.support:recyclerview-v7:21.0.3'
     //compile 'com.android.support:support-v4:21.0.2'
     //compile files('libs/umsdk_Android_analytics_v5.4.2.zip')
 }
 
+
+// uploade to jCenter.
 def siteUrl = 'https://github.com/luoqii/ApkLauncher'
 def gitUrl = 'https://github.com/luoqii/ApkLauncher.git'
 group = "org.bbs.apklauncher"

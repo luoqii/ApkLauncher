@@ -1,0 +1,55 @@
+<resources>
+    
+    <!-- 
+    0xAABBCCCC
+    package type
+    AA :  01 non-app
+    	  02 norma ano-app
+    	  7f app 
+    	  
+   	res type
+    BB :  01 attr
+          02 drawable
+          03 layout
+          04 string
+          09 dimen
+    
+     -->
+    <!-- <private-symbols package="org.bbs.apklauncher.res"/> -->
+     <attr name="showAsAction" >     
+                     <!-- Never show this item in an action bar, show it in the overflow menu instead.
+                 Mutually exclusive with "ifRoom" and "always". -->
+            <flag name="never" value="0" />
+            <!-- Show this item in an action bar if there is room for it as determined
+                 by the system. Favor this option over "always" where possible.
+                 Mutually exclusive with "never" and "always". -->
+            <flag name="ifRoom" value="1" />
+            <!-- Always show this item in an actionbar, even if it would override
+                 the system's limits of how much stuff to put there. This may make
+                 your action bar look bad on some screens. In most cases you should
+                 use "ifRoom" instead. Mutually exclusive with "ifRoom" and "never". -->
+            <flag name="always" value="2" />
+            <!-- When this item is shown as an action in the action bar, show a text
+                 label with it even if it has an icon representation. -->
+            <flag name="withText" value="4" />
+            <!-- This item's action view collapses to a normal menu
+                 item. When expanded, the action view takes over a
+                 larger segment of its container. -->
+            <flag name="collapseActionView" value="8" />
+            </attr>
+    <!-- TODO need comment -->
+    <public type="attr" name="showAsAction"   id="0x07015678">
+
+        </public>
+ <!--    <public type="attr" name="reverseLayout"   id="0x07015679"/>
+    <public type="attr" name="stackFromEnd"   id="0x07015680"/>
+    <public type="attr" name="layoutManager"   id="0x07015681"/>
+    
+    
+    TODO need comment
+    <item type="id" name="item_touch_helper_previous_elevation"/>
+    TODO need comment
+    <public type="id" name="item_touch_helper_previous_elevation" id="0703567834"/>
+    TODO need comment
+    <public type="dimen" name="item_touch_helper_max_drag_scroll_per_frame" id="07097835"/> -->
+</resources>

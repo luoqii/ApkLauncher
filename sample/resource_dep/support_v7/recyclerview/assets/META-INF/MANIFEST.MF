@@ -1,0 +1,8 @@
+X-contribute-android-component: false
+Bundle-Name: Android RecycleView
+Bundle-Description: A bundle that impl RecycleView
+Bundle-Vendor: android
+Bundle-Version: 1.0.0
+Bundle-Activator: ext.android.support.v7.recycleview.Activator
+Import-Package: org.osgi.framework
+Export-Package: android.support.v7.widget,android.support.v7.util

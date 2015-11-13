@@ -7,7 +7,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="lib" path="/ApkLauncher_osgi/osgi/felix/org.apache.felix.framework-4.4.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="/ApkLauncher_Sdk/apklauncher_plugin.jar"/>
+	<classpathentry kind="lib" path="/ApkLauncher_Sdk/apklauncher_plugin.jar"/>
 	<classpathentry kind="lib" path="/ApkLauncher_osgi/assets/auto_install_bundle/example2.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

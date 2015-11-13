@@ -952,6 +952,9 @@ public class ApkPackageManager extends BasePackageManager {
 		}
 
 		private void addActToResolver(PackageInfoX info) {
+			if (info == null || info.activities == null) {
+				return;
+			}
 			for (ActivityInfo a: info.activities) {
 				ActivityInfoX aX = (ActivityInfoX) a;
 				mActResolver.addActivity(aX);

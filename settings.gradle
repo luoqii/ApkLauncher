@@ -1,9 +1,19 @@
 // sdk lib
+include 'library'
 //project(':library').name = "apklauncher_sdk"
 
 // sample app use sdk.
+include 'sample:apklauncher'
 
 // plguin app
 //include 'app:samples:android-21:legacy:ApiDemos'
+
+
+// osgi app
+include 'sample:osgi:appshell'
+include 'sample:resource_dep:res-apk'
+include 'sample:resource_dep:res-apk-lib'
+include 'sample:resource_dep:support_v7:appcompat'
+include 'sample:resource_dep:support_v7/recyclerview'
 
 

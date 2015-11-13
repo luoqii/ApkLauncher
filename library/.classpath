@@ -6,5 +6,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="src" path="test/junit"/>
+	<classpathentry kind="lib" path="library/android-support-v4.jar"/>
+	<classpathentry kind="lib" path="library/android-support-v7-appcompat.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

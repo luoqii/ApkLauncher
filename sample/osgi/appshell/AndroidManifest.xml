@@ -48,7 +48,7 @@
 
     <application
         android:allowBackup="true"
-        android:name="com.example.apklauncher_app.App"
+        android:name="com.example.apklauncher_osgi.App"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
         <activity
@@ -62,7 +62,7 @@
         </activity>
         <activity            
 			android:taskAffinity="com.example.osgilauncher"
-            android:name="com.example.apklauncher_app.MainActivity"
+            android:name="com.example.apklauncher_osgi.MainActivity"
             android:label="osgi launcher" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -87,7 +87,7 @@
         </activity> -->
         
         <activity
-            android:name="com.example.apklauncher_app.MyStub"
+            android:name="com.example.apklauncher_osgi.MyStub"
             android:label="osgi launcher" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

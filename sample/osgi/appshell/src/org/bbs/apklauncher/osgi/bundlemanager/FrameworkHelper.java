@@ -36,7 +36,12 @@ public class FrameworkHelper {
 			+ "org.json.*,"
 			+ "org.w3c.dom.*,"
 			+ "org.xml.sax.*,"
-			+ "org.xmlpull.*"
+			+ "org.xmlpull.*,"
+			
+//			+ "org.bbs.apklauncher.emb.auto_gen.*,"
+//			+ "org.bbs.apklauncher.emb.*,"
+			
+			+ "non.exist.package.*"
 			;
 
 //	private static final String ASSERT_PRELOAD_BUNDLE_DIR = "felix/preloadbundle";
@@ -67,7 +72,7 @@ public class FrameworkHelper {
 
 //		mFramework = new FrameworkFactory().newFramework(configMap);
 		configMap.put(Debug.CLASSLOADER_PROP, "true");
-//		configMap.put(Debug.RESOLVER_PROP, "true");
+		configMap.put(Debug.RESOLVER_PROP, "true");
 		mFramework = new org.knopflerfish.framework.FrameworkFactoryImpl().newFramework(configMap);
 
 		Log.d(TAG, "init & start osgi.");
