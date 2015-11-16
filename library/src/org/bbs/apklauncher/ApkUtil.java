@@ -59,6 +59,10 @@ public class ApkUtil {
 	}
 
 	public static  Resources loadApkResource(String apkFilePath, Context context) {
+		// not support file:// schema ???
+		if (apkFilePath.startsWith("file://")) {
+			apkFilePath = apkFilePath.substring("file://".length());
+		}
 		AssetManager assets = null;
 		try {
 			assets = AssetManager.class.getConstructor(null).newInstance(null);

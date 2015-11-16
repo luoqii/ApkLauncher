@@ -3,7 +3,7 @@ package ext.android.support.v7.recycleview;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
-public class Activitor implements BundleActivator {
+public class Activator implements BundleActivator {
 
 	@Override
 	public void start(BundleContext arg0) throws Exception {

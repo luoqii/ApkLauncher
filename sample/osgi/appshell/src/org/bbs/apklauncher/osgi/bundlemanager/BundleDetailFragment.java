@@ -1,6 +1,7 @@
 package org.bbs.apklauncher.osgi.bundlemanager;
 
 import java.util.Date;
+import java.util.regex.Pattern;
 
 import org.osgi.framework.BundleException;
 
@@ -9,7 +10,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.text.method.ScrollingMovementMethod;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,6 +25,7 @@ import android.widget.TextView;
 import com.example.apklauncher_osgi.R;
 
 public class BundleDetailFragment extends Fragment {
+	public static final java.lang.String SCHEMA_PLUGIN = "plugin";
 	public static final String EXTRA_BUNDLE_ID = "extra.bundle.id";
 	private ViewPager mViewPager;
 	private Adapter mAdapter;
@@ -29,7 +34,17 @@ public class BundleDetailFragment extends Fragment {
 	public BundleDetailFragment(){
 		setHasOptionsMenu(true);
 	}
-	
+
+	public void showBundle(long id){
+		int i = 0;
+		for (org.osgi.framework.Bundle b : mBundles){
+			if (id == b.getBundleId()){
+				mViewPager.setCurrentItem(i, false);
+			}
+			i++;
+		}
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -60,6 +75,14 @@ public class BundleDetailFragment extends Fragment {
 				 + "state: " + OsgiUtil.bundleState2Str(b.getState()) + "\n"
 				 + "lastModified: " + new Date(b.getLastModified()) + "\n"
 				 + "headers: \n" + getHeader(b) + "\n"
+				 + "wiring: \n" + OsgiUtil.toWiringString(b)
+//				 + "\n"
+//				 + "link: plugin://?id=" + b.getBundleId()
+//				 + "\n"
+//				 + Html.fromHtml(
+//				"<b>text3: Constructed from HTML programmatically.</b>  Text with a " +
+//						"<a href=\"http://www.google.com\">link</a> " +
+//						"created in the Java source code using HTML.")
 				;
 		return str;
 	}
@@ -107,6 +130,11 @@ public class BundleDetailFragment extends Fragment {
 			text.setText(BundleDetailFragment.toString(b));
 			text.setTag(position);
 			text.setMovementMethod(new ScrollingMovementMethod());
+
+//			text.setAutoLinkMask(Linkify.ALL);
+			text.setMovementMethod(LinkMovementMethod.getInstance());
+			Pattern p = Pattern.compile(SCHEMA_PLUGIN + "://\\S*");
+			Linkify.addLinks(text,p, SCHEMA_PLUGIN);
 			
 			container.addView(text);
 			return text;

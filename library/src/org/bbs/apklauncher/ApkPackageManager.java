@@ -91,7 +91,12 @@ public class ApkPackageManager extends BasePackageManager {
 		mInited = new AtomicBoolean();
 		mActResolver = new ActivityIntentResolver();
 	}
-		
+
+	@Override
+	public boolean isPermissionRevokedByPolicy(String permName, String pkgName) {
+		return false;
+	}
+
 	/**
 	 * @return
 	 * 
@@ -917,8 +922,10 @@ public class ApkPackageManager extends BasePackageManager {
 				PackageInfoX old = remove(index);
 				//==========123456789012345678
 				Log.i(TAG, "plugin updated:");
-				Log.i(TAG, "old plugin    :"  + appInfoStr(old) + " md5:" + fileDigest(old.applicationInfo.publicSourceDir));
+				Log.i(TAG, "old plugin    :"  + appInfoStr(old)  + " md5:" + fileDigest(old.applicationInfo.publicSourceDir));
 				Log.i(TAG, "new plugin    :"  + appInfoStr(info) + " md5:" + fileDigest(info.applicationInfo.publicSourceDir));
+			} else {
+				Log.i(TAG, "new plugin added.");
 			}
 			add(info);
 			addActToResolver(info);
@@ -935,8 +942,14 @@ public class ApkPackageManager extends BasePackageManager {
 				    digester.update(bytes, 0, byteCount);
 				  }
 				  byte[] digest = digester.digest();
-				  
-				  return new String(digest);
+
+				  String digestStr = "";
+				  int L = digest.length;
+				  for (byte b : digest){
+					  digestStr = digestStr +  Integer.toHexString(b);
+				  }
+				  return digestStr;
+//				  return new String(digest);
 			} catch (NoSuchAlgorithmException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

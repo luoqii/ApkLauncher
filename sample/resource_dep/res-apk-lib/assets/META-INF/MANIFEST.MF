@@ -1,0 +1,8 @@
+X-contribute-android-component: true
+Bundle-Name: res apk
+Bundle-Description: A bundle that use other bundle's res
+Bundle-Vendor: bbs
+Bundle-Version: 1.0.0
+Bundle-Activator: org.bbs.apklauncher.res.lib.Activator
+Import-Package: org.osgi.framework,
+ resource.org.bbs.apklauncher.res.lib

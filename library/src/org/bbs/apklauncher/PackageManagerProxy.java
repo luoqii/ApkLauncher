@@ -168,6 +168,11 @@ public class PackageManagerProxy extends PackageManager {
 	}
 
 	@Override
+	public boolean isPermissionRevokedByPolicy(String permName, String pkgName) {
+		return mProxy.isPermissionRevokedByPolicy(permName, pkgName);
+	}
+
+	@Override
 	public boolean addPermission(PermissionInfo info) {
 		return mProxy.addPermission(info);
 	}

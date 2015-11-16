@@ -63,6 +63,10 @@ public class MainActivity extends Activity {
 				PackageInfoX info = pm.parseApkFile(new File(apkPath), false, ApkPackageManager.APK_FILE_REG);
 
 				List<ActivityInfoX> aInfo = pm.getLauncherActivityInfo(info.packageName);
+				if (aInfo == null || aInfo.size() == 0){
+					Toast.makeText(getApplicationContext(), "no activity", Toast.LENGTH_LONG).show();
+					return;
+				}
 				ApkLauncher.getInstance().startActivity(MainActivity.this, OsgiUtil.getBundleClassLoader(b), aInfo.get(0));
 			}
 		});

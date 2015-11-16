@@ -19,11 +19,12 @@
     <!-- <attr name="spanCount" format="reference"/>     -->
     <!-- TODO need comment -->
     <public type="attr" name="showAsAction"   id="0x07015678"/>
+
+    <public type="string" name="abc_action_mode_done" id="0704567834"/>
  <!--    <public type="attr" name="reverseLayout"   id="0x07015679"/>
     <public type="attr" name="stackFromEnd"   id="0x07015680"/>
     <public type="attr" name="layoutManager"   id="0x07015681"/>
-    
-    
+
     TODO need comment
     <item type="id" name="item_touch_helper_previous_elevation"/>
     TODO need comment

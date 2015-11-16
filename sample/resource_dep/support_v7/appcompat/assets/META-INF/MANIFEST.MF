@@ -6,4 +6,5 @@ Bundle-Version: 1.0.0
 Bundle-Activator: ext.android.support.v7.appcompat.Activator
 Import-Package: org.osgi.framework
 Export-Package: android.support.v7.widget,android.support.v7.view,
- android.support.v7.app,android.support.v7.graphics.drawable
+ android.support.v7.app,android.support.v7.graphics.drawable,
+ resource.android.support.v7.appcompat

@@ -3,16 +3,24 @@ package com.example.apklauncher_res_apk;
 import org.bbs.apklauncher.api.Base_Activity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 @SuppressWarnings("deprecation")
 public class MainActivity extends Base_Activity {
 
+	private static final String TAG = MainActivity.class.getSimpleName();
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+
+		String libStr = getResources().getString(R.string.abc_action_mode_done);
+		Log.d(TAG, "libStr: " + libStr);
+
 	}
 
 	@Override

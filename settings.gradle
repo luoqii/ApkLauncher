@@ -14,6 +14,6 @@ include 'sample:osgi:appshell'
 include 'sample:resource_dep:res-apk'
 include 'sample:resource_dep:res-apk-lib'
 include 'sample:resource_dep:support_v7:appcompat'
-include 'sample:resource_dep:support_v7/recyclerview'
+include 'sample:resource_dep:support_v7:recycleview'
 
 

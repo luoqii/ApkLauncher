@@ -12,6 +12,7 @@
     android:id="@+id/listFragment"
     android:name="org.bbs.apklauncher.osgi.bundlemanager.BundleDetailFragment"
     android:layout_width="match_parent"
-    android:layout_height="fill_parent" />
+    android:layout_height="fill_parent"
+    tools:layout="@layout/activity_bundle_detail" />
 
 </RelativeLayout>

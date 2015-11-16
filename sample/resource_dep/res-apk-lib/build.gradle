@@ -1,0 +1,133 @@
+apply plugin: 'com.android.application'
+
+android {
+    signingConfigs {
+    }
+
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+//        applicationId "com.bombtime.bombtime"
+//        minSdkVersion 14
+//        targetSdkVersion 21
+
+        // use AndroidManifest's to couple with eclipse.
+//        versionCode 1
+//        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            //runProguard false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src']
+
+            resources.srcDirs = ['src']
+            aidl.srcDirs = ['src']
+
+            renderscript.srcDirs = ['src']
+
+            res.srcDirs = ['res']
+            assets.srcDirs = ['assets']
+        }
+    }
+
+    productFlavors {
+        app {
+        }
+
+        plugin {
+        }
+    }
+}
+
+//http://www.open-open.com/lib/view/open1439216256770.html
+afterEvaluate {
+    android.applicationVariants.each { variant ->
+//        println variant
+//        println variant.name
+
+        if (variant.name.contains('plugin')) {
+            println "name: ${variant.name}"
+//            println "outputFile: ${variant.outputFile}"
+            variant.properties.each {
+//                println it
+            }
+
+            def sterm = 'zipalign'
+
+            tasks.each {
+                if (it.name.contains(sterm)){
+//                println it
+//                it.
+                }
+            }
+
+            def t = tasks.findByName("${sterm}${variant.name.capitalize()}")
+            if (null != t) {
+                println "task ${t}"
+//                println "${t.outputFile}"
+
+                t.doLast {
+//                    println "copy apk"
+//                    "cp -f ./a.apk b.abp".execute()
+                }
+
+
+                println "project: ${project.name}"
+//                def dest_apk = "ApkLauncher_${project.name}.apk"
+                def dest_apk = "ApkLauncher_res_apk_lib.apk"
+                def dir = new File("tmp")
+                dir.mkdir()
+                t.outputFile = new File(dest_apk)
+//                    t.outputFile = new File(dir,dest_apk)
+//                    dest_apk = t.outputFile.getPath()
+                println "dest_apk: ${dest_apk}"
+
+                def project_dir="./sample/resource_dep/res-apk-lib"
+                def dest_dir="sample/osgi/appshell/assets/auto_install_bundle"
+                def script_path="sample/osgi/update_manifest.sh"
+
+                def deploy = "deploy${variant.name.capitalize()}"
+                task(deploy) << {
+
+                    println "pwd".execute().text
+
+                    String cmd = "${script_path} ${project_dir}/${dest_apk} ${project_dir}/assets/META-INF/MANIFEST.MF"
+                    println "cmd: ${cmd}"
+                    println cmd.execute().text
+
+
+                    cmd = "rm -f ${project_dir}/${dest_apk}"
+                    println "cmd: ${cmd}"
+                    println cmd.execute().text
+
+                    cmd = "mv -vf ${dest_apk} ${dest_dir}/${dest_apk}"
+                    println "cmd: ${cmd}"
+                    println cmd.execute().text
+                }
+                tasks.findByName(deploy).dependsOn t
+            }
+
+        }
+
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile files('../../../library/apklauncher_plugin.jar')
+    provided files('../../osgi/appshell/osgi/knopflerfish/framework.jar')
+
+    compile project(':library')
+    //    compile 'com.android.support:recyclerview-v7:21.0.3'
+    //compile 'com.android.support:support-v4:21.0.2'
+    //compile files('libs/umsdk_Android_analytics_v5.4.2.zip')
+}
